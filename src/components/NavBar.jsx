@@ -1,7 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function NavBar() {
 	const [active, setActive] = useState("home");
+
+	useEffect(() => {
+		const sections = document.querySelectorAll("section");
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						setActive(entry.target.id);
+					}
+				});
+			},
+			{ threshold: 0.6 }
+		);
+
+		sections.forEach((section) => observer.observe(section));
+
+		return () => observer.disconnect();
+	}, []);
 
 	const navItems = [
 		{
@@ -9,7 +28,7 @@ function NavBar() {
 			label: "Home",
 			icon: (
 				<svg
-					className="w-10 h-10"
+					className="w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10"
 					viewBox="0 0 24 24"
 					fill="none"
 					xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +55,7 @@ function NavBar() {
 			label: "Profile",
 			icon: (
 				<svg
-					className="w-10 h-10"
+					className="w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10"
 					viewBox="0 0 24 24"
 					fill="none"
 					xmlns="http://www.w3.org/2000/svg"
@@ -67,7 +86,7 @@ function NavBar() {
 			label: "Education",
 			icon: (
 				<svg
-					className="w-10 h-10"
+					className="w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10"
 					viewBox="0 0 24 24"
 					xmlns="http://www.w3.org/2000/svg"
 					fill="#000000"
@@ -93,7 +112,7 @@ function NavBar() {
 			label: "Work",
 			icon: (
 				<svg
-					className="w-9 h-9"
+					className="w-6 sm:w-7 md:w-9 h-6 sm:h-7 md:h-9"
 					viewBox="0 0 24 24"
 					fill="none"
 					xmlns="http://www.w3.org/2000/svg"
@@ -150,7 +169,7 @@ function NavBar() {
 			label: "Menu",
 			icon: (
 				<svg
-					className="w-9 h-9"
+					className="w-6 sm:w-7 md:w-9 h-6 sm:h-7 md:h-9"
 					viewBox="0 0 192 192"
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -181,7 +200,7 @@ function NavBar() {
 					background: #ffffff1a;
 					backdrop-filter: blur(10px);
 					-webkit-backdrop-filter: blur(10px);
-					border: 1px solid #ffffff4d;
+					border: 1px solid #ffffffff;
 					box-shadow: 0 8px 32px 0 #1f2687199, inset 0 1px 1px #ffffff80;
 				}
 				.glass-button-active {
@@ -201,7 +220,7 @@ function NavBar() {
 
 				.glass-button-inactive {
 					background: transparent;
-					border: none;
+					border: 2px solid #ffffffff;
 					backdrop-filter: none;
 					-webkit-backdrop-filter: none;
 					box-shadow: none;
@@ -219,7 +238,13 @@ function NavBar() {
 				{navItems.map((item) => (
 					<button
 						key={item.id}
-						onClick={() => setActive(item.id)}
+						onClick={() => {
+							setActive(item.id);
+							document.getElementById(item.id)?.scrollIntoView({
+								behavior: "smooth",
+								block: "start",
+							});
+						}}
 						aria-label={item.label}
 						className={`flex items-center justify-center w-12 sm:w-14 md:w-16 h-12 sm:h-14 md:h-16 rounded-full transition-all duration-300 ${
 							active === item.id
