@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import resumePdf from "./assets/resume/RESUME.pdf";
+import me from "./assets/me/jordie.jpg";
 
 function Home() {
 	const fullText = "Full Stack Web Developer";
@@ -187,7 +188,7 @@ function Home() {
 					<div className="hidden md:flex justify-center">
 						<div className="relative rounded-full overflow-hidden w-80 h-80 border-4 border-gray-300 shadow-2xl hover:shadow-3xl transition-shadow duration-500 group">
 							<img
-								src="/src/assets/me/jordie.jpg"
+								src={me}
 								alt="Profile"
 								className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
 							/>
