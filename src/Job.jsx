@@ -45,13 +45,13 @@ function Job() {
 				<motion.div
 					initial={{ opacity: 0, y: 60 }}
 					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true, amount: 0.3 }}
+					viewport={{ once: true, amount: 0.1 }}
 					transition={{ duration: 0.8, ease: "easeOut" }}
-					className="relative max-w-5xl w-full p-10 rounded-3xl bg-white/70 backdrop-blur-2xl
-					border border-white/50
-					shadow-[0_20px_60px_-15px_rgba(0,0,0,0.25)]"
+					className="relative max-w-5xl w-full p-10 rounded-3xl bg-white/70 dark:bg-gray-800/70 backdrop-blur-2xl
+				border border-white/50 dark:border-gray-700/50
+				shadow-[0_20px_60px_-15px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]"
 				>
-					<div className="absolute inset-0 -z-10 rounded-3xl bg-gradient-to-br from-white/40 via-transparent to-white/10" />
+					<div className="absolute inset-0 -z-10 rounded-3xl bg-gradient-to-br from-white/40 dark:from-gray-700/40 via-transparent to-white/10 dark:to-gray-800/10" />
 
 					{/* Header */}
 					<motion.div
@@ -64,12 +64,12 @@ function Job() {
 							variants={item}
 							className="flex items-center gap-3 mb-5"
 						>
-							<FiBriefcase className="text-4xl md:text-5xl text-gray-900" />
+							<FiBriefcase className="text-4xl md:text-5xl text-gray-900 dark:text-white" />
 							<motion.h2
 								initial={{ opacity: 0, y: 20, letterSpacing: "0.2em" }}
 								whileInView={{ opacity: 1, y: 0, letterSpacing: "0em" }}
 								transition={{ duration: 0.8, ease: "easeOut" }}
-								className="text-4xl md:text-4xl font-semibold tracking-tight text-gray-900"
+								className="text-4xl md:text-4xl font-semibold tracking-tight text-gray-900 dark:text-white"
 							>
 								Experience & Career
 							</motion.h2>
@@ -78,16 +78,16 @@ function Job() {
 						{/* Divider */}
 						<motion.div
 							variants={item}
-							className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent my-8"
+							className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent my-8"
 						/>
 
 						{/* Professional Readiness */}
 						<div className="space-y-6 mb-10">
 							<div className="flex items-center gap-3">
-								<span className="w-2 h-2 rounded-full bg-gray-900" />
+								<span className="w-2 h-2 rounded-full bg-gray-900 dark:bg-white" />
 								<motion.h3
 									variants={item}
-									className="text-xl font-semibold text-gray-900 tracking-wide"
+									className="text-xl font-semibold text-gray-900 dark:text-white tracking-wide"
 								>
 									Professional Readiness
 								</motion.h3>
@@ -95,25 +95,27 @@ function Job() {
 
 							<motion.p
 								variants={item}
-								className="text-gray-600 text-base leading-7"
+								className="text-gray-600 dark:text-gray-300 text-base leading-7"
 							>
 								I am currently a{" "}
-								<span className="font-semibold text-gray-900">
+								<span className="font-semibold text-gray-900 dark:text-white">
 									3rd Year college student
 								</span>{" "}
 								developing production-style applications through hands-on
 								projects. I am currently working on{" "}
-								<span className="font-semibold text-gray-900">Capstone 1</span>,
-								where I focus on writing clean code, building scalable systems,
-								and following real-world development workflows.
+								<span className="font-semibold text-gray-900 dark:text-white">
+									Capstone 1
+								</span>
+								, where I focus on writing clean code, building scalable
+								systems, and following real-world development workflows.
 							</motion.p>
 
 							<motion.p
 								variants={item}
-								className="text-gray-600 text-base leading-7"
+								className="text-gray-600 dark:text-gray-300 text-base leading-7"
 							>
 								I am actively seeking an{" "}
-								<span className="font-semibold text-gray-900">
+								<span className="font-semibold text-gray-900 dark:text-white">
 									Internship or OJT
 								</span>{" "}
 								where I can contribute to real projects, collaborate with a
@@ -124,10 +126,10 @@ function Job() {
 						{/* Project & Skill Experience */}
 						<div className="space-y-6 mb-10">
 							<div className="flex items-center gap-3">
-								<span className="w-2 h-2 rounded-full bg-gray-900" />
+								<span className="w-2 h-2 rounded-full bg-gray-900 dark:bg-white" />
 								<motion.h3
 									variants={item}
-									className="text-xl font-semibold text-gray-900 tracking-wide"
+									className="text-xl font-semibold text-gray-900 dark:text-white tracking-wide"
 								>
 									Project & Skill Experience
 								</motion.h3>
@@ -150,9 +152,9 @@ function Job() {
 									<motion.li
 										key={i}
 										variants={bulletItem}
-										className="text-gray-600 text-base leading-7 flex items-start gap-3"
+										className="text-gray-600 dark:text-gray-300 text-base leading-7 flex items-start gap-3"
 									>
-										<span className="text-gray-900 font-semibold mt-0.5">
+										<span className="text-gray-900 dark:text-white font-semibold mt-0.5">
 											•
 										</span>
 										<span>{item}</span>
@@ -164,10 +166,10 @@ function Job() {
 						{/* What I'm Seeking */}
 						<div className="space-y-6">
 							<div className="flex items-center gap-3">
-								<span className="w-2 h-2 rounded-full bg-gray-900" />
+								<span className="w-2 h-2 rounded-full bg-gray-900 dark:bg-white" />
 								<motion.h3
 									variants={item}
-									className="text-xl font-semibold text-gray-900 tracking-wide"
+									className="text-xl font-semibold text-gray-900 dark:text-white tracking-wide"
 								>
 									What I'm Seeking
 								</motion.h3>
@@ -190,9 +192,9 @@ function Job() {
 									<motion.li
 										key={i}
 										variants={bulletItem}
-										className="text-gray-600 text-base leading-7 flex items-start gap-3"
+										className="text-gray-600 dark:text-gray-300 text-base leading-7 flex items-start gap-3"
 									>
-										<span className="text-gray-900 font-semibold mt-0.5">
+										<span className="text-gray-900 dark:text-white font-semibold mt-0.5">
 											•
 										</span>
 										<span>{item}</span>

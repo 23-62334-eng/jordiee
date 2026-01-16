@@ -26,8 +26,8 @@ function DockIcon({
 
 	// Responsive sizing: no animation on mobile, magnification on desktop
 	const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
-	const baseSize = isMobile ? 58 : 50;
-	const magnifiedSize = isMobile ? 58 : 70; // Keep same size on mobile (no animation)
+	const baseSize = isMobile ? 46 : 50;
+	const magnifiedSize = isMobile ? 46 : 70; // Keep same size on mobile (no animation)
 
 	const widthSync = useTransform(
 		distance,
@@ -313,6 +313,18 @@ function NavBar() {
 					animation: float 5s ease-in-out infinite;
 				}
 
+				/* Dark mode glassmorphism */
+				.dark .glass-nav {
+					background: rgba(31, 41, 55, 0.6);
+					backdrop-filter: blur(80px) saturate(180%);
+					-webkit-backdrop-filter: blur(80px) saturate(180%);
+					box-shadow: 
+						0 8px 32px rgba(0, 0, 0, 0.4),
+						0 2px 8px rgba(0, 0, 0, 0.2),
+						inset 0 1px 0 rgba(255, 255, 255, 0.1),
+						inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+				}
+
 				/* Tooltip label */
 				.nav-tooltip {
 					position: absolute;
@@ -335,6 +347,13 @@ function NavBar() {
 					z-index: 100;
 				}
 
+				.dark .nav-tooltip {
+					background: rgba(55, 65, 81, 0.95);
+					backdrop-filter: blur(20px);
+					-webkit-backdrop-filter: blur(20px);
+					box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+				}
+
 				.nav-button:hover .nav-tooltip,
 				.nav-button-active:hover .nav-tooltip {
 					opacity: 1;
@@ -354,6 +373,15 @@ function NavBar() {
 					transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 				}
 
+				.dark .nav-button-active {
+					background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+					box-shadow: 
+						0 4px 16px rgba(59, 130, 246, 0.3),
+						0 2px 8px rgba(59, 130, 246, 0.2),
+						inset 0 1px 2px rgba(255, 255, 255, 0.2);
+					color: white;
+				}
+
 				/* Inactive button state */
 				.nav-button {
 					background: white;
@@ -363,6 +391,17 @@ function NavBar() {
 						0 1px 4px rgba(0, 0, 0, 0.06);
 					color: #374151;
 					transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+				}
+
+				.dark .nav-button {
+					background: rgba(55, 65, 81, 0.8);
+					backdrop-filter: blur(8px);
+					-webkit-backdrop-filter: blur(8px);
+					box-shadow: 
+						0 2px 8px rgba(0, 0, 0, 0.3),
+						0 1px 4px rgba(0, 0, 0, 0.2),
+						inset 0 1px 0 rgba(255, 255, 255, 0.1);
+					color: #e5e7eb;
 				}
 
 				/* Hover effect with spring animation - iOS refined */
@@ -376,6 +415,17 @@ function NavBar() {
 					color: #374151;
 				}
 
+				.dark .nav-button:hover {
+					background: rgba(75, 85, 99, 0.9);
+					backdrop-filter: blur(8px);
+					-webkit-backdrop-filter: blur(8px);
+					box-shadow: 
+						0 6px 20px rgba(0, 0, 0, 0.4),
+						0 3px 10px rgba(0, 0, 0, 0.3),
+						inset 0 1px 0 rgba(255, 255, 255, 0.15);
+					color: #f3f4f6;
+				}
+
 				.nav-button-active:hover {
 					background: linear-gradient(135deg, #3f4551 0%, #475563 100%);
 					border: none;
@@ -384,6 +434,14 @@ function NavBar() {
 						0 8px 24px rgba(0, 0, 0, 0.2),
 						0 4px 12px rgba(0, 0, 0, 0.15);
 					color: white;
+				}
+
+				.dark .nav-button-active:hover {
+					background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+					box-shadow: 
+						0 8px 24px rgba(59, 130, 246, 0.4),
+						0 4px 12px rgba(59, 130, 246, 0.3),
+						inset 0 1px 2px rgba(255, 255, 255, 0.25);
 				}
 
 				/* Neighboring icons scale effect */
@@ -440,13 +498,13 @@ function NavBar() {
 			<div
 				className="
 					flex items-center
-					gap-3 sm:gap-4 md:gap-5
+					gap-2 sm:gap-4 md:gap-5
 					glass-nav
 					rounded-full
-					px-2.5 py-2
+					px-2 py-1.5
 					sm:px-4 sm:py-2.5
 					pointer-events-auto
-					border border-gray-200
+					border border-gray-200 dark:border-gray-700
 					overflow-visible
 					isolate
 				"

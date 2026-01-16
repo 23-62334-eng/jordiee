@@ -69,11 +69,11 @@ const ImageCarousel = ({ images, title, dateBadge }) => {
 					<motion.div
 						initial={{ opacity: 0, y: -10 }}
 						whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-						viewport={{ once: true, amount: 0.1 }}
+						viewport={{ once: true, amount: 0.5 }}
 						transition={{ duration: 0.5, delay: 0.3 }}
 						className="md:hidden absolute top-3 left-3 px-3 py-1.5 rounded-full 
-							bg-white/90 dark:bg-gray-700/90 backdrop-blur-md border border-white/50 dark:border-gray-600/50 
-							text-xs font-semibold text-gray-700 dark:text-gray-200 shadow-lg z-30
+							bg-white/90 backdrop-blur-md border border-white/50 
+							text-xs font-semibold text-gray-700 shadow-lg z-30
 							whitespace-nowrap"
 					>
 						{dateBadge}
@@ -96,7 +96,7 @@ const ImageCarousel = ({ images, title, dateBadge }) => {
 						)
 					}
 					className="absolute left-3 top-1/2 -translate-y-1/2
-					bg-white/70 dark:bg-gray-700/70 hover:bg-white dark:hover:bg-gray-600
+					bg-white/70 hover:bg-white
 					backdrop-blur-md rounded-full p-2
 					shadow-md transition
 					md:p-3 cursor-pointer rounded-2xl"
@@ -137,7 +137,7 @@ const ImageCarousel = ({ images, title, dateBadge }) => {
 				<button
 					onClick={() => setCurrentIndex((prev) => (prev + 1) % images.length)}
 					className="absolute right-3 top-1/2 -translate-y-1/2
-					bg-white/70 dark:bg-gray-700/70 hover:bg-white dark:hover:bg-gray-600
+					bg-white/70 hover:bg-white
 					backdrop-blur-md rounded-full p-2
 					shadow-md transition
 					md:p-3 cursor-pointer rounded-2xl"
@@ -362,15 +362,15 @@ function Projects() {
 					initial={{ opacity: 0, y: 60 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.8, ease: "easeOut" }}
-					className="relative max-w-5xl w-full p-10 rounded-3xl bg-white/70 dark:bg-gray-800 backdrop-blur-2xl
-					border border-white/50 dark:border-gray-700
-					shadow-[0_20px_60px_-15px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]"
+					className="relative max-w-5xl w-full p-10 rounded-3xl bg-white/70 backdrop-blur-2xl
+					border border-white/50
+					shadow-[0_20px_60px_-15px_rgba(0,0,0,0.25)]"
 				>
 					<div className="absolute inset-0 -z-10 rounded-3xl bg-gradient-to-br from-white/40 dark:from-gray-700/40 via-transparent to-white/10 dark:to-gray-800/10" />
 					<motion.div
 						initial={{ opacity: 0, y: 20 }}
 						whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-						viewport={{ once: true, amount: 0.1 }}
+						viewport={{ once: true, amount: 0.5 }}
 						transition={{ duration: 0.6, ease: "easeOut" }}
 						className="flex items-center gap-3 mb-10"
 					>
@@ -388,7 +388,7 @@ function Projects() {
 					<motion.div
 						initial={{ opacity: 0, scaleX: 0 }}
 						whileInView={{ opacity: 1, scaleX: 1 }}
-						viewport={{ once: true, amount: 0.1 }}
+						viewport={{ once: true, amount: 0.5 }}
 						transition={{ duration: 0.6, ease: "easeOut" }}
 					/>
 
@@ -396,23 +396,23 @@ function Projects() {
 					<motion.div
 						initial={{ opacity: 0, y: 30 }}
 						whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-						viewport={{ once: true, amount: 0.1 }}
-						transition={{ duration: 0.5, ease: "easeOut" }}
+						viewport={{ once: true, amount: 0.5 }}
+						transition={{ duration: 0.7, ease: "easeOut" }}
 						className="mb-20"
 					>
 						<div
 							className="relative rounded-2xl p-8 md:p-10
-                            bg-white/60 dark:bg-gray-700 backdrop-blur-xl
-                            border border-white/40 dark:border-gray-600
-                            shadow-lg dark:shadow-gray-900/30"
+                            bg-white/60 backdrop-blur-xl
+                            border border-white/40
+                            shadow-lg"
 						>
 							<div
 								className="absolute inset-0 rounded-2xl
-                                bg-gradient-to-br from-white/40 dark:from-gray-600/40 via-transparent to-white/10 dark:to-gray-700/10
+                                bg-gradient-to-br from-white/40 via-transparent to-white/10
                                 -z-10"
 							/>
 
-							<h3 className="text-2xl md:text-3xl font-semibold tracking-tight mb-4 text-gray-900 dark:text-white">
+							<h3 className="text-2xl md:text-3xl font-semibold tracking-tight mb-4">
 								Education Overview
 							</h3>
 
@@ -425,7 +425,7 @@ function Projects() {
 								purely theoretical learning.
 							</p>
 
-							<p className="text-gray-700 dark:text-gray-300 leading-relaxed mt-4 max-w-3xl">
+							<p className="text-gray-700 leading-relaxed mt-4 max-w-3xl">
 								I worked extensively with technologies such as <b>Java (OOP)</b>
 								, <b>PHP</b>,<b> MySQL</b>, <b>HTML</b>, <b>CSS</b>, and{" "}
 								<b>Tailwind CSS</b>, developing systems that included scheduling
@@ -435,7 +435,7 @@ function Projects() {
 								relationships, and responsive UI design.
 							</p>
 
-							<p className="text-gray-700 dark:text-gray-300 leading-relaxed mt-4 max-w-3xl">
+							<p className="text-gray-700 leading-relaxed mt-4 max-w-3xl">
 								My academic experience trained me to analyze requirements
 								carefully, design scalable solutions, and deliver functional
 								systems under project deadlines — preparing me for real-world
@@ -470,7 +470,7 @@ function Projects() {
 					<motion.div
 						initial={{ opacity: 0, y: 20 }}
 						whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-						viewport={{ once: true, amount: 0.1 }}
+						viewport={{ once: true, amount: 0.5 }}
 						transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
 						className="flex items-center gap-3 mb-10"
 					>
@@ -480,7 +480,6 @@ function Projects() {
 							viewBox="0 0 24 24"
 							fill="none"
 							xmlns="http://www.w3.org/2000/svg"
-							className="text-gray-900 dark:text-white"
 						>
 							<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
 							<g
@@ -492,7 +491,7 @@ function Projects() {
 								{" "}
 								<path
 									d="M7 8L3 11.6923L7 16M17 8L21 11.6923L17 16M14 4L10 20"
-									stroke="currentColor"
+									stroke="#000000"
 									strokeWidth="2.04"
 									strokeLinecap="round"
 									strokeLinejoin="round"
@@ -512,7 +511,7 @@ function Projects() {
 					<motion.div
 						initial={{ opacity: 0, scaleX: 0 }}
 						whileInView={{ opacity: 1, scaleX: 1 }}
-						viewport={{ once: true, amount: 0.1 }}
+						viewport={{ once: true, amount: 0.5 }}
 						transition={{ duration: 0.6, ease: "easeOut" }}
 						className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent my-8"
 					/>
@@ -581,7 +580,7 @@ function Projects() {
 								{/* Date Badge - Desktop (center) */}
 								<motion.div
 									variants={dateBadgeLeft}
-									className="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-8 px-4 py-1.5 rounded-full bg-white/80 dark:bg-gray-700/80 backdrop-blur-md border border-white/50 dark:border-gray-600/50 text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-md whitespace-nowrap z-20"
+									className="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-8 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-white/50 text-sm font-semibold text-gray-700 shadow-md whitespace-nowrap z-20"
 								>
 									2nd Yr 1st Sem 2024
 								</motion.div>
@@ -591,7 +590,7 @@ function Projects() {
 									aria-hidden
 									initial={{ scale: 0.8, opacity: 0 }}
 									whileInView={{ scale: 1, opacity: 1 }}
-									viewport={{ once: true, amount: 0.1 }}
+									viewport={{ once: true, amount: 0.5 }}
 									transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
 									className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-white/40 via-white/10 to-transparent blur-2xl -z-10"
 								/>
@@ -609,7 +608,7 @@ function Projects() {
 										<motion.h3
 											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
+											viewport={{ once: true, amount: 0.5 }}
 											transition={{
 												delay: 0.3,
 												duration: 0.7,
@@ -622,13 +621,13 @@ function Projects() {
 										<motion.p
 											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
+											viewport={{ once: true, amount: 0.5 }}
 											transition={{
 												delay: 0.4,
 												duration: 0.7,
 												ease: [0.22, 1, 0.36, 1],
 											}}
-											className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 max-w-lg"
+											className="text-gray-600 leading-relaxed mb-6 max-w-lg"
 										>
 											A final project developed using Java with Object-Oriented
 											Programming principles and MySQL, designed to efficiently
@@ -641,7 +640,7 @@ function Projects() {
 													key={tool}
 													variants={badge}
 													whileHover={{ scale: 1.05 }}
-													className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
+													className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 backdrop-blur-md border border-white/40 text-gray-700 shadow-sm hover:bg-white/80 transition"
 												>
 													{tool}
 												</motion.span>
@@ -662,7 +661,7 @@ function Projects() {
 											<motion.h3
 												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
+												viewport={{ once: true, amount: 0.5 }}
 												transition={{
 													delay: 0.3,
 													duration: 0.7,
@@ -675,13 +674,13 @@ function Projects() {
 											<motion.p
 												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
+												viewport={{ once: true, amount: 0.5 }}
 												transition={{
 													delay: 0.4,
 													duration: 0.7,
 													ease: [0.22, 1, 0.36, 1],
 												}}
-												className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6"
+												className="text-gray-600 leading-relaxed mb-6"
 											>
 												A final project developed using Java with
 												Object-Oriented Programming principles and MySQL,
@@ -694,7 +693,7 @@ function Projects() {
 														key={tool}
 														variants={badge}
 														whileHover={{ scale: 1.05 }}
-														className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
+														className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 backdrop-blur-md border border-white/40 text-gray-700 shadow-sm hover:bg-white/80 transition"
 													>
 														{tool}
 													</motion.span>
@@ -741,7 +740,7 @@ function Projects() {
 								{/* Date Badge - Desktop (center) */}
 								<motion.div
 									variants={dateBadgeRight}
-									className="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-8 px-4 py-1.5 rounded-full bg-white/80 dark:bg-gray-700/80 backdrop-blur-md border border-white/50 dark:border-gray-600/50 text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-md whitespace-nowrap z-20"
+									className="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-8 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-white/50 text-sm font-semibold text-gray-700 shadow-md whitespace-nowrap z-20"
 								>
 									2nd Yr 2nd Sem 2025
 								</motion.div>
@@ -751,7 +750,7 @@ function Projects() {
 									aria-hidden
 									initial={{ scale: 0.8, opacity: 0 }}
 									whileInView={{ scale: 1, opacity: 1 }}
-									viewport={{ once: true, amount: 0.1 }}
+									viewport={{ once: true, amount: 0.5 }}
 									transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
 									className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-white/40 via-white/10 to-transparent blur-2xl -z-10"
 								/>
@@ -762,7 +761,7 @@ function Projects() {
 										<motion.h3
 											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
+											viewport={{ once: true, amount: 0.5 }}
 											transition={{
 												delay: 0.3,
 												duration: 0.7,
@@ -775,13 +774,13 @@ function Projects() {
 										<motion.p
 											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
+											viewport={{ once: true, amount: 0.5 }}
 											transition={{
 												delay: 0.4,
 												duration: 0.7,
 												ease: [0.22, 1, 0.36, 1],
 											}}
-											className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 max-w-lg"
+											className="text-gray-600 leading-relaxed mb-6 max-w-lg"
 										>
 											A web-based online thrift shop built using HTML, CSS,
 											Tailwind CSS, and MySQL, featuring a user-friendly
@@ -794,7 +793,7 @@ function Projects() {
 													key={tool}
 													variants={badge}
 													whileHover={{ scale: 1.05 }}
-													className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
+													className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 backdrop-blur-md border border-white/40 text-gray-700 shadow-sm hover:bg-white/80 transition"
 												>
 													{tool}
 												</motion.span>
@@ -822,7 +821,7 @@ function Projects() {
 											<motion.h3
 												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
+												viewport={{ once: true, amount: 0.5 }}
 												transition={{
 													delay: 0.3,
 													duration: 0.7,
@@ -835,13 +834,13 @@ function Projects() {
 											<motion.p
 												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
+												viewport={{ once: true, amount: 0.5 }}
 												transition={{
 													delay: 0.4,
 													duration: 0.7,
 													ease: [0.22, 1, 0.36, 1],
 												}}
-												className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6"
+												className="text-gray-600 leading-relaxed mb-6"
 											>
 												A web-based online thrift shop built using HTML, CSS,
 												Tailwind CSS, and MySQL, featuring a user-friendly
@@ -854,7 +853,7 @@ function Projects() {
 														key={tool}
 														variants={badge}
 														whileHover={{ scale: 1.05 }}
-														className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
+														className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 backdrop-blur-md border border-white/40 text-gray-700 shadow-sm hover:bg-white/80 transition"
 													>
 														{tool}
 													</motion.span>
@@ -901,7 +900,7 @@ function Projects() {
 								{/* Date Badge - Desktop (center) */}
 								<motion.div
 									variants={dateBadgeLeft}
-									className="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-8 px-4 py-1.5 rounded-full bg-white/80 dark:bg-gray-700/80 backdrop-blur-md border border-white/50 dark:border-gray-600/50 text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-md whitespace-nowrap z-20"
+									className="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-8 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-white/50 text-sm font-semibold text-gray-700 shadow-md whitespace-nowrap z-20"
 								>
 									Vacation 2025
 								</motion.div>
@@ -911,7 +910,7 @@ function Projects() {
 									aria-hidden
 									initial={{ scale: 0.8, opacity: 0 }}
 									whileInView={{ scale: 1, opacity: 1 }}
-									viewport={{ once: true, amount: 0.1 }}
+									viewport={{ once: true, amount: 0.5 }}
 									transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
 									className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-white/40 via-white/10 to-transparent blur-2xl -z-10"
 								/>
@@ -929,7 +928,7 @@ function Projects() {
 										<motion.h3
 											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
+											viewport={{ once: true, amount: 0.5 }}
 											transition={{
 												delay: 0.3,
 												duration: 0.7,
@@ -942,13 +941,13 @@ function Projects() {
 										<motion.p
 											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
+											viewport={{ once: true, amount: 0.5 }}
 											transition={{
 												delay: 0.4,
 												duration: 0.7,
 												ease: [0.22, 1, 0.36, 1],
 											}}
-											className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 max-w-lg"
+											className="text-gray-600 leading-relaxed mb-6 max-w-lg"
 										>
 											A fully responsive personal portfolio website built with
 											HTML, CSS, and Tailwind CSS, showcasing projects and
@@ -961,7 +960,7 @@ function Projects() {
 													key={tool}
 													variants={badge}
 													whileHover={{ scale: 1.05 }}
-													className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
+													className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 backdrop-blur-md border border-white/40 text-gray-700 shadow-sm hover:bg-white/80 transition"
 												>
 													{tool}
 												</motion.span>
@@ -982,7 +981,7 @@ function Projects() {
 											<motion.h3
 												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
+												viewport={{ once: true, amount: 0.5 }}
 												transition={{
 													delay: 0.3,
 													duration: 0.7,
@@ -995,13 +994,13 @@ function Projects() {
 											<motion.p
 												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
+												viewport={{ once: true, amount: 0.5 }}
 												transition={{
 													delay: 0.4,
 													duration: 0.7,
 													ease: [0.22, 1, 0.36, 1],
 												}}
-												className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6"
+												className="text-gray-600 leading-relaxed mb-6"
 											>
 												A fully responsive personal portfolio website built with
 												HTML, CSS, and Tailwind CSS, showcasing projects and
@@ -1014,7 +1013,7 @@ function Projects() {
 														key={tool}
 														variants={badge}
 														whileHover={{ scale: 1.05 }}
-														className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
+														className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 backdrop-blur-md border border-white/40 text-gray-700 shadow-sm hover:bg-white/80 transition"
 													>
 														{tool}
 													</motion.span>
@@ -1061,7 +1060,7 @@ function Projects() {
 								{/* Date Badge - Desktop (center) */}
 								<motion.div
 									variants={dateBadgeRight}
-									className="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-8 px-4 py-1.5 rounded-full bg-white/80 dark:bg-gray-700/80 backdrop-blur-md border border-white/50 dark:border-gray-600/50 text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-md whitespace-nowrap z-20"
+									className="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-8 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-white/50 text-sm font-semibold text-gray-700 shadow-md whitespace-nowrap z-20"
 								>
 									3rd Yr 1st Sem 2025
 								</motion.div>
@@ -1071,7 +1070,7 @@ function Projects() {
 									aria-hidden
 									initial={{ scale: 0.8, opacity: 0 }}
 									whileInView={{ scale: 1, opacity: 1 }}
-									viewport={{ once: true, amount: 0.1 }}
+									viewport={{ once: true, amount: 0.5 }}
 									transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
 									className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-white/40 via-white/10 to-transparent blur-2xl -z-10"
 								/>
@@ -1082,7 +1081,7 @@ function Projects() {
 										<motion.h3
 											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
+											viewport={{ once: true, amount: 0.5 }}
 											transition={{
 												delay: 0.3,
 												duration: 0.7,
@@ -1095,13 +1094,13 @@ function Projects() {
 										<motion.p
 											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
+											viewport={{ once: true, amount: 0.5 }}
 											transition={{
 												delay: 0.4,
 												duration: 0.7,
 												ease: [0.22, 1, 0.36, 1],
 											}}
-											className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 max-w-lg"
+											className="text-gray-600 leading-relaxed mb-6 max-w-lg"
 										>
 											A café management system built with PHP and XAMPP,
 											featuring full CRUD functionality for managing products,
@@ -1117,7 +1116,7 @@ function Projects() {
 													key={tool}
 													variants={badge}
 													whileHover={{ scale: 1.05 }}
-													className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
+													className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 backdrop-blur-md border border-white/40 text-gray-700 shadow-sm hover:bg-white/80 transition"
 												>
 													{tool}
 												</motion.span>
@@ -1167,7 +1166,7 @@ function Projects() {
 											<motion.h3
 												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
+												viewport={{ once: true, amount: 0.5 }}
 												transition={{
 													delay: 0.3,
 													duration: 0.7,
@@ -1180,13 +1179,13 @@ function Projects() {
 											<motion.p
 												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
+												viewport={{ once: true, amount: 0.5 }}
 												transition={{
 													delay: 0.4,
 													duration: 0.7,
 													ease: [0.22, 1, 0.36, 1],
 												}}
-												className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6"
+												className="text-gray-600 leading-relaxed mb-6"
 											>
 												A café management system built with PHP and XAMPP,
 												featuring full CRUD functionality for managing products,
@@ -1202,7 +1201,7 @@ function Projects() {
 														key={tool}
 														variants={badge}
 														whileHover={{ scale: 1.05 }}
-														className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
+														className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 backdrop-blur-md border border-white/40 text-gray-700 shadow-sm hover:bg-white/80 transition"
 													>
 														{tool}
 													</motion.span>
@@ -1249,7 +1248,7 @@ function Projects() {
 								{/* Date Badge - Desktop (center) */}
 								<motion.div
 									variants={dateBadgeLeft}
-									className="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-8 px-4 py-1.5 rounded-full bg-white/80 dark:bg-gray-700/80 backdrop-blur-md border border-white/50 dark:border-gray-600/50 text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-md whitespace-nowrap z-20"
+									className="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-8 px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-md border border-white/50 text-sm font-semibold text-gray-700 shadow-md whitespace-nowrap z-20"
 								>
 									3rd Yr 1st Sem 2025
 								</motion.div>
@@ -1259,7 +1258,7 @@ function Projects() {
 									aria-hidden
 									initial={{ scale: 0.8, opacity: 0 }}
 									whileInView={{ scale: 1, opacity: 1 }}
-									viewport={{ once: true, amount: 0.1 }}
+									viewport={{ once: true, amount: 0.5 }}
 									transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
 									className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-white/40 via-white/10 to-transparent blur-2xl -z-10"
 								/>
@@ -1288,7 +1287,7 @@ function Projects() {
 										<motion.h3
 											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
+											viewport={{ once: true, amount: 0.5 }}
 											transition={{
 												delay: 0.3,
 												duration: 0.7,
@@ -1301,13 +1300,13 @@ function Projects() {
 										<motion.p
 											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
+											viewport={{ once: true, amount: 0.5 }}
 											transition={{
 												delay: 0.4,
 												duration: 0.7,
 												ease: [0.22, 1, 0.36, 1],
 											}}
-											className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 max-w-lg"
+											className="text-gray-600 leading-relaxed mb-6 max-w-lg"
 										>
 											A PHP-based vehicle rental system using CRUD operations
 											and XML for structured data handling, enhanced with an
@@ -1320,7 +1319,7 @@ function Projects() {
 													key={tool}
 													variants={badge}
 													whileHover={{ scale: 1.05 }}
-													className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
+													className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 backdrop-blur-md border border-white/40 text-gray-700 shadow-sm hover:bg-white/80 transition"
 												>
 													{tool}
 												</motion.span>
@@ -1352,7 +1351,7 @@ function Projects() {
 											<motion.h3
 												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
+												viewport={{ once: true, amount: 0.5 }}
 												transition={{
 													delay: 0.3,
 													duration: 0.7,
@@ -1365,13 +1364,13 @@ function Projects() {
 											<motion.p
 												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
+												viewport={{ once: true, amount: 0.5 }}
 												transition={{
 													delay: 0.4,
 													duration: 0.7,
 													ease: [0.22, 1, 0.36, 1],
 												}}
-												className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6"
+												className="text-gray-600 leading-relaxed mb-6"
 											>
 												A PHP-based vehicle rental system using CRUD operations
 												and XML for structured data handling, enhanced with an
@@ -1384,7 +1383,7 @@ function Projects() {
 														key={tool}
 														variants={badge}
 														whileHover={{ scale: 1.05 }}
-														className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
+														className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 backdrop-blur-md border border-white/40 text-gray-700 shadow-sm hover:bg-white/80 transition"
 													>
 														{tool}
 													</motion.span>

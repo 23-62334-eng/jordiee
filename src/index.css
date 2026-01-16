@@ -1,8 +1,55 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+	/* Light Mode Colors */
+	--bg: 255 255 255;
+	--text: 17 24 39;
+	--accent: 59 130 246;
+	--card-bg: 249 250 251;
+	--border: 229 231 235;
+	--shadow: 0 0 0;
+	--glow: 0 0 0;
+	
+	/* Transitions */
+	--transition-speed: 400ms;
+}
+
+.dark {
+	/* Dark Mode Colors */
+	--bg: 17 24 39;
+	--text: 243 244 246;
+	--accent: 96 165 250;
+	--card-bg: 31 41 55;
+	--border: 55 65 81;
+	--shadow: 0 0 0;
+	--glow: 96 165 250;
+}
+
+/* Smooth transitions for all theme-related properties */
+* {
+	transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+	transition-duration: var(--transition-speed);
+	transition-timing-function: ease-in-out;
+}
+
+/* Disable animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
 
 html {
 	scroll-behavior: smooth;
+	background-color: rgb(var(--bg));
+	color: rgb(var(--text));
 }
 
 .tag {

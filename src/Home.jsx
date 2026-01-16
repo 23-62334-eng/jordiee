@@ -56,7 +56,7 @@ function Home() {
 				<div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
 					{/* TOP IMAGE FOR MOBILE */}
 					<div className="md:hidden flex justify-center order-first -mt-24 sm:-mt-20 mb-8 sm:mb-12">
-						<div className="relative rounded-full overflow-hidden w-64 h-64 sm:w-72 sm:h-72 border-4 border-gray-300 shadow-2xl hover:shadow-3xl transition-shadow duration-500 group">
+						<div className="relative rounded-full overflow-hidden w-64 h-64 sm:w-72 sm:h-72 border-4 border-gray-300 dark:border-gray-600 shadow-2xl hover:shadow-3xl dark:shadow-gray-900/50 dark:hover:shadow-gray-800/60 transition-shadow duration-500 group">
 							<img
 								src={me}
 								alt="Profile"
@@ -64,10 +64,9 @@ function Home() {
 							/>
 
 							{/* Overlay Shine Effect */}
-							<div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
+							<div className="absolute inset-0 bg-gradient-to-br from-white/20 dark:from-gray-200/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 							{/* Subtle Inner Glow */}
-							<div className="absolute inset-0 rounded-full shadow-inner shadow-blue-500/20"></div>
+							<div className="absolute inset-0 rounded-full shadow-inner shadow-blue-500/20 dark:shadow-blue-400/30"></div>
 						</div>
 					</div>
 
@@ -75,13 +74,13 @@ function Home() {
 					<div>
 						<div className="flex items-center gap-3 mb-4 flex-wrap">
 							{/* Name */}
-							<span className="px-4 py-1 text-xl sm:text-2xl font-bold rounded-full bg-gray-300 text-gray-700">
+							<span className="px-4 py-1 text-xl sm:text-2xl font-bold rounded-full bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-gray-200">
 								Mark Jordan Javier
 							</span>
 
 							{/* Certified Badge with polish */}
 							<div
-								className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 hover:scale-110 transition transform relative"
+								className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/40 hover:scale-110 transition transform relative"
 								title="Certified Developer"
 							>
 								<svg
@@ -97,20 +96,20 @@ function Home() {
 								</svg>
 
 								{/* Optional Glow Pulse */}
-								<span className="absolute inset-0 rounded-full bg-blue-300 opacity-30 animate-ping"></span>
+								<span className="absolute inset-0 rounded-full bg-blue-300 dark:bg-blue-500 opacity-30 dark:opacity-20 animate-ping"></span>
 							</div>
 						</div>
 
-						<div className="flex items-center gap-2 text-gray-600 mb-3 text-base sm:text-lg">
-							<FaMapMarkerAlt className="text-gray-500" />
+						<div className="flex items-center gap-2 text-gray-600 dark:text-gray-300 mb-3 text-base sm:text-lg">
+							<FaMapMarkerAlt className="text-gray-500 dark:text-gray-400" />
 							<span>Batangas, Philippines</span>
 						</div>
 
-						<h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
+						<h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
 							{displayedText}
 							<span className="typing-cursor">|</span>
 						</h1>
-						<p className="mt-5 text-gray-600 max-w-lg text-base sm:text-lg">
+						<p className="mt-5 text-gray-600 dark:text-gray-300 max-w-lg text-base sm:text-lg">
 							A BS Information Technology student from Batangas State University
 							- TNEU.
 						</p>
@@ -121,21 +120,21 @@ function Home() {
 								href={resumePdf}
 								download="Mark_Jordan_Javier_RESUME.pdf"
 								className="
-								group relative inline-block
-								font-semibold py-2 sm:py-3 px-4 sm:px-6 rounded-full
-								text-gray-600 text-sm sm:text-base
-								bg-gradient-to-br from-gray-100 to-gray-200
-								shadow-lg overflow-hidden
-								transition-all duration-300 ease-out
-								hover:-translate-y-1 hover:shadow-xl
-								active:scale-95 
+							group relative inline-block
+							font-semibold py-2 sm:py-3 px-4 sm:px-6 rounded-full
+							text-gray-600 dark:text-gray-200 text-sm sm:text-base
+							bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800
+							shadow-lg dark:shadow-gray-900/50 overflow-hidden
+							transition-all duration-300 ease-out
+							hover:-translate-y-1 hover:shadow-xl dark:hover:shadow-gray-800/60
+							active:scale-95 
                         "
 							>
 								{/* Glow overlay */}
 								<span
 									className="
                             absolute inset-0 rounded-full 
-                            bg-gradient-to-tr from-gray-400/30 to-transparent 
+                            bg-gradient-to-tr from-gray-400/30 dark:from-gray-500/20 to-transparent 
                             opacity-0 group-hover:opacity-100 
                             transition duration-500
                         "
@@ -154,7 +153,7 @@ function Home() {
 							<a
 								href="https://www.facebook.com/markjordan.javier"
 								target="_blank"
-								className="hover:text-blue-600 text-gray-700 transition duration-300 transform hover:scale-110"
+								className="hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-200 transition duration-300 transform hover:scale-110"
 							>
 								<FaFacebook />
 							</a>
@@ -162,7 +161,7 @@ function Home() {
 							<a
 								href="https://github.com/Jordieeeee"
 								target="_blank"
-								className="hover:text-gray-900 text-gray-700 transition duration-300 transform hover:scale-110"
+								className="hover:text-gray-900 dark:hover:text-white text-gray-700 dark:text-gray-200 transition duration-300 transform hover:scale-110"
 							>
 								<FaGithub />
 							</a>
@@ -170,14 +169,14 @@ function Home() {
 							<a
 								href="https://www.linkedin.com/in/mark-jordan-javier-29b72935a/"
 								target="_blank"
-								className="hover:text-blue-500 text-gray-700 transition duration-300 transform hover:scale-110"
+								className="hover:text-blue-500 dark:hover:text-blue-400 text-gray-700 dark:text-gray-200 transition duration-300 transform hover:scale-110"
 							>
 								<FaLinkedin />
 							</a>
 
 							<a
 								href="mailto:javiermarkjordan@email.com"
-								className="hover:text-red-500 text-gray-700 transition duration-300 transform hover:scale-110"
+								className="hover:text-red-500 dark:hover:text-red-400 text-gray-700 dark:text-gray-200 transition duration-300 transform hover:scale-110"
 							>
 								<FaEnvelope />
 							</a>
@@ -186,7 +185,7 @@ function Home() {
 
 					{/* RIGHT IMAGE FOR DESKTOP */}
 					<div className="hidden md:flex justify-center">
-						<div className="relative rounded-full overflow-hidden w-80 h-80 border-4 border-gray-300 shadow-2xl hover:shadow-3xl transition-shadow duration-500 group">
+						<div className="relative rounded-full overflow-hidden w-80 h-80 border-4 border-gray-300 dark:border-gray-600 shadow-2xl hover:shadow-3xl dark:shadow-gray-900/50 dark:hover:shadow-gray-800/60 transition-shadow duration-500 group">
 							<img
 								src={me}
 								alt="Profile"
@@ -194,10 +193,10 @@ function Home() {
 							/>
 
 							{/* Overlay Shine Effect */}
-							<div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+							<div className="absolute inset-0 bg-gradient-to-br from-white/20 dark:from-gray-200/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
 							{/* Subtle Inner Glow */}
-							<div className="absolute inset-0 rounded-full shadow-inner shadow-blue-500/20"></div>
+							<div className="absolute inset-0 rounded-full shadow-inner shadow-blue-500/20 dark:shadow-blue-400/30"></div>
 						</div>
 					</div>
 				</div>
