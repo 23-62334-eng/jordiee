@@ -86,13 +86,14 @@ const ImageCarousel = ({ images, title, dateBadge }) => {
 					transition={{ duration: 0.6, ease: "easeOut" }}
 					src={images[currentIndex]}
 					alt={`${title} - Image ${currentIndex + 1}`}
+					loading="lazy"
 					className="w-full h-full object-cover hover:shadow-xl transition-shadow duration-500"
 				/>
 				{/* Prev Button */}
 				<button
 					onClick={() =>
 						setCurrentIndex(
-							(prev) => (prev - 1 + images.length) % images.length
+							(prev) => (prev - 1 + images.length) % images.length,
 						)
 					}
 					className="absolute left-3 top-1/2 -translate-y-1/2
@@ -241,7 +242,7 @@ function Projects() {
 					}
 				});
 			},
-			{ threshold: 0.5 }
+			{ threshold: 0.5 },
 		);
 
 		const section = document.getElementById("education");

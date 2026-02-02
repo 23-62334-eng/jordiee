@@ -149,6 +149,7 @@ function Certificate() {
 										<motion.img
 											src={cert.img}
 											alt={cert.title}
+											loading="lazy"
 											initial={{ opacity: 0, scale: 1.05 }}
 											whileInView={{ opacity: 1, scale: 1 }}
 											viewport={{ once: true }}
@@ -253,6 +254,7 @@ function Certificate() {
 							<img
 								src={expandedCert.img}
 								alt={expandedCert.title}
+								loading="lazy"
 								className="w-full h-full object-contain p-4"
 							/>
 							{/* Vignette Effect */}
