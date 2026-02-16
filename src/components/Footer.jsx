@@ -51,7 +51,7 @@ function Footer() {
 								<FaFacebook size={24} />
 							</a>
 							<a
-								href="https://www.instagram.com/jordieeeee_"
+								href="https://www.instagram.com/imnot_dannnnn"
 								target="_blank"
 								rel="noopener noreferrer"
 								className="text-gray-600 dark:text-gray-400 hover:text-pink-500 dark:hover:text-pink-400 transition-colors duration-300 transform hover:scale-110"
