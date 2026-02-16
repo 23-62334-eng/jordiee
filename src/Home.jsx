@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import resumePdf from "./assets/resume/RESUME.pdf";
 import me from "./assets/me/jordie.jpg";
+import AsciiPortrait from "./components/AsciiPortrait";
 
 function Home() {
 	const fullText = "Full Stack Web Developer";
@@ -60,28 +61,7 @@ function Home() {
 				<div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
 					{/* TOP IMAGE FOR MOBILE */}
 					<div className="md:hidden flex justify-center order-first mt-8 sm:mt-4 mb-8 sm:mb-12">
-						<motion.div
-							className="relative rounded-full overflow-hidden w-64 h-64 sm:w-72 sm:h-72 border-4 border-gray-300 dark:border-gray-600 shadow-2xl dark:shadow-gray-900/50"
-							whileHover={{
-								scale: 1.02,
-								boxShadow: "0 25px 50px -15px rgba(59,130,246,0.35)",
-							}}
-							transition={{ duration: 0.6, ease: "easeOut" }}
-						>
-							<motion.img
-								src={me}
-								alt="Profile"
-								loading="lazy"
-								className="w-full h-full object-cover"
-								whileHover={{ scale: 1.08 }}
-								transition={{ duration: 0.8, ease: "easeOut" }}
-							/>
-
-							{/* Overlay Shine Effect */}
-							<div className="absolute inset-0 bg-gradient-to-br from-white/20 dark:from-gray-200/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-out"></div>
-							{/* Subtle Inner Glow */}
-							<div className="absolute inset-0 rounded-full shadow-inner shadow-blue-500/20 dark:shadow-blue-400/30"></div>
-						</motion.div>
+						<AsciiPortrait className="w-64 h-96 sm:w-72 sm:h-[28rem]" />
 					</div>
 
 					{/* LEFT CONTENT */}
@@ -213,29 +193,7 @@ function Home() {
 
 					{/* RIGHT IMAGE FOR DESKTOP */}
 					<div className="hidden md:flex justify-center">
-						<motion.div
-							className="relative rounded-full overflow-hidden w-80 h-80 border-4 border-gray-300 dark:border-gray-600 shadow-2xl dark:shadow-gray-900/50"
-							whileHover={{
-								scale: 1.03,
-								boxShadow: "0 25px 50px -15px rgba(59,130,246,0.4)",
-							}}
-							transition={{ duration: 0.6, ease: "easeOut" }}
-						>
-							<motion.img
-								src={me}
-								alt="Profile"
-								loading="lazy"
-								className="w-full h-full object-cover"
-								whileHover={{ scale: 1.1 }}
-								transition={{ duration: 0.8, ease: "easeOut" }}
-							/>
-
-							{/* Overlay Shine Effect */}
-							<div className="absolute inset-0 bg-gradient-to-br from-white/20 dark:from-gray-200/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-out"></div>
-
-							{/* Subtle Inner Glow */}
-							<div className="absolute inset-0 rounded-full shadow-inner shadow-blue-500/20 dark:shadow-blue-400/30"></div>
-						</motion.div>
+						<AsciiPortrait className="w-80 h-[34rem]" />
 					</div>
 				</div>
 			</div>
