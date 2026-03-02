@@ -129,47 +129,7 @@ function AsciiPortrait({ className = "" }) {
 				result += "\n";
 			}
 
-			// Typing animation
-			animateTyping(result);
-		}
-
-		let typingAnimation = null;
-		let animationFrameId = null;
-
-		function animateTyping(fullText) {
-			// Cancel any existing animation
-			if (typingAnimation) {
-				clearTimeout(typingAnimation);
-			}
-			if (animationFrameId) {
-				cancelAnimationFrame(animationFrameId);
-			}
-
-			ascii.textContent = "";
-			let currentIndex = 0;
-			let lastTime = 0;
-			const charsPerFrame = 500; // Much faster typing speed
-
-			function typeNextChunk(timestamp) {
-				if (!lastTime) lastTime = timestamp;
-				const elapsed = timestamp - lastTime;
-
-				if (elapsed > 16) {
-					const endIndex = Math.min(
-						currentIndex + charsPerFrame,
-						fullText.length,
-					);
-					ascii.textContent = fullText.substring(0, endIndex);
-					currentIndex = endIndex;
-					lastTime = timestamp;
-				}
-
-				if (currentIndex < fullText.length) {
-					animationFrameId = requestAnimationFrame(typeNextChunk);
-				}
-			}
-
-			animationFrameId = requestAnimationFrame(typeNextChunk);
+			ascii.textContent = result;
 		}
 
 		const handleResize = () => {
@@ -180,8 +140,6 @@ function AsciiPortrait({ className = "" }) {
 
 		return () => {
 			window.removeEventListener("resize", handleResize);
-			if (typingAnimation) clearTimeout(typingAnimation);
-			if (animationFrameId) cancelAnimationFrame(animationFrameId);
 		};
 	}, [isLoading, isDark]);
 
