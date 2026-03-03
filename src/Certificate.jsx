@@ -7,33 +7,54 @@ import cert1 from "./assets/cert/cert1.jpg";
 import cert2 from "./assets/cert/cert2.jpg";
 import cert3 from "./assets/cert/cert3.jpg";
 import cert4 from "./assets/cert/cert4.jpg";
+import certMicroPBI from "./assets/cert/MicroPBI.jpg";
 
 const certificates = [
+	{
+		title: "Microsoft Power BI Data Analyst",
+		org: "Microsoft",
+		year: "2025",
+		img: certMicroPBI,
+		category: "Professional",
+	},
 	{
 		title: "Databiz Conference 2024",
 		org: "Batangas Information Technology Society",
 		year: "2024",
 		img: cert1,
+		category: "Conference",
 	},
 	{
 		title: "BIT Conference (BITCON) 2025",
 		org: "Batangas Information Technology Society",
 		year: "2025",
 		img: cert2,
+		category: "Conference",
 	},
 	{
 		title: "Databiz Conference 2025",
 		org: "Batangas Information Technology Society",
 		year: "2025",
 		img: cert3,
+		category: "Conference",
 	},
 	{
 		title: "TechTalks S3",
 		org: "CICS Student Council",
 		year: "2025",
 		img: cert4,
+		category: "Event",
 	},
 ];
+
+const categoryColors = {
+	Professional:
+		"bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200/50 dark:border-blue-700/50",
+	Conference:
+		"bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 border border-purple-200/50 dark:border-purple-700/50",
+	Event:
+		"bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-700/50",
+};
 
 function Certificate() {
 	const [expandedCert, setExpandedCert] = useState(null);
@@ -77,7 +98,7 @@ function Certificate() {
 					whileInView={{ opacity: 1, y: 0 }}
 					viewport={{ once: true, amount: 0.1 }}
 					transition={{ duration: 0.8, ease: "easeOut" }}
-					className="relative max-w-5xl w-full p-10 rounded-3xl bg-white/70 dark:bg-gray-800 backdrop-blur-2xl
+						className="relative max-w-6xl w-full p-10 rounded-3xl bg-white/70 dark:bg-gray-800 backdrop-blur-2xl
 					border border-white/50 dark:border-gray-700
 					shadow-[0_20px_60px_-15px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]"
 				>
@@ -123,9 +144,28 @@ function Certificate() {
 							/>
 
 							<p className="text-gray-700 dark:text-gray-300 leading-relaxed max-w-3xl">
-								Recognized participation in technology, data science, AI, and
-								professional development conferences and events.
+								Professional certifications and recognized participation in
+								technology, data science, AI, and professional development
+								conferences and events.
 							</p>
+
+							{/* Stats Row */}
+							<div className="flex flex-wrap gap-4 mt-5">
+								{Object.entries(
+									certificates.reduce((acc, cert) => {
+										acc[cert.category] = (acc[cert.category] || 0) + 1;
+										return acc;
+									}, {}),
+								).map(([cat, count]) => (
+									<span
+										key={cat}
+										className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ${categoryColors[cat]}`}
+									>
+										<span className="w-1.5 h-1.5 rounded-full bg-current opacity-60" />
+										{count} {cat}
+									</span>
+								))}
+							</div>
 						</div>
 					</motion.div>
 
@@ -144,7 +184,7 @@ function Certificate() {
 						initial="hidden"
 						whileInView="visible"
 						viewport={{ once: true }}
-						className="grid grid-cols-1 md:grid-cols-2 gap-6"
+						className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
 					>
 						{certificates.map((cert, i) => (
 							<motion.div
@@ -175,26 +215,31 @@ function Certificate() {
 									<div className="absolute inset-0 bg-gradient-to-br from-gray-900/70 via-gray-800/60 to-gray-900/70 dark:from-black/80 dark:via-gray-900/70 dark:to-black/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
 										<button
 											onClick={() => setExpandedCert(cert)}
-											className="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-full font-semibold shadow-lg dark:shadow-gray-900/50 hover:scale-105 active:scale-95 transition-all duration-200"
+											className="inline-flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-full font-semibold shadow-lg dark:shadow-gray-900/50 hover:scale-105 active:scale-95 transition-all duration-200 text-sm"
 										>
-											View Certificate{" "}
-											<FiExternalLink className="w-5 h-5 dark:text-white" />
+											View{" "}
+											<FiExternalLink className="w-4 h-4 dark:text-white" />
 										</button>
 									</div>
 								</div>
 
 								{/* Info Section */}
-								<div className="p-6 bg-gradient-to-br from-white/95 to-gray-50/95 dark:from-gray-800/95 dark:to-gray-900/95 border-t border-gray-200/50 dark:border-gray-700/50">
-									<h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-gray-800 dark:group-hover:text-gray-100 transition-colors duration-300">
+								<div className="p-5 bg-gradient-to-br from-white/95 to-gray-50/95 dark:from-gray-800/95 dark:to-gray-900/95 border-t border-gray-200/50 dark:border-gray-700/50">
+									{/* Category Badge */}
+									<span
+										className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider mb-2.5 ${categoryColors[cert.category]}`}
+									>
+										{cert.category}
+									</span>
+									<h3 className="text-base font-bold text-gray-900 dark:text-white leading-snug group-hover:text-gray-800 dark:group-hover:text-gray-100 transition-colors duration-300">
 										{cert.title}
 									</h3>
 									<div className="flex items-center gap-2 mt-2">
-										<div className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500" />
-										<p className="text-gray-600 dark:text-gray-300 text-sm font-medium">
+										<p className="text-gray-500 dark:text-gray-400 text-xs font-medium">
 											{cert.org}
 										</p>
-										<div className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500" />
-										<p className="text-gray-500 dark:text-gray-400 text-sm">
+										<span className="text-gray-300 dark:text-gray-600">&middot;</span>
+										<p className="text-gray-400 dark:text-gray-500 text-xs">
 											{cert.year}
 										</p>
 									</div>
@@ -247,6 +292,11 @@ function Certificate() {
 
 								{/* Info */}
 								<div className="p-8 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border-t border-gray-200/50 dark:border-gray-700/50">
+									<span
+										className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 ${categoryColors[expandedCert.category]}`}
+									>
+										{expandedCert.category}
+									</span>
 									<div className="flex items-center gap-3 mb-2">
 										<FiAward
 											className="text-gray-700 dark:text-gray-200"
@@ -257,11 +307,10 @@ function Certificate() {
 										</h2>
 									</div>
 									<div className="flex items-center gap-2 mt-3">
-										<div className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-500" />
 										<p className="text-gray-600 dark:text-gray-300 font-medium">
 											{expandedCert.org}
 										</p>
-										<div className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-500" />
+										<span className="text-gray-300 dark:text-gray-600">&middot;</span>
 										<p className="text-gray-500 dark:text-gray-400">
 											{expandedCert.year}
 										</p>
