@@ -98,7 +98,7 @@ function Certificate() {
 					whileInView={{ opacity: 1, y: 0 }}
 					viewport={{ once: true, amount: 0.1 }}
 					transition={{ duration: 0.8, ease: "easeOut" }}
-						className="relative max-w-6xl w-full p-10 rounded-3xl bg-white/70 dark:bg-gray-800 backdrop-blur-2xl
+					className="relative max-w-6xl w-full p-10 rounded-3xl bg-white/70 dark:bg-gray-800 backdrop-blur-2xl
 					border border-white/50 dark:border-gray-700
 					shadow-[0_20px_60px_-15px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]"
 				>
@@ -238,7 +238,9 @@ function Certificate() {
 										<p className="text-gray-500 dark:text-gray-400 text-xs font-medium">
 											{cert.org}
 										</p>
-										<span className="text-gray-300 dark:text-gray-600">&middot;</span>
+										<span className="text-gray-300 dark:text-gray-600">
+											&middot;
+										</span>
 										<p className="text-gray-400 dark:text-gray-500 text-xs">
 											{cert.year}
 										</p>
@@ -310,7 +312,9 @@ function Certificate() {
 										<p className="text-gray-600 dark:text-gray-300 font-medium">
 											{expandedCert.org}
 										</p>
-										<span className="text-gray-300 dark:text-gray-600">&middot;</span>
+										<span className="text-gray-300 dark:text-gray-600">
+											&middot;
+										</span>
 										<p className="text-gray-500 dark:text-gray-400">
 											{expandedCert.year}
 										</p>
