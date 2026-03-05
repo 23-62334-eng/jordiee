@@ -537,7 +537,7 @@ function Projects() {
 								{/* Project content - Desktop: Image left, Timeline center, Description right */}
 								<div className="hidden md:flex gap-4 items-center relative pt-8">
 									<div className="w-[45%] pr-6">
-										<StackedImages
+										<ImageCarousel
 											images={[time1, time2, time3]}
 											title="Time Scheduling System"
 										/>
@@ -591,7 +591,7 @@ function Projects() {
 								{/* Mobile layout: Content left, Timeline right */}
 								<div className="md:hidden flex gap-4 pr-8">
 									<div className="flex-1 space-y-4">
-										<StackedImages
+										<ImageCarousel
 											images={[time1, time2, time3]}
 											title="Time Scheduling System"
 											dateBadge="2nd Yr 1st Sem 2024"
@@ -745,7 +745,7 @@ function Projects() {
 									</div>
 									<div className="w-[10%] shrink-0"></div>
 									<div className="w-[45%] pl-6">
-										<StackedImages
+										<ImageCarousel
 											images={[thrift1, thrift2, thrift3, thrift4, thrift5]}
 											title="Online Thrift Shop"
 										/>
@@ -755,7 +755,7 @@ function Projects() {
 								{/* Mobile layout: Content left, Timeline right */}
 								<div className="md:hidden flex gap-4 pr-8">
 									<div className="flex-1 space-y-4">
-										<StackedImages
+										<ImageCarousel
 											images={[thrift1, thrift2, thrift3, thrift4, thrift5]}
 											title="Online Thrift Shop"
 											dateBadge="2nd Yr 2nd Sem 2025"
@@ -865,7 +865,7 @@ function Projects() {
 								{/* Project content - Desktop: Image left, Timeline center, Description right */}
 								<div className="hidden md:flex gap-4 items-center relative pt-8">
 									<div className="w-[45%] pr-6">
-										<StackedImages
+										<ImageCarousel
 											images={[portfolio1, portfolio2, portfolio3, portfolio4]}
 											title="Portfolio Website"
 										/>
@@ -919,7 +919,7 @@ function Projects() {
 								{/* Mobile layout: Content left, Timeline right */}
 								<div className="md:hidden flex gap-4 pr-8">
 									<div className="flex-1 space-y-4">
-										<StackedImages
+										<ImageCarousel
 											images={[portfolio1, portfolio2, portfolio3, portfolio4]}
 											title="Portfolio Website"
 											dateBadge="Vacation 2025"
@@ -1076,7 +1076,7 @@ function Projects() {
 									</div>
 									<div className="w-[10%] shrink-0"></div>
 									<div className="w-[45%] pl-6">
-										<StackedImages
+										<ImageCarousel
 											images={[
 												cafe1,
 												cafe2,
@@ -1097,7 +1097,7 @@ function Projects() {
 								{/* Mobile layout: Content left, Timeline right */}
 								<div className="md:hidden flex gap-4 pr-8">
 									<div className="flex-1 space-y-4">
-										<StackedImages
+										<ImageCarousel
 											images={[
 												cafe1,
 												cafe2,
@@ -1221,7 +1221,7 @@ function Projects() {
 								{/* Project content - Desktop: Image left, Timeline center, Description right */}
 								<div className="hidden md:flex gap-4 items-center relative pt-8">
 									<div className="w-[45%] pr-6">
-										<StackedImages
+										<ImageCarousel
 											images={[
 												rental1,
 												rental2,
@@ -1286,7 +1286,7 @@ function Projects() {
 								{/* Mobile layout: Content left, Timeline right */}
 								<div className="md:hidden flex gap-4 pr-8">
 									<div className="flex-1 space-y-4">
-										<StackedImages
+										<ImageCarousel
 											images={[
 												rental1,
 												rental2,
