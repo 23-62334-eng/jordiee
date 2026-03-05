@@ -191,7 +191,7 @@ function Certificate() {
 							<TiltCard
 								key={i}
 								variants={certItem}
-								className="group relative rounded-2xl overflow-hidden cursor-pointer bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 shadow-lg hover:shadow-2xl dark:shadow-gray-900/50 dark:hover:shadow-gray-900/70 transition-shadow duration-300"
+								className="group relative rounded-2xl overflow-hidden cursor-pointer bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700/50 shadow-lg hover:shadow-2xl dark:shadow-gray-900/50 dark:hover:shadow-gray-900/70 transition-shadow duration-300"
 							>
 								{/* Image Container */}
 								<div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">

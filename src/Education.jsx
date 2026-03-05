@@ -35,176 +35,107 @@ import rental8 from "./assets/proj/vehiRental/vRental8.png";
 import rental9 from "./assets/proj/vehiRental/vrental9.png";
 import rental10 from "./assets/proj/vehiRental/vRental10.png";
 
-const ImageCarousel = ({ images, title, dateBadge }) => {
+const StackedImages = ({ images, title, dateBadge }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setCurrentIndex((prev) => (prev + 1) % images.length);
-		}, 3000);
-		return () => clearInterval(interval);
-	}, [images.length]);
+	// Show up to 4 images in the stack
+	const stackSize = Math.min(images.length, 4);
+
+	const handleClick = () => {
+		setCurrentIndex((prev) => (prev + 1) % images.length);
+	};
 
 	return (
-		<TiltCard
-			className="relative group"
-			tiltDegree={10}
-			scale={1.03}
-			glareOpacity={0.2}
-		>
+		<div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto">
+			{/* Mobile Date Badge */}
+			{dateBadge && (
+				<motion.div
+					initial={{ opacity: 0, y: -10 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true, amount: 0.1 }}
+					transition={{ duration: 0.5, delay: 0.3 }}
+					className="md:hidden absolute -top-3 left-3 px-3 py-1.5 rounded-full 
+						bg-white/90 dark:bg-gray-700/90 backdrop-blur-md border border-white/50 dark:border-gray-600/50 
+						text-xs font-semibold text-gray-700 dark:text-gray-200 shadow-lg z-30
+						whitespace-nowrap"
+				>
+					{dateBadge}
+				</motion.div>
+			)}
+
+			{/* Stacked photos container */}
 			<div
-				className="
-					relative
-					w-full
-					max-w-xs
-					sm:max-w-sm
-					md:max-w-md
-					aspect-[4/3]
-					sm:aspect-[16/10]
-					overflow-hidden
-					rounded-2xl
-					mx-auto
-				"
+				className="relative cursor-pointer group"
+				style={{ paddingBottom: "75%" /* 4:3 aspect ratio */ }}
+				onClick={handleClick}
 			>
-				{/* Mobile Date Badge - Positioned on top of image */}
-				{dateBadge && (
-					<motion.div
-						initial={{ opacity: 0, y: -10 }}
-						whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-						viewport={{ once: true, amount: 0.1 }}
-						transition={{ duration: 0.5, delay: 0.3 }}
-						className="md:hidden absolute top-3 left-3 px-3 py-1.5 rounded-full 
-							bg-white/90 dark:bg-gray-700/90 backdrop-blur-md border border-white/50 dark:border-gray-600/50 
-							text-xs font-semibold text-gray-700 dark:text-gray-200 shadow-lg z-30
-							whitespace-nowrap"
-					>
-						{dateBadge}
-					</motion.div>
-				)}
-				<motion.img
-					key={currentIndex}
-					initial={{ opacity: 0, scale: 1.05 }}
-					animate={{ opacity: 1, scale: 1 }}
-					transition={{ duration: 0.6, ease: "easeOut" }}
-					src={images[currentIndex]}
-					alt={`${title} - Image ${currentIndex + 1}`}
-					loading="lazy"
-					className="w-full h-full object-cover hover:shadow-xl transition-shadow duration-500"
-				/>
-				{/* Prev Button */}
-				<button
-					onClick={() =>
-						setCurrentIndex(
-							(prev) => (prev - 1 + images.length) % images.length,
-						)
-					}
-					className="absolute left-3 top-1/2 -translate-y-1/2
-					bg-white/70 dark:bg-gray-700/70 hover:bg-white dark:hover:bg-gray-600
-					backdrop-blur-md rounded-full p-2
-					shadow-md transition
-					md:p-3 cursor-pointer rounded-2xl"
-				>
-					<svg
-						fill="#000000"
-						height="15px"
-						width="15px"
-						version="1.1"
-						id="Layer_1"
-						xmlns="http://www.w3.org/2000/svg"
-						xmlnsXlink="http://www.w3.org/1999/xlink"
-						viewBox="0 0 512 512"
-						xmlSpace="preserve"
-						stroke="#000000"
-						strokeWidth="51.2"
-					>
-						<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-						<g
-							id="SVGRepo_tracerCarrier"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						></g>
-						<g id="SVGRepo_iconCarrier">
-							{" "}
-							<g>
-								{" "}
-								<g>
-									{" "}
-									<path d="M476.92,493.76L240.333,256.32L476.707,18.24c4.16-4.16,4.16-10.88,0-15.04C474.68,1.067,472.013,0,469.24,0H286.627 c-2.88,0-5.547,1.173-7.573,3.2L35.107,248.853c-4.16,4.16-4.16,10.88,0,15.04l244.16,245.013 c2.027,2.027,4.693,3.093,7.573,3.093h182.507c5.867,0,10.667-4.8,10.667-10.667C480.013,498.56,478.947,495.787,476.92,493.76z M291.213,490.667L57.72,256.32L291,21.333h152.533L217.72,248.853c-4.16,4.16-4.16,10.88,0,15.04l225.92,226.773H291.213z"></path>{" "}
-								</g>{" "}
-							</g>{" "}
-						</g>
-					</svg>
-				</button>
+				{Array.from({ length: stackSize }, (_, stackIdx) => {
+					const depth = stackSize - 1 - stackIdx; // back to front
+					const imgIndex = (currentIndex + depth) % images.length;
+					const isFront = depth === 0;
+					const rotations = [0, -3.5, 4, -2];
+					const xOffsets = [0, -8, 12, -4];
+					const yOffsets = [0, -6, -10, -14];
 
-				{/* Next Button */}
-				<button
-					onClick={() => setCurrentIndex((prev) => (prev + 1) % images.length)}
-					className="absolute right-3 top-1/2 -translate-y-1/2
-					bg-white/70 dark:bg-gray-700/70 hover:bg-white dark:hover:bg-gray-600
-					backdrop-blur-md rounded-full p-2
-					shadow-md transition
-					md:p-3 cursor-pointer rounded-2xl"
-				>
-					<svg
-						fill="#000000"
-						height="15px"
-						width="15px"
-						version="1.1"
-						id="Layer_1"
-						xmlns="http://www.w3.org/2000/svg"
-						xmlnsXlink="http://www.w3.org/1999/xlink"
-						viewBox="0 0 511.893 511.893"
-						xmlSpace="preserve"
-						stroke="#000000"
-						strokeWidth="51.189299999999996"
-					>
-						<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-						<g
-							id="SVGRepo_tracerCarrier"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						></g>
-						<g id="SVGRepo_iconCarrier">
-							{" "}
-							<g>
-								{" "}
-								<g>
-									{" "}
-									<path d="M476.84,248.107L233.64,3.2c-2.027-2.027-4.693-3.2-7.573-3.2H42.6c-5.867,0-10.667,4.8-10.667,10.667 c0,2.88,1.173,5.547,3.093,7.573l237.76,237.44L35.24,493.76c-4.16,4.16-4.16,10.88,0,15.04c2.027,2.027,4.693,3.093,7.573,3.093 H226.28c2.88,0,5.547-1.173,7.573-3.2L476.84,263.04C481,258.987,481,252.267,476.84,248.107z M221.8,490.667H68.52 l226.987-227.52c4.16-4.16,4.16-10.88,0-15.04L68.413,21.333h153.28l232.64,234.347L221.8,490.667z"></path>{" "}
-								</g>{" "}
-							</g>{" "}
-						</g>
-					</svg>
-				</button>
-
-				{/* ✨ Mouse-follow shine overlay (PUT IT HERE) */}
-				<div
-					className="absolute inset-0 opacity-0 group-hover:opacity-100
-					transition duration-500
-					bg-gradient-to-tr from-transparent via-white/10 to-transparent
-					pointer-events-none"
-				/>
-
-				<div className="absolute inset-0 rounded-2xl ring-1 ring-white/30 pointer-events-none" />
-
-				{/* Image Counter */}
-				<div className="absolute bottom-4 right-4 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs font-medium">
-					{currentIndex + 1} / {images.length}
-				</div>
-
-				{/* Scroll Indicators */}
-				<div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-					{images.map((_, index) => (
+					return (
 						<motion.div
-							key={index}
-							className={`h-1.5 rounded-full transition-all duration-300 ${
-								index === currentIndex ? "w-6 bg-white/80" : "w-1.5 bg-white/40"
-							}`}
-						/>
-					))}
-				</div>
+							key={`stack-${stackIdx}`}
+							initial={false}
+							animate={{
+								rotate: rotations[depth] || 0,
+								x: xOffsets[depth] || 0,
+								y: yOffsets[depth] || 0,
+								scale: 1 - depth * 0.03,
+								opacity: 1 - depth * 0.15,
+							}}
+							transition={{ type: "spring", stiffness: 300, damping: 25 }}
+							className="absolute inset-0"
+							style={{ zIndex: stackIdx }}
+						>
+							<TiltCard
+								className="w-full h-full rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700/50"
+								borderRadius="rounded-2xl"
+								tiltDegree={isFront ? 10 : 4}
+								scale={isFront ? 1.03 : 1}
+								glareOpacity={isFront ? 0.2 : 0.05}
+							>
+								<div className="relative w-full h-full">
+									<motion.img
+										key={imgIndex}
+										initial={{ opacity: 0.7 }}
+										animate={{ opacity: 1 }}
+										transition={{ duration: 0.4 }}
+										src={images[imgIndex]}
+										alt={`${title} - Image ${imgIndex + 1}`}
+										loading="lazy"
+										className={`w-full h-full object-cover ${isFront ? "group-hover:scale-105 transition-transform duration-700 ease-out" : ""}`}
+									/>
+
+									{/* Front card overlay effects */}
+									{isFront && (
+										<>
+											{/* Shine sweep */}
+											<div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none" />
+											{/* Image counter */}
+											<div className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-black/30 backdrop-blur-md border border-white/20 text-white text-xs font-medium">
+												{(currentIndex % images.length) + 1} / {images.length}
+											</div>
+											{/* Click hint */}
+											<div className="absolute bottom-3 left-3 px-3 py-1 rounded-full bg-black/30 backdrop-blur-md border border-white/20 text-white text-[10px] font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+												Click to browse
+											</div>
+										</>
+									)}
+
+									{/* Subtle border ring */}
+									<div className="absolute inset-0 rounded-2xl ring-1 ring-white/20 pointer-events-none" />
+								</div>
+							</TiltCard>
+						</motion.div>
+					);
+				})}
 			</div>
-		</TiltCard>
+		</div>
 	);
 };
 
@@ -521,7 +452,7 @@ function Projects() {
 					/>
 
 					{/* Timeline Projects Section */}
-					<div ref={timelineRef} className="relative">
+					<div id="projects" ref={timelineRef} className="relative">
 						{/* Background Timeline Line - Desktop (center) - Base line */}
 						<div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-gray-200 z-0" />
 
@@ -549,7 +480,11 @@ function Projects() {
 							className="space-y-24 md:space-y-32 relative pb-32"
 						>
 							{/* Project 1: Time Scheduling System - 2nd yr 1st Sem 2024 (Left) */}
-							<motion.div variants={projectItemLeft} className="relative">
+							<motion.div
+								id="project-time-scheduling"
+								variants={projectItemLeft}
+								className="relative"
+							>
 								{/* Timeline Dot - Desktop (center) */}
 								<motion.div
 									variants={timelineDot}
@@ -602,7 +537,7 @@ function Projects() {
 								{/* Project content - Desktop: Image left, Timeline center, Description right */}
 								<div className="hidden md:flex gap-4 items-center relative pt-8">
 									<div className="w-[45%] pr-6">
-										<ImageCarousel
+										<StackedImages
 											images={[time1, time2, time3]}
 											title="Time Scheduling System"
 										/>
@@ -656,7 +591,7 @@ function Projects() {
 								{/* Mobile layout: Content left, Timeline right */}
 								<div className="md:hidden flex gap-4 pr-8">
 									<div className="flex-1 space-y-4">
-										<ImageCarousel
+										<StackedImages
 											images={[time1, time2, time3]}
 											title="Time Scheduling System"
 											dateBadge="2nd Yr 1st Sem 2024"
@@ -709,7 +644,11 @@ function Projects() {
 							</motion.div>
 
 							{/* Project 2: Online Thrift Shop - 2nd yr 2nd Sem 2025 (Right) */}
-							<motion.div variants={projectItemRight} className="relative">
+							<motion.div
+								id="project-thrift-shop"
+								variants={projectItemRight}
+								className="relative"
+							>
 								{/* Timeline Dot - Desktop (center) */}
 								<motion.div
 									variants={timelineDot}
@@ -806,7 +745,7 @@ function Projects() {
 									</div>
 									<div className="w-[10%] shrink-0"></div>
 									<div className="w-[45%] pl-6">
-										<ImageCarousel
+										<StackedImages
 											images={[thrift1, thrift2, thrift3, thrift4, thrift5]}
 											title="Online Thrift Shop"
 										/>
@@ -816,7 +755,7 @@ function Projects() {
 								{/* Mobile layout: Content left, Timeline right */}
 								<div className="md:hidden flex gap-4 pr-8">
 									<div className="flex-1 space-y-4">
-										<ImageCarousel
+										<StackedImages
 											images={[thrift1, thrift2, thrift3, thrift4, thrift5]}
 											title="Online Thrift Shop"
 											dateBadge="2nd Yr 2nd Sem 2025"
@@ -869,7 +808,11 @@ function Projects() {
 							</motion.div>
 
 							{/* Project 3: Portfolio - Vacation 2025 (Left) */}
-							<motion.div variants={projectItemLeft} className="relative">
+							<motion.div
+								id="project-portfolio"
+								variants={projectItemLeft}
+								className="relative"
+							>
 								{/* Timeline Dot - Desktop (center) */}
 								<motion.div
 									variants={timelineDot}
@@ -922,7 +865,7 @@ function Projects() {
 								{/* Project content - Desktop: Image left, Timeline center, Description right */}
 								<div className="hidden md:flex gap-4 items-center relative pt-8">
 									<div className="w-[45%] pr-6">
-										<ImageCarousel
+										<StackedImages
 											images={[portfolio1, portfolio2, portfolio3, portfolio4]}
 											title="Portfolio Website"
 										/>
@@ -976,7 +919,7 @@ function Projects() {
 								{/* Mobile layout: Content left, Timeline right */}
 								<div className="md:hidden flex gap-4 pr-8">
 									<div className="flex-1 space-y-4">
-										<ImageCarousel
+										<StackedImages
 											images={[portfolio1, portfolio2, portfolio3, portfolio4]}
 											title="Portfolio Website"
 											dateBadge="Vacation 2025"
@@ -1029,7 +972,11 @@ function Projects() {
 							</motion.div>
 
 							{/* Project 4: Malvar Bat Cafe - 3rd Yr 1st Sem 2025 (Right) */}
-							<motion.div variants={projectItemRight} className="relative">
+							<motion.div
+								id="project-bat-cafe"
+								variants={projectItemRight}
+								className="relative"
+							>
 								{/* Timeline Dot - Desktop (center) */}
 								<motion.div
 									variants={timelineDot}
@@ -1129,7 +1076,7 @@ function Projects() {
 									</div>
 									<div className="w-[10%] shrink-0"></div>
 									<div className="w-[45%] pl-6">
-										<ImageCarousel
+										<StackedImages
 											images={[
 												cafe1,
 												cafe2,
@@ -1150,7 +1097,7 @@ function Projects() {
 								{/* Mobile layout: Content left, Timeline right */}
 								<div className="md:hidden flex gap-4 pr-8">
 									<div className="flex-1 space-y-4">
-										<ImageCarousel
+										<StackedImages
 											images={[
 												cafe1,
 												cafe2,
@@ -1217,7 +1164,11 @@ function Projects() {
 							</motion.div>
 
 							{/* Project 5: Vehicle Rental - 3rd yr 1st Sem 2025 (Left) */}
-							<motion.div variants={projectItemLeft} className="relative">
+							<motion.div
+								id="project-vehicle-rental"
+								variants={projectItemLeft}
+								className="relative"
+							>
 								{/* Timeline Dot - Desktop (center) */}
 								<motion.div
 									variants={timelineDot}
@@ -1270,7 +1221,7 @@ function Projects() {
 								{/* Project content - Desktop: Image left, Timeline center, Description right */}
 								<div className="hidden md:flex gap-4 items-center relative pt-8">
 									<div className="w-[45%] pr-6">
-										<ImageCarousel
+										<StackedImages
 											images={[
 												rental1,
 												rental2,
@@ -1335,7 +1286,7 @@ function Projects() {
 								{/* Mobile layout: Content left, Timeline right */}
 								<div className="md:hidden flex gap-4 pr-8">
 									<div className="flex-1 space-y-4">
-										<ImageCarousel
+										<StackedImages
 											images={[
 												rental1,
 												rental2,
