@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { FiBookOpen } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
+import TiltCard from "./components/TiltCard";
 import portfolio1 from "./assets/proj/1stPortfolio/portfolio1.png";
 import portfolio2 from "./assets/proj/1stPortfolio/portfolio2.png";
 import portfolio3 from "./assets/proj/1stPortfolio/portfolio3.png";
@@ -45,10 +46,11 @@ const ImageCarousel = ({ images, title, dateBadge }) => {
 	}, [images.length]);
 
 	return (
-		<motion.div
-			whileHover={{ scale: 1.03, y: -6 }}
-			transition={{ type: "spring", stiffness: 200, damping: 18 }}
+		<TiltCard
 			className="relative group"
+			tiltDegree={10}
+			scale={1.03}
+			glareOpacity={0.2}
 		>
 			<div
 				className="
@@ -202,7 +204,7 @@ const ImageCarousel = ({ images, title, dateBadge }) => {
 					))}
 				</div>
 			</div>
-		</motion.div>
+		</TiltCard>
 	);
 };
 

@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import resumePdf from "./assets/resume/RESUME.pdf";
 import me from "./assets/me/jordie.jpg";
 import AsciiPortrait from "./components/AsciiPortrait";
+import TiltCard from "./components/TiltCard";
 
 function Home() {
 	const fullText = "Full Stack Web Developer";
@@ -61,7 +62,15 @@ function Home() {
 				<div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
 					{/* TOP IMAGE FOR MOBILE */}
 					<div className="md:hidden flex justify-center order-first mt-8 sm:mt-4 mb-8 sm:mb-12">
-						<AsciiPortrait className="w-64 h-96 sm:w-72 sm:h-[28rem]" />
+						<TiltCard
+							className="relative"
+							borderRadius="rounded-full"
+							tiltDegree={8}
+							scale={1.05}
+							glareOpacity={0.15}
+						>
+							<AsciiPortrait className="w-64 h-96 sm:w-72 sm:h-[28rem]" />
+						</TiltCard>
 					</div>
 
 					{/* LEFT CONTENT */}
@@ -193,7 +202,15 @@ function Home() {
 
 					{/* RIGHT IMAGE FOR DESKTOP */}
 					<div className="hidden md:flex justify-center">
-						<AsciiPortrait className="w-80 h-[34rem]" />
+						<TiltCard
+							className="relative"
+							borderRadius="rounded-full"
+							tiltDegree={8}
+							scale={1.05}
+							glareOpacity={0.15}
+						>
+							<AsciiPortrait className="w-80 h-[34rem]" />
+						</TiltCard>
 					</div>
 				</div>
 			</div>

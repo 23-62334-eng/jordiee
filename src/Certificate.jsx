@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiExternalLink, FiX, FiAward } from "react-icons/fi";
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import TiltCard from "./components/TiltCard";
 
 import cert1 from "./assets/cert/cert1.jpg";
 import cert2 from "./assets/cert/cert2.jpg";
@@ -187,12 +188,10 @@ function Certificate() {
 						className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
 					>
 						{certificates.map((cert, i) => (
-							<motion.div
+							<TiltCard
 								key={i}
 								variants={certItem}
-								whileHover={{ scale: 1.03, y: -6 }}
-								transition={{ type: "spring", stiffness: 200, damping: 18 }}
-								className="group relative rounded-2xl overflow-hidden cursor-pointer bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 shadow-lg hover:shadow-xl dark:shadow-gray-900/50 dark:hover:shadow-gray-900/70 transition-shadow duration-300"
+								className="group relative rounded-2xl overflow-hidden cursor-pointer bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 shadow-lg hover:shadow-2xl dark:shadow-gray-900/50 dark:hover:shadow-gray-900/70 transition-shadow duration-300"
 							>
 								{/* Image Container */}
 								<div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
@@ -200,14 +199,14 @@ function Certificate() {
 										src={cert.img}
 										alt={cert.title}
 										loading="lazy"
-										className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+										className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
 									/>
 
 									{/* Shine overlay on hover */}
 									<div
 										className="absolute inset-0 opacity-0 group-hover:opacity-100
 										transition duration-500
-										bg-gradient-to-tr from-transparent via-white/10 dark:via-white/5 to-transparent
+										bg-gradient-to-tr from-transparent via-white/15 dark:via-white/5 to-transparent
 										pointer-events-none"
 									/>
 
@@ -246,7 +245,7 @@ function Certificate() {
 										</p>
 									</div>
 								</div>
-							</motion.div>
+							</TiltCard>
 						))}
 					</motion.div>
 				</motion.div>
