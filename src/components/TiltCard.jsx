@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useDarkMode } from "../context/DarkModeContext";
 
 function TiltCard({
 	children,
@@ -7,6 +8,7 @@ function TiltCard({
 	variants,
 	style = {},
 	borderRadius = "rounded-2xl",
+	borderRadiusStyle,
 	tiltDegree = 12,
 	scale = 1.04,
 	glareOpacity = 0.25,
@@ -15,6 +17,7 @@ function TiltCard({
 	const glareRef = useRef(null);
 	const rafRef = useRef(null);
 	const [isHovered, setIsHovered] = useState(false);
+	const { isDark } = useDarkMode();
 
 	const handleMouseMove = useCallback(
 		(e) => {
@@ -80,6 +83,12 @@ function TiltCard({
 			style={{
 				transformStyle: "preserve-3d",
 				willChange: "transform",
+				transition: "box-shadow 0.4s ease-out",
+				boxShadow: isHovered
+					? isDark
+						? "0 25px 70px -10px rgba(200,200,210,0.35), 0 10px 30px -8px rgba(200,200,210,0.25), 0 0 20px rgba(200,200,210,0.12)"
+						: "0 25px 70px -10px rgba(0,0,0,0.5), 0 10px 30px -8px rgba(0,0,0,0.35), 0 0 20px rgba(0,0,0,0.1)"
+					: "0 0 0 0 transparent",
 				...style,
 			}}
 		>
@@ -87,12 +96,16 @@ function TiltCard({
 			{/* Glare overlay */}
 			<div
 				ref={glareRef}
-				className={`absolute inset-0 ${borderRadius} pointer-events-none z-20 transition-opacity duration-300 ${isHovered ? "opacity-100" : "opacity-0"}`}
+				className={`absolute inset-0 ${borderRadiusStyle ? "" : borderRadius} pointer-events-none z-20 overflow-hidden transition-opacity duration-300 ${isHovered ? "opacity-100" : "opacity-0"}`}
+				style={
+					borderRadiusStyle ? { borderRadius: borderRadiusStyle } : undefined
+				}
 			/>
 			{/* Edge light effect */}
 			<div
-				className={`absolute inset-0 ${borderRadius} pointer-events-none z-10 transition-opacity duration-300 ${isHovered ? "opacity-100" : "opacity-0"}`}
+				className={`absolute inset-0 ${borderRadiusStyle ? "" : borderRadius} pointer-events-none z-10 overflow-hidden transition-opacity duration-300 ${isHovered ? "opacity-100" : "opacity-0"}`}
 				style={{
+					...(borderRadiusStyle ? { borderRadius: borderRadiusStyle } : {}),
 					boxShadow:
 						"inset 0 0 30px rgba(255,255,255,0.08), 0 15px 40px -10px rgba(0,0,0,0.3)",
 				}}

@@ -63,8 +63,9 @@ function Home() {
 					{/* TOP IMAGE FOR MOBILE */}
 					<div className="md:hidden flex justify-center order-first mt-8 sm:mt-4 mb-8 sm:mb-12">
 						<TiltCard
-							className="relative"
-							borderRadius="rounded-full"
+							className="relative overflow-hidden"
+							borderRadiusStyle="50%"
+							style={{ borderRadius: "50%" }}
 							tiltDegree={8}
 							scale={1.05}
 							glareOpacity={0.15}
@@ -203,8 +204,9 @@ function Home() {
 					{/* RIGHT IMAGE FOR DESKTOP */}
 					<div className="hidden md:flex justify-center">
 						<TiltCard
-							className="relative"
-							borderRadius="rounded-full"
+							className="relative overflow-hidden"
+							borderRadiusStyle="50%"
+							style={{ borderRadius: "50%" }}
 							tiltDegree={8}
 							scale={1.05}
 							glareOpacity={0.15}
