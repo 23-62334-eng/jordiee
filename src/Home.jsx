@@ -306,7 +306,7 @@ function Home() {
 								</div>
 
 								{/* Social icons */}
-								<div className="flex items-center gap-4 sm:gap-5 text-xl sm:text-2xl">
+								<div className="flex items-center gap-4 sm:gap-5 text-2xl sm:text-3xl">
 									<motion.a
 										href="https://www.facebook.com/markjordan.javier"
 										target="_blank"
@@ -600,7 +600,7 @@ function Home() {
 								</span>
 							</motion.a>
 
-							<div className="flex items-center gap-4 text-xl pl-1">
+							<div className="flex items-center gap-5 text-2xl xl:text-3xl pl-1">
 								<motion.a
 									href="https://www.facebook.com/markjordan.javier"
 									target="_blank"
