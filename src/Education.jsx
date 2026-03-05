@@ -35,7 +35,7 @@ import rental8 from "./assets/proj/vehiRental/vRental8.png";
 import rental9 from "./assets/proj/vehiRental/vrental9.png";
 import rental10 from "./assets/proj/vehiRental/vRental10.png";
 
-const StackedImages = ({ images, title, dateBadge }) => {
+const ImageCarousel = ({ images, title, dateBadge }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 
 	// Show up to 4 images in the stack

@@ -517,7 +517,7 @@ function Home() {
 											}}
 										>
 											<TiltCard
-												className={`rounded-2xl border backdrop-blur-xl ${depth === 0 ? "bg-gray-900/80 shadow-[0_16px_48px_-10px_rgba(0,0,0,0.5)]" : "bg-gray-900/60 shadow-[0_8px_28px_-8px_rgba(0,0,0,0.4)]"} border-white/10 overflow-hidden`}
+												className={`rounded-2xl border backdrop-blur-xl ${depth === 0 ? "bg-white/80 dark:bg-gray-900/80 shadow-[0_16px_48px_-10px_rgba(0,0,0,0.12)] dark:shadow-[0_16px_48px_-10px_rgba(0,0,0,0.5)]" : "bg-white/60 dark:bg-gray-900/60 shadow-[0_8px_28px_-8px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_28px_-8px_rgba(0,0,0,0.4)]"} border-gray-200 dark:border-white/10 overflow-hidden`}
 												borderRadius="rounded-2xl"
 												tiltDegree={depth === 0 ? 10 : 6}
 												scale={depth === 0 ? 1.04 : 1.02}
@@ -537,17 +537,17 @@ function Home() {
 													}}
 												>
 													{/* Shine overlay on hover */}
-													<div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-tr from-transparent via-white/8 to-transparent pointer-events-none" />
+													<div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-tr from-transparent via-white/20 dark:via-white/8 to-transparent pointer-events-none" />
 
 													{/* See Projects popup on hover */}
 													<div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
-														<span className="px-4 py-1.5 rounded-full text-xs font-bold text-white bg-white/20 backdrop-blur-md shadow-lg tracking-wide uppercase border border-white/20">
+														<span className="px-4 py-1.5 rounded-full text-xs font-bold text-white bg-gray-900/70 dark:bg-white/20 backdrop-blur-md shadow-lg tracking-wide uppercase border border-gray-900/20 dark:border-white/20">
 															See Projects
 														</span>
 													</div>
 
 													{/* Project thumbnail */}
-													<div className="shrink-0 w-11 h-11 xl:w-13 xl:h-13 rounded-xl overflow-hidden shadow-md bg-gray-800 border border-white/10 group-hover:opacity-30 transition-opacity duration-300 mt-0.5">
+													<div className="shrink-0 w-11 h-11 xl:w-13 xl:h-13 rounded-xl overflow-hidden shadow-md bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-white/10 group-hover:opacity-30 transition-opacity duration-300 mt-0.5">
 														<img
 															src={project.img}
 															alt={project.title}
@@ -558,14 +558,14 @@ function Home() {
 													{/* Content */}
 													<div className="flex-1 min-w-0 group-hover:opacity-30 transition-opacity duration-300">
 														<div className="flex items-start justify-between gap-2">
-															<h4 className="text-sm xl:text-base font-bold text-white leading-snug group-hover:text-blue-300 transition-colors duration-300">
+															<h4 className="text-sm xl:text-base font-bold text-gray-900 dark:text-white leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors duration-300">
 																{project.title}
 															</h4>
-															<span className="text-[10px] xl:text-xs text-gray-400 whitespace-nowrap mt-0.5 shrink-0">
+															<span className="text-[10px] xl:text-xs text-gray-400 dark:text-gray-400 whitespace-nowrap mt-0.5 shrink-0">
 																{project.time}
 															</span>
 														</div>
-														<p className="text-xs xl:text-sm text-gray-300 mt-1.5 leading-relaxed line-clamp-2">
+														<p className="text-xs xl:text-sm text-gray-500 dark:text-gray-300 mt-1.5 leading-relaxed line-clamp-2">
 															{project.desc}
 														</p>
 													</div>
