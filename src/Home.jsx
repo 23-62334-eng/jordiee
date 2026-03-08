@@ -127,22 +127,49 @@ function useScreenTier() {
 }
 
 function Home() {
-	const fullText = "Full Stack Web Developer";
+	const titles = ["Full Stack Web Developer", "Aspiring Software Engineer"];
 	const [displayedText, setDisplayedText] = useState("");
 	const screenTier = useScreenTier();
 
 	useEffect(() => {
-		let index = 0;
-		const interval = setInterval(() => {
-			if (index < fullText.length) {
-				setDisplayedText(fullText.slice(0, index + 1));
-				index++;
-			} else {
-				clearInterval(interval);
-			}
-		}, 80);
+		let titleIndex = 0;
+		let charIndex = 0;
+		let isDeleting = false;
+		let timeout;
 
-		return () => clearInterval(interval);
+		const tick = () => {
+			const current = titles[titleIndex];
+
+			if (!isDeleting) {
+				charIndex++;
+				setDisplayedText(current.slice(0, charIndex));
+
+				if (charIndex === current.length) {
+					// Finished typing — pause then start deleting
+					timeout = setTimeout(() => {
+						isDeleting = true;
+						tick();
+					}, 1000);
+					return;
+				}
+				timeout = setTimeout(tick, 85);
+			} else {
+				charIndex--;
+				setDisplayedText(current.slice(0, charIndex));
+
+				if (charIndex === 0) {
+					// Finished deleting — move to next title
+					isDeleting = false;
+					titleIndex = (titleIndex + 1) % titles.length;
+					timeout = setTimeout(tick, 300);
+					return;
+				}
+				timeout = setTimeout(tick, 40);
+			}
+		};
+
+		tick();
+		return () => clearTimeout(timeout);
 	}, []);
 
 	// Floating animation for side panels
