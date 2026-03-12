@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { FiBookOpen } from "react-icons/fi";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import TiltCard from "./components/TiltCard";
 import portfolio1 from "./assets/proj/1stPortfolio/portfolio1.png";
 import portfolio2 from "./assets/proj/1stPortfolio/portfolio2.png";
@@ -35,10 +35,9 @@ import rental8 from "./assets/proj/vehiRental/vRental8.png";
 import rental9 from "./assets/proj/vehiRental/vrental9.png";
 import rental10 from "./assets/proj/vehiRental/vRental10.png";
 
+/* ─── Image Carousel ─────────────────────────────────────── */
 const ImageCarousel = ({ images, title, dateBadge }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
-
-	// Show up to 4 images in the stack
 	const stackSize = Math.min(images.length, 4);
 
 	const handleClick = () => {
@@ -46,31 +45,19 @@ const ImageCarousel = ({ images, title, dateBadge }) => {
 	};
 
 	return (
-		<div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto">
-			{/* Mobile Date Badge */}
+		<div className="relative w-full">
 			{dateBadge && (
-				<motion.div
-					initial={{ opacity: 0, y: -10 }}
-					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true, amount: 0.1 }}
-					transition={{ duration: 0.5, delay: 0.3 }}
-					className="md:hidden absolute -top-3 left-3 px-3 py-1.5 rounded-full 
-						bg-white/90 dark:bg-gray-700/90 backdrop-blur-md border border-white/50 dark:border-gray-600/50 
-						text-xs font-semibold text-gray-700 dark:text-gray-200 shadow-lg z-30
-						whitespace-nowrap"
-				>
+				<div className="absolute -top-3 left-3 px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-[10px] font-semibold z-30">
 					{dateBadge}
-				</motion.div>
+				</div>
 			)}
-
-			{/* Stacked photos container */}
 			<div
 				className="relative cursor-pointer group"
-				style={{ paddingBottom: "75%" /* 4:3 aspect ratio */ }}
+				style={{ paddingBottom: "68%" }}
 				onClick={handleClick}
 			>
 				{Array.from({ length: stackSize }, (_, stackIdx) => {
-					const depth = stackSize - 1 - stackIdx; // back to front
+					const depth = stackSize - 1 - stackIdx;
 					const imgIndex = (currentIndex + depth) % images.length;
 					const isFront = depth === 0;
 					const rotations = [0, -3.5, 4, -2];
@@ -93,42 +80,35 @@ const ImageCarousel = ({ images, title, dateBadge }) => {
 							style={{ zIndex: stackIdx }}
 						>
 							<TiltCard
-								className="w-full h-full rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700/50"
-								borderRadius="rounded-2xl"
-								tiltDegree={isFront ? 10 : 4}
-								scale={isFront ? 1.03 : 1}
-								glareOpacity={isFront ? 0.2 : 0.05}
+								className="w-full h-full rounded-xl overflow-hidden shadow-md border border-gray-200 dark:border-gray-700/50"
+								borderRadius="rounded-xl"
+								tiltDegree={isFront ? 8 : 3}
+								scale={isFront ? 1.02 : 1}
+								glareOpacity={isFront ? 0.15 : 0.04}
 							>
 								<div className="relative w-full h-full">
 									<motion.img
 										key={imgIndex}
 										initial={{ opacity: 0.7 }}
 										animate={{ opacity: 1 }}
-										transition={{ duration: 0.4 }}
+										transition={{ duration: 0.35 }}
 										src={images[imgIndex]}
-										alt={`${title} - Image ${imgIndex + 1}`}
+										alt={`${title} - ${imgIndex + 1}`}
 										loading="lazy"
 										className={`w-full h-full object-cover ${isFront ? "group-hover:scale-105 transition-transform duration-700 ease-out" : ""}`}
 									/>
-
-									{/* Front card overlay effects */}
 									{isFront && (
 										<>
-											{/* Shine sweep */}
 											<div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none" />
-											{/* Image counter */}
-											<div className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-black/30 backdrop-blur-md border border-white/20 text-white text-xs font-medium">
+											<div className="absolute bottom-2 right-2 px-2.5 py-0.5 rounded-full bg-black/35 backdrop-blur-md text-white text-[10px] font-medium">
 												{(currentIndex % images.length) + 1} / {images.length}
 											</div>
-											{/* Click hint */}
-											<div className="absolute bottom-3 left-3 px-3 py-1 rounded-full bg-black/30 backdrop-blur-md border border-white/20 text-white text-[10px] font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+											<div className="absolute bottom-2 left-2 px-2.5 py-0.5 rounded-full bg-black/35 backdrop-blur-md text-white text-[10px] font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
 												Click to browse
 											</div>
 										</>
 									)}
-
-									{/* Subtle border ring */}
-									<div className="absolute inset-0 rounded-2xl ring-1 ring-white/20 pointer-events-none" />
+									<div className="absolute inset-0 rounded-xl ring-1 ring-white/20 pointer-events-none" />
 								</div>
 							</TiltCard>
 						</motion.div>
@@ -139,1216 +119,415 @@ const ImageCarousel = ({ images, title, dateBadge }) => {
 	);
 };
 
+/* ─── Skill Badge ─────────────────────────────────────────── */
+function SkillBadge({ skill }) {
+	const [hovered, setHovered] = useState(false);
+	return (
+		<span
+			onMouseEnter={() => setHovered(true)}
+			onMouseLeave={() => setHovered(false)}
+			style={{
+				transition: "transform 0.22s ease, box-shadow 0.3s ease",
+				transform: hovered
+					? "scale(1.06) translateY(-2px)"
+					: "scale(1) translateY(0)",
+				boxShadow: hovered ? "0 0 18px 4px rgba(99,102,241,0.28)" : "none",
+			}}
+			className="px-4 py-1.5 rounded-full text-sm font-medium cursor-default
+				bg-gray-100 dark:bg-gray-800
+				border border-gray-200 dark:border-gray-700
+				text-gray-700 dark:text-gray-300"
+		>
+			{skill}
+		</span>
+	);
+}
+
+/* ─── Project Card ────────────────────────────────────────── */
+function ProjectCard({
+	id,
+	title,
+	description,
+	tags,
+	images,
+	date,
+	slideFrom,
+}) {
+	return (
+		<motion.div
+			id={id}
+			initial={{
+				opacity: 0,
+				x: slideFrom === "left" ? -45 : 45,
+				filter: "blur(4px)",
+			}}
+			whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+			viewport={{ once: true, amount: 0.12 }}
+			transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+			className="rounded-2xl overflow-hidden
+				bg-white dark:bg-gray-900/60
+				border border-gray-200 dark:border-gray-700/60
+				shadow-sm hover:shadow-xl
+				hover:-translate-y-1.5
+				transition-all duration-300 group"
+		>
+			<div className="relative p-3 pb-0">
+				<ImageCarousel images={images} title={title} />
+				{date && (
+					<span className="absolute top-5 left-5 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-[10px] font-semibold tracking-wide z-20">
+						{date}
+					</span>
+				)}
+			</div>
+			<div className="p-4 pt-3">
+				<h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-1.5">
+					{title}
+				</h4>
+				<p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-3">
+					{description}
+				</p>
+				<div className="flex flex-wrap gap-1.5">
+					{tags.map((tag) => (
+						<span
+							key={tag}
+							className="px-2.5 py-0.5 rounded-full text-[10px] font-medium
+								bg-gray-100 dark:bg-gray-800
+								border border-gray-200 dark:border-gray-700
+								text-gray-600 dark:text-gray-400"
+						>
+							{tag}
+						</span>
+					))}
+				</div>
+			</div>
+		</motion.div>
+	);
+}
+
+/* ─── Main Component ──────────────────────────────────────── */
 function Projects() {
-	const [animationKey, setAnimationKey] = useState(0);
 	const timelineRef = useRef(null);
 
-	// Scroll progress for timeline
 	const { scrollYProgress } = useScroll({
 		target: timelineRef,
 		offset: ["start center", "end center"],
 	});
-
-	// Transform scroll progress to scale
 	const scaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
-	// Trigger animations when section is navigated to
-	useEffect(() => {
-		const handleHashChange = () => {
-			if (
-				window.location.hash === "#education" ||
-				document.getElementById("education")?.getBoundingClientRect().top === 0
-			) {
-				setAnimationKey((prev) => prev + 1);
-			}
-		};
-
-		// Listen for navigation events
-		window.addEventListener("hashchange", handleHashChange);
-
-		// Check on mount if we're already at the section
-		const observer = new IntersectionObserver(
-			(entries) => {
-				entries.forEach((entry) => {
-					if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-						setAnimationKey((prev) => prev + 1);
-					}
-				});
-			},
-			{ threshold: 0.5 },
-		);
-
-		const section = document.getElementById("education");
-		if (section) observer.observe(section);
-
-		return () => {
-			window.removeEventListener("hashchange", handleHashChange);
-			if (section) observer.unobserve(section);
-		};
-	}, []);
-
-	const container = {
+	const stagger = {
 		hidden: {},
-		visible: {
-			transition: {
-				staggerChildren: 0.08,
-			},
-		},
+		visible: { transition: { staggerChildren: 0.07 } },
 	};
-
-	const item = {
-		hidden: { opacity: 0, y: 12 },
+	const fadeUp = {
+		hidden: { opacity: 0, y: 16 },
 		visible: {
 			opacity: 1,
 			y: 0,
-			transition: { duration: 0.6, ease: "easeOut" },
+			transition: { duration: 0.55, ease: "easeOut" },
 		},
 	};
 
-	const badge = {
-		hidden: { opacity: 0, y: 8, filter: "blur(4px)" },
-		visible: {
-			opacity: 1,
-			y: 0,
-			filter: "blur(0px)",
-			transition: { duration: 0.4, ease: "easeOut" },
+	const projects = [
+		{
+			id: "project-time-scheduling",
+			title: "Time Scheduling System",
+			date: "2nd Yr · 1st Sem 2024",
+			description:
+				"A scheduling management system built with Java (OOP) and MySQL to efficiently manage schedules and streamline time-based operations.",
+			tags: ["Java", "MySQL", "OOP"],
+			images: [time1, time2, time3],
+			slideFrom: "left",
 		},
-	};
+		{
+			id: "project-thrift-shop",
+			title: "Online Thrift Shop",
+			date: "2nd Yr · 2nd Sem 2025",
+			description:
+				"A web-based e-commerce platform with HTML, Tailwind CSS, and MySQL, featuring product browsing and inventory management.",
+			tags: ["HTML", "CSS", "Tailwind CSS", "MySQL"],
+			images: [thrift1, thrift2, thrift3, thrift4, thrift5],
+			slideFrom: "right",
+		},
+		{
+			title: "Portfolio Website",
+			date: "Vacation 2025",
+			description:
+				"A fully responsive personal portfolio built with HTML, CSS, and Tailwind CSS showcasing projects through a clean interface.",
+			tags: ["HTML", "CSS", "Tailwind CSS"],
+			images: [portfolio1, portfolio2, portfolio3, portfolio4],
+			slideFrom: "left",
+		},
+		{
+			id: "project-bat-cafe",
+			title: "Malvar Bat Cave Café",
+			date: "3rd Yr · 1st Sem 2025",
+			description:
+				"A café management system with PHP and XAMPP featuring CRUD operations, an integrated chatbot, and dark mode.",
+			tags: ["PHP", "XAMPP", "MySQL", "CRUD"],
+			images: [
+				cafe1,
+				cafe2,
+				cafe3,
+				cafe4,
+				cafe5,
+				cafe6,
+				cafe7,
+				cafe8,
+				cafe9,
+				cafe10,
+			],
+			slideFrom: "right",
+		},
+		{
+			id: "project-vehicle-rental",
+			title: "Vehicle Rental System",
+			date: "3rd Yr · 1st Sem 2025",
+			description:
+				"A PHP-based vehicle rental system with CRUD operations and XML data handling, enhanced with a chatbot for booking guidance.",
+			tags: ["PHP", "CRUD", "XML"],
+			images: [
+				rental1,
+				rental2,
+				rental3,
+				rental4,
+				rental5,
+				rental6,
+				rental7,
+				rental8,
+				rental9,
+				rental10,
+			],
+			slideFrom: "left",
+		},
+	];
 
-	const projectContainer = {
-		hidden: {},
-		visible: {
-			transition: {
-				staggerChildren: 0.2,
-				delayChildren: 0.3,
-			},
+	const timelineItems = [
+		{
+			date: "2nd Year · 1st Semester 2024",
+			title: "Time Scheduling System",
+			desc: "Built a scheduling management system using Java OOP and MySQL.",
+			side: "left",
 		},
-	};
-
-	const projectItemLeft = {
-		hidden: { opacity: 0, x: -50, filter: "blur(4px)" },
-		visible: {
-			opacity: 1,
-			x: 0,
-			filter: "blur(0px)",
-			transition: {
-				duration: 0.8,
-				ease: [0.22, 1, 0.36, 1], // Custom ease-out curve for smooth deceleration
-			},
+		{
+			date: "2nd Year · 2nd Semester 2025",
+			title: "Online Thrift Shop",
+			desc: "Developed a web-based e-commerce platform with HTML, Tailwind CSS, and MySQL.",
+			side: "right",
 		},
-	};
-
-	const projectItemRight = {
-		hidden: { opacity: 0, x: 50, filter: "blur(4px)" },
-		visible: {
-			opacity: 1,
-			x: 0,
-			filter: "blur(0px)",
-			transition: {
-				duration: 0.8,
-				ease: [0.22, 1, 0.36, 1],
-			},
+		{
+			date: "Vacation 2025",
+			title: "Portfolio Website",
+			desc: "Created a personal portfolio site with HTML, CSS, and Tailwind CSS.",
+			side: "left",
 		},
-	};
-
-	// Timeline dot animation with subtle pulse
-	const timelineDot = {
-		hidden: { scale: 0, opacity: 0 },
-		visible: {
-			scale: 1,
-			opacity: 1,
-			transition: {
-				type: "spring",
-				stiffness: 300,
-				damping: 20,
-				delay: 0.2,
-			},
+		{
+			date: "3rd Year · 1st Semester 2025",
+			title: "Malvar Bat Cave Café",
+			desc: "Built a café management system with PHP and XAMPP featuring CRUD operations, an integrated chatbot, and dark mode.",
+			side: "right",
 		},
-	};
-
-	// Date badge animation
-	const dateBadgeLeft = {
-		hidden: { opacity: 0, x: -20, filter: "blur(4px)" },
-		visible: {
-			opacity: 1,
-			x: 0,
-			filter: "blur(0px)",
-			transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.3 },
+		{
+			date: "3rd Year · 1st Semester 2025",
+			title: "Vehicle Rental System",
+			desc: "Developed a PHP-based vehicle rental system with CRUD operations and XML data handling, enhanced with a chatbot for booking guidance.",
+			side: "left",
 		},
-	};
-
-	const dateBadgeRight = {
-		hidden: { opacity: 0, x: 20, filter: "blur(4px)" },
-		visible: {
-			opacity: 1,
-			x: 0,
-			filter: "blur(0px)",
-			transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.3 },
-		},
-	};
+	];
 
 	return (
 		<section id="education" className="min-h-screen relative z-0">
-			<div className="min-h-screen flex items-center justify-center px-6 py-20">
-				{/* Glass Card */}
+			<div className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16">
 				<motion.div
-					key={animationKey}
 					initial={{ opacity: 0, y: 60 }}
-					animate={{ opacity: 1, y: 0 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true, amount: 0.05 }}
 					transition={{ duration: 0.8, ease: "easeOut" }}
-					className="relative max-w-5xl w-full p-10 rounded-3xl bg-white/70 dark:bg-gray-800 backdrop-blur-2xl
-					border border-white/50 dark:border-gray-700
-					shadow-[0_20px_60px_-15px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)]"
+					className="relative max-w-5xl w-full rounded-3xl bg-white/70 dark:bg-gray-800/70 backdrop-blur-2xl
+						border border-white/50 dark:border-gray-700/50
+						shadow-[0_20px_60px_-15px_rgba(0,0,0,0.25)]
+						overflow-hidden"
 				>
 					<div className="absolute inset-0 -z-10 rounded-3xl bg-gradient-to-br from-white/40 dark:from-gray-700/40 via-transparent to-white/10 dark:to-gray-800/10" />
+
+					{/* ── Section 1: Education ── */}
 					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-						viewport={{ once: true, amount: 0.1 }}
-						transition={{ duration: 0.6, ease: "easeOut" }}
-						className="flex items-center gap-3 mb-10"
+						variants={stagger}
+						initial="hidden"
+						whileInView="visible"
+						viewport={{ once: true }}
+						className="px-7 py-7 sm:px-9 sm:py-8 border-b border-gray-200/40 dark:border-gray-700/40"
 					>
-						<FiBookOpen className="text-4xl md:text-5xl text-gray-900 dark:text-white" />
-						<motion.h2
-							initial={{ opacity: 0, y: 20, letterSpacing: "0.2em" }}
-							whileInView={{ opacity: 1, y: 0, letterSpacing: "0em" }}
-							transition={{ duration: 0.8, ease: "easeOut" }}
-							className="text-4xl md:text-4xl font-semibold tracking-tight text-gray-900 dark:text-white"
+						<motion.div
+							variants={fadeUp}
+							className="flex items-center gap-2 mb-6"
 						>
-							Educational Journey
-						</motion.h2>
-					</motion.div>
+							<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white" />
+							<h2 className="text-sm font-bold text-gray-900 dark:text-white tracking-wide uppercase">
+								Education
+							</h2>
+						</motion.div>
 
-					<motion.div
-						initial={{ opacity: 0, scaleX: 0 }}
-						whileInView={{ opacity: 1, scaleX: 1 }}
-						viewport={{ once: true, amount: 0.1 }}
-						transition={{ duration: 0.6, ease: "easeOut" }}
-					/>
+						<div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
+							{/* Degree info */}
+							<motion.div variants={fadeUp} className="flex-1">
+								<div className="flex items-start gap-4">
+									<div className="w-10 h-10 rounded-xl bg-gray-900 dark:bg-white flex items-center justify-center shrink-0 mt-0.5">
+										<FiBookOpen className="w-5 h-5 text-white dark:text-gray-900" />
+									</div>
+									<div>
+										<h3 className="text-base font-bold text-gray-900 dark:text-white leading-snug">
+											Bachelor of Science in Information Technology
+										</h3>
+										<p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+											Batangas State University · 2023 – Present
+										</p>
+										<p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mt-3 max-w-lg">
+											Currently studying software development, database systems,
+											and modern web technologies — building real-world
+											full-stack applications across multiple academic projects.
+										</p>
+									</div>
+								</div>
+							</motion.div>
 
-					{/* Education Overview */}
-					<motion.div
-						initial={{ opacity: 0, y: 30 }}
-						whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-						viewport={{ once: true, amount: 0.1 }}
-						transition={{ duration: 0.5, ease: "easeOut" }}
-						className="mb-20"
-					>
-						<div
-							className="relative rounded-2xl p-8 md:p-10
-                            bg-white/60 dark:bg-gray-700 backdrop-blur-xl
-                            border border-white/40 dark:border-gray-600
-                            shadow-lg dark:shadow-gray-900/30"
-						>
-							<div
-								className="absolute inset-0 rounded-2xl
-                                bg-gradient-to-br from-white/40 dark:from-gray-600/40 via-transparent to-white/10 dark:to-gray-700/10
-                                -z-10"
-							/>
-
-							<h3 className="text-2xl md:text-3xl font-semibold tracking-tight mb-4 text-gray-900 dark:text-white">
-								Education Overview
-							</h3>
-
-							<p className="text-gray-700 dark:text-gray-300 leading-relaxed max-w-3xl">
-								Throughout my academic journey in software and system
-								development, I focused on building strong foundations in
-								programming, database management, and user-centered application
-								design. My education emphasized hands-on development,
-								problem-solving, and real-world project execution rather than
-								purely theoretical learning.
-							</p>
-
-							<p className="text-gray-700 dark:text-gray-300 leading-relaxed mt-4 max-w-3xl">
-								I worked extensively with technologies such as <b>Java (OOP)</b>
-								, <b>PHP</b>,<b> MySQL</b>, <b>HTML</b>, <b>CSS</b>, and{" "}
-								<b>Tailwind CSS</b>, developing systems that included scheduling
-								platforms, e-commerce solutions, inventory systems, and
-								interactive web applications. These projects strengthened my
-								understanding of clean architecture, CRUD operations, database
-								relationships, and responsive UI design.
-							</p>
-
-							<p className="text-gray-700 dark:text-gray-300 leading-relaxed mt-4 max-w-3xl">
-								My academic experience trained me to analyze requirements
-								carefully, design scalable solutions, and deliver functional
-								systems under project deadlines — preparing me for real-world
-								full-stack development and continuous learning in modern
-								technologies such as React and automation workflows.
-							</p>
-
-							{/* Skills highlights */}
-							<div className="flex flex-wrap gap-3 mt-6">
-								{[
-									"Object-Oriented Programming",
-									"Database Design",
-									"Full Stack Development",
-									"System Analysis",
-									"UI/UX Implementation",
-									"Agile Project Execution",
-								].map((skill) => (
-									<span
-										key={skill}
-										className="px-4 py-1.5 rounded-full text-sm font-medium
-                                        bg-white/70 backdrop-blur-md
-                                        border border-white/40
-                                        text-gray-700 shadow-sm"
-									>
-										{skill}
-									</span>
-								))}
-							</div>
+							{/* Focus Areas */}
+							<motion.div variants={fadeUp} className="lg:w-60 shrink-0">
+								<p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">
+									Focus Areas
+								</p>
+								<ul className="space-y-2">
+									{[
+										"Software Development",
+										"Database Management",
+										"Web Application Development",
+										"System Analysis & Design",
+									].map((area) => (
+										<li
+											key={area}
+											className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300"
+										>
+											<span className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500 shrink-0" />
+											{area}
+										</li>
+									))}
+								</ul>
+							</motion.div>
 						</div>
 					</motion.div>
 
+					{/* ── Section 2: Key Skills ── */}
 					<motion.div
-						initial={{ opacity: 0, y: 20 }}
-						whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-						viewport={{ once: true, amount: 0.1 }}
-						transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-						className="flex items-center gap-3 mb-10"
+						variants={stagger}
+						initial="hidden"
+						whileInView="visible"
+						viewport={{ once: true }}
+						className="px-7 py-6 sm:px-9 sm:py-7 border-b border-gray-200/40 dark:border-gray-700/40"
 					>
-						<svg
-							width="48px"
-							height="48px"
-							viewBox="0 0 24 24"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-							className="text-gray-900 dark:text-white"
+						<motion.div
+							variants={fadeUp}
+							className="flex items-center gap-2 mb-4"
 						>
-							<g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-							<g
-								id="SVGRepo_tracerCarrier"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							></g>
-							<g id="SVGRepo_iconCarrier">
-								{" "}
-								<path
-									d="M7 8L3 11.6923L7 16M17 8L21 11.6923L17 16M14 4L10 20"
-									stroke="currentColor"
-									strokeWidth="2.04"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-								></path>{" "}
-							</g>
-						</svg>
-						<motion.h2
-							initial={{ opacity: 0, y: 20, letterSpacing: "0.2em" }}
-							whileInView={{ opacity: 1, y: 0, letterSpacing: "0em" }}
-							transition={{ duration: 0.8, ease: "easeOut" }}
-							className="text-4xl md:text-3xl font-semibold tracking-tight text-gray-900 dark:text-white"
-						>
-							Recent Projects
-						</motion.h2>
+							<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white" />
+							<h3 className="text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+								Key Skills Learned
+							</h3>
+						</motion.div>
+						<motion.div variants={fadeUp} className="flex flex-wrap gap-2">
+							{[
+								"Object-Oriented Programming",
+								"Database Design",
+								"Full Stack Development",
+								"System Analysis",
+								"UI/UX Implementation",
+							].map((skill) => (
+								<SkillBadge key={skill} skill={skill} />
+							))}
+						</motion.div>
 					</motion.div>
 
-					<motion.div
-						initial={{ opacity: 0, scaleX: 0 }}
-						whileInView={{ opacity: 1, scaleX: 1 }}
-						viewport={{ once: true, amount: 0.1 }}
-						transition={{ duration: 0.6, ease: "easeOut" }}
-						className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent my-8"
-					/>
-
-					{/* Timeline Projects Section */}
-					<div id="projects" ref={timelineRef} className="relative">
-						{/* Background Timeline Line - Desktop (center) - Base line */}
-						<div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-gray-200 z-0" />
-
-						{/* Animated Progress Timeline Line - Desktop (center) - Fills on scroll */}
+					{/* ── Section 3: Academic Projects ── */}
+					<div className="px-7 py-6 sm:px-9 sm:py-7 border-b border-gray-200/40 dark:border-gray-700/40">
 						<motion.div
-							style={{ scaleY, originY: 0 }}
-							className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-gray-500 via-gray-600 to-gray-500 z-0"
-						/>
-
-						{/* Background Timeline Line - Mobile (right) - Base line */}
-						<div className="md:hidden absolute right-0 w-0.5 h-full bg-gray-200 z-0" />
-
-						{/* Animated Progress Timeline Line - Mobile (right) - Fills on scroll */}
-						<motion.div
-							style={{ scaleY, originY: 0 }}
-							className="md:hidden absolute right-0 w-0.5 h-full bg-gradient-to-b from-gray-500 via-gray-600 to-gray-500 z-0"
-						/>
-
-						{/* Project List with Timeline */}
-						<motion.div
-							variants={projectContainer}
-							initial="hidden"
-							whileInView="visible"
-							viewport={{ once: true, amount: 0.1 }}
-							className="space-y-24 md:space-y-32 relative pb-32"
+							initial={{ opacity: 0, y: 14 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5 }}
+							className="flex items-center gap-2 mb-6"
 						>
-							{/* Project 1: Time Scheduling System - 2nd yr 1st Sem 2024 (Left) */}
-							<motion.div
-								id="project-time-scheduling"
-								variants={projectItemLeft}
-								className="relative"
-							>
-								{/* Timeline Dot - Desktop (center) */}
-								<motion.div
-									variants={timelineDot}
-									className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-gray-700 rounded-full border-4 border-white shadow-lg z-10 items-center justify-center"
-								>
-									<motion.div
-										animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-										transition={{
-											duration: 2,
-											repeat: Infinity,
-											ease: "easeInOut",
-										}}
-										className="absolute w-full h-full rounded-full bg-gray-400"
-									/>
-								</motion.div>
-								{/* Timeline Dot - Mobile (right) */}
-								<motion.div
-									variants={timelineDot}
-									className="md:hidden flex absolute right-0 transform translate-x-1/2 w-4 h-4 bg-gray-700 rounded-full border-4 border-white shadow-lg z-10 items-center justify-center"
-								>
-									<motion.div
-										animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-										transition={{
-											duration: 2,
-											repeat: Infinity,
-											ease: "easeInOut",
-										}}
-										className="absolute w-full h-full rounded-full bg-gray-400"
-									/>
-								</motion.div>
-
-								{/* Date Badge - Desktop (center) */}
-								<motion.div
-									variants={dateBadgeLeft}
-									className="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-8 px-4 py-1.5 rounded-full bg-white/80 dark:bg-gray-700/80 backdrop-blur-md border border-white/50 dark:border-gray-600/50 text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-md whitespace-nowrap z-20"
-								>
-									2nd Yr 1st Sem 2024
-								</motion.div>
-
-								{/* Glow background */}
-								<motion.div
-									aria-hidden
-									initial={{ scale: 0.8, opacity: 0 }}
-									whileInView={{ scale: 1, opacity: 1 }}
-									viewport={{ once: true, amount: 0.1 }}
-									transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-									className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-white/40 via-white/10 to-transparent blur-2xl -z-10"
-								/>
-
-								{/* Project content - Desktop: Image left, Timeline center, Description right */}
-								<div className="hidden md:flex gap-4 items-center relative pt-8">
-									<div className="w-[45%] pr-6">
-										<ImageCarousel
-											images={[time1, time2, time3]}
-											title="Time Scheduling System"
-										/>
-									</div>
-									<div className="w-[10%] shrink-0"></div>
-									<div className="w-[45%] pl-6">
-										<motion.h3
-											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
-											transition={{
-												delay: 0.3,
-												duration: 0.7,
-												ease: [0.22, 1, 0.36, 1],
-											}}
-											className="text-2xl font-semibold mb-4 tracking-tight"
-										>
-											Time Scheduling System
-										</motion.h3>
-										<motion.p
-											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
-											transition={{
-												delay: 0.4,
-												duration: 0.7,
-												ease: [0.22, 1, 0.36, 1],
-											}}
-											className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 max-w-lg"
-										>
-											A final project developed using Java with Object-Oriented
-											Programming principles and MySQL, designed to efficiently
-											manage schedules, store data, and streamline time-based
-											operations.
-										</motion.p>
-										<div className="flex flex-wrap gap-3">
-											{["Java", "MySQL", "OOP"].map((tool) => (
-												<motion.span
-													key={tool}
-													variants={badge}
-													whileHover={{ scale: 1.05 }}
-													className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
-												>
-													{tool}
-												</motion.span>
-											))}
-										</div>
-									</div>
-								</div>
-
-								{/* Mobile layout: Content left, Timeline right */}
-								<div className="md:hidden flex gap-4 pr-8">
-									<div className="flex-1 space-y-4">
-										<ImageCarousel
-											images={[time1, time2, time3]}
-											title="Time Scheduling System"
-											dateBadge="2nd Yr 1st Sem 2024"
-										/>
-										<div>
-											<motion.h3
-												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
-												transition={{
-													delay: 0.3,
-													duration: 0.7,
-													ease: [0.22, 1, 0.36, 1],
-												}}
-												className="text-2xl font-semibold mb-4 tracking-tight"
-											>
-												Time Scheduling System
-											</motion.h3>
-											<motion.p
-												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
-												transition={{
-													delay: 0.4,
-													duration: 0.7,
-													ease: [0.22, 1, 0.36, 1],
-												}}
-												className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6"
-											>
-												A final project developed using Java with
-												Object-Oriented Programming principles and MySQL,
-												designed to efficiently manage schedules, store data,
-												and streamline time-based operations.
-											</motion.p>
-											<div className="flex flex-wrap gap-3">
-												{["Java", "MySQL", "OOP"].map((tool) => (
-													<motion.span
-														key={tool}
-														variants={badge}
-														whileHover={{ scale: 1.05 }}
-														className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
-													>
-														{tool}
-													</motion.span>
-												))}
-											</div>
-										</div>
-									</div>
-								</div>
-							</motion.div>
-
-							{/* Project 2: Online Thrift Shop - 2nd yr 2nd Sem 2025 (Right) */}
-							<motion.div
-								id="project-thrift-shop"
-								variants={projectItemRight}
-								className="relative"
-							>
-								{/* Timeline Dot - Desktop (center) */}
-								<motion.div
-									variants={timelineDot}
-									className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-gray-700 rounded-full border-4 border-white shadow-lg z-10 items-center justify-center"
-								>
-									<motion.div
-										animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-										transition={{
-											duration: 2,
-											repeat: Infinity,
-											ease: "easeInOut",
-										}}
-										className="absolute w-full h-full rounded-full bg-gray-400"
-									/>
-								</motion.div>
-								{/* Timeline Dot - Mobile (right) */}
-								<motion.div
-									variants={timelineDot}
-									className="md:hidden flex absolute right-0 transform translate-x-1/2 w-4 h-4 bg-gray-700 rounded-full border-4 border-white shadow-lg z-10 items-center justify-center"
-								>
-									<motion.div
-										animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-										transition={{
-											duration: 2,
-											repeat: Infinity,
-											ease: "easeInOut",
-										}}
-										className="absolute w-full h-full rounded-full bg-gray-400"
-									/>
-								</motion.div>
-
-								{/* Date Badge - Desktop (center) */}
-								<motion.div
-									variants={dateBadgeRight}
-									className="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-8 px-4 py-1.5 rounded-full bg-white/80 dark:bg-gray-700/80 backdrop-blur-md border border-white/50 dark:border-gray-600/50 text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-md whitespace-nowrap z-20"
-								>
-									2nd Yr 2nd Sem 2025
-								</motion.div>
-
-								{/* Glow background */}
-								<motion.div
-									aria-hidden
-									initial={{ scale: 0.8, opacity: 0 }}
-									whileInView={{ scale: 1, opacity: 1 }}
-									viewport={{ once: true, amount: 0.1 }}
-									transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-									className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-white/40 via-white/10 to-transparent blur-2xl -z-10"
-								/>
-
-								{/* Project content - Desktop: Description left, Timeline center, Image right */}
-								<div className="hidden md:flex gap-4 items-center relative pt-8">
-									<div className="w-[45%] pr-6">
-										<motion.h3
-											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
-											transition={{
-												delay: 0.3,
-												duration: 0.7,
-												ease: [0.22, 1, 0.36, 1],
-											}}
-											className="text-2xl font-semibold mb-4 tracking-tight"
-										>
-											Online Thrift Shop
-										</motion.h3>
-										<motion.p
-											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
-											transition={{
-												delay: 0.4,
-												duration: 0.7,
-												ease: [0.22, 1, 0.36, 1],
-											}}
-											className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 max-w-lg"
-										>
-											A web-based online thrift shop built using HTML, CSS,
-											Tailwind CSS, and MySQL, featuring a user-friendly
-											interface for browsing products and managing inventory
-											data.
-										</motion.p>
-										<div className="flex flex-wrap gap-3">
-											{["HTML", "CSS", "Tailwind", "MySQL"].map((tool) => (
-												<motion.span
-													key={tool}
-													variants={badge}
-													whileHover={{ scale: 1.05 }}
-													className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
-												>
-													{tool}
-												</motion.span>
-											))}
-										</div>
-									</div>
-									<div className="w-[10%] shrink-0"></div>
-									<div className="w-[45%] pl-6">
-										<ImageCarousel
-											images={[thrift1, thrift2, thrift3, thrift4, thrift5]}
-											title="Online Thrift Shop"
-										/>
-									</div>
-								</div>
-
-								{/* Mobile layout: Content left, Timeline right */}
-								<div className="md:hidden flex gap-4 pr-8">
-									<div className="flex-1 space-y-4">
-										<ImageCarousel
-											images={[thrift1, thrift2, thrift3, thrift4, thrift5]}
-											title="Online Thrift Shop"
-											dateBadge="2nd Yr 2nd Sem 2025"
-										/>
-										<div>
-											<motion.h3
-												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
-												transition={{
-													delay: 0.3,
-													duration: 0.7,
-													ease: [0.22, 1, 0.36, 1],
-												}}
-												className="text-2xl font-semibold mb-4 tracking-tight"
-											>
-												Online Thrift Shop
-											</motion.h3>
-											<motion.p
-												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
-												transition={{
-													delay: 0.4,
-													duration: 0.7,
-													ease: [0.22, 1, 0.36, 1],
-												}}
-												className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6"
-											>
-												A web-based online thrift shop built using HTML, CSS,
-												Tailwind CSS, and MySQL, featuring a user-friendly
-												interface for browsing products and managing inventory
-												data.
-											</motion.p>
-											<div className="flex flex-wrap gap-3">
-												{["HTML", "CSS", "Tailwind", "MySQL"].map((tool) => (
-													<motion.span
-														key={tool}
-														variants={badge}
-														whileHover={{ scale: 1.05 }}
-														className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
-													>
-														{tool}
-													</motion.span>
-												))}
-											</div>
-										</div>
-									</div>
-								</div>
-							</motion.div>
-
-							{/* Project 3: Portfolio - Vacation 2025 (Left) */}
-							<motion.div
-								id="project-portfolio"
-								variants={projectItemLeft}
-								className="relative"
-							>
-								{/* Timeline Dot - Desktop (center) */}
-								<motion.div
-									variants={timelineDot}
-									className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-gray-700 rounded-full border-4 border-white shadow-lg z-10 items-center justify-center"
-								>
-									<motion.div
-										animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-										transition={{
-											duration: 2,
-											repeat: Infinity,
-											ease: "easeInOut",
-										}}
-										className="absolute w-full h-full rounded-full bg-gray-400"
-									/>
-								</motion.div>
-								{/* Timeline Dot - Mobile (right) */}
-								<motion.div
-									variants={timelineDot}
-									className="md:hidden flex absolute right-0 transform translate-x-1/2 w-4 h-4 bg-gray-700 rounded-full border-4 border-white shadow-lg z-10 items-center justify-center"
-								>
-									<motion.div
-										animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-										transition={{
-											duration: 2,
-											repeat: Infinity,
-											ease: "easeInOut",
-										}}
-										className="absolute w-full h-full rounded-full bg-gray-400"
-									/>
-								</motion.div>
-
-								{/* Date Badge - Desktop (center) */}
-								<motion.div
-									variants={dateBadgeLeft}
-									className="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-8 px-4 py-1.5 rounded-full bg-white/80 dark:bg-gray-700/80 backdrop-blur-md border border-white/50 dark:border-gray-600/50 text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-md whitespace-nowrap z-20"
-								>
-									Vacation 2025
-								</motion.div>
-
-								{/* Glow background */}
-								<motion.div
-									aria-hidden
-									initial={{ scale: 0.8, opacity: 0 }}
-									whileInView={{ scale: 1, opacity: 1 }}
-									viewport={{ once: true, amount: 0.1 }}
-									transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-									className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-white/40 via-white/10 to-transparent blur-2xl -z-10"
-								/>
-
-								{/* Project content - Desktop: Image left, Timeline center, Description right */}
-								<div className="hidden md:flex gap-4 items-center relative pt-8">
-									<div className="w-[45%] pr-6">
-										<ImageCarousel
-											images={[portfolio1, portfolio2, portfolio3, portfolio4]}
-											title="Portfolio Website"
-										/>
-									</div>
-									<div className="w-[10%] shrink-0"></div>
-									<div className="w-[45%] pl-6">
-										<motion.h3
-											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
-											transition={{
-												delay: 0.3,
-												duration: 0.7,
-												ease: [0.22, 1, 0.36, 1],
-											}}
-											className="text-2xl font-semibold mb-4 tracking-tight"
-										>
-											Portfolio Website
-										</motion.h3>
-										<motion.p
-											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
-											transition={{
-												delay: 0.4,
-												duration: 0.7,
-												ease: [0.22, 1, 0.36, 1],
-											}}
-											className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 max-w-lg"
-										>
-											A fully responsive personal portfolio website built with
-											HTML, CSS, and Tailwind CSS, showcasing projects and
-											skills through a clean, modern, and user-focused
-											interface.
-										</motion.p>
-										<div className="flex flex-wrap gap-3">
-											{["HTML", "CSS", "Tailwind"].map((tool) => (
-												<motion.span
-													key={tool}
-													variants={badge}
-													whileHover={{ scale: 1.05 }}
-													className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
-												>
-													{tool}
-												</motion.span>
-											))}
-										</div>
-									</div>
-								</div>
-
-								{/* Mobile layout: Content left, Timeline right */}
-								<div className="md:hidden flex gap-4 pr-8">
-									<div className="flex-1 space-y-4">
-										<ImageCarousel
-											images={[portfolio1, portfolio2, portfolio3, portfolio4]}
-											title="Portfolio Website"
-											dateBadge="Vacation 2025"
-										/>
-										<div>
-											<motion.h3
-												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
-												transition={{
-													delay: 0.3,
-													duration: 0.7,
-													ease: [0.22, 1, 0.36, 1],
-												}}
-												className="text-2xl font-semibold mb-4 tracking-tight"
-											>
-												Portfolio Website
-											</motion.h3>
-											<motion.p
-												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
-												transition={{
-													delay: 0.4,
-													duration: 0.7,
-													ease: [0.22, 1, 0.36, 1],
-												}}
-												className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6"
-											>
-												A fully responsive personal portfolio website built with
-												HTML, CSS, and Tailwind CSS, showcasing projects and
-												skills through a clean, modern, and user-focused
-												interface.
-											</motion.p>
-											<div className="flex flex-wrap gap-3">
-												{["HTML", "CSS", "Tailwind"].map((tool) => (
-													<motion.span
-														key={tool}
-														variants={badge}
-														whileHover={{ scale: 1.05 }}
-														className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
-													>
-														{tool}
-													</motion.span>
-												))}
-											</div>
-										</div>
-									</div>
-								</div>
-							</motion.div>
-
-							{/* Project 4: Malvar Bat Cafe - 3rd Yr 1st Sem 2025 (Right) */}
-							<motion.div
-								id="project-bat-cafe"
-								variants={projectItemRight}
-								className="relative"
-							>
-								{/* Timeline Dot - Desktop (center) */}
-								<motion.div
-									variants={timelineDot}
-									className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-gray-700 rounded-full border-4 border-white shadow-lg z-10 items-center justify-center"
-								>
-									<motion.div
-										animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-										transition={{
-											duration: 2,
-											repeat: Infinity,
-											ease: "easeInOut",
-										}}
-										className="absolute w-full h-full rounded-full bg-gray-400"
-									/>
-								</motion.div>
-								{/* Timeline Dot - Mobile (right) */}
-								<motion.div
-									variants={timelineDot}
-									className="md:hidden flex absolute right-0 transform translate-x-1/2 w-4 h-4 bg-gray-700 rounded-full border-4 border-white shadow-lg z-10 items-center justify-center"
-								>
-									<motion.div
-										animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-										transition={{
-											duration: 2,
-											repeat: Infinity,
-											ease: "easeInOut",
-										}}
-										className="absolute w-full h-full rounded-full bg-gray-400"
-									/>
-								</motion.div>
-
-								{/* Date Badge - Desktop (center) */}
-								<motion.div
-									variants={dateBadgeRight}
-									className="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-8 px-4 py-1.5 rounded-full bg-white/80 dark:bg-gray-700/80 backdrop-blur-md border border-white/50 dark:border-gray-600/50 text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-md whitespace-nowrap z-20"
-								>
-									3rd Yr 1st Sem 2025
-								</motion.div>
-
-								{/* Glow background */}
-								<motion.div
-									aria-hidden
-									initial={{ scale: 0.8, opacity: 0 }}
-									whileInView={{ scale: 1, opacity: 1 }}
-									viewport={{ once: true, amount: 0.1 }}
-									transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-									className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-white/40 via-white/10 to-transparent blur-2xl -z-10"
-								/>
-
-								{/* Project content - Desktop: Description left, Timeline center, Image right */}
-								<div className="hidden md:flex gap-4 items-center relative pt-8">
-									<div className="w-[45%] pr-6">
-										<motion.h3
-											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
-											transition={{
-												delay: 0.3,
-												duration: 0.7,
-												ease: [0.22, 1, 0.36, 1],
-											}}
-											className="text-2xl font-semibold mb-4 tracking-tight"
-										>
-											Malvar Bat Cave Café
-										</motion.h3>
-										<motion.p
-											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
-											transition={{
-												delay: 0.4,
-												duration: 0.7,
-												ease: [0.22, 1, 0.36, 1],
-											}}
-											className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 max-w-lg"
-										>
-											A café management system built with PHP and XAMPP,
-											featuring full CRUD functionality for managing products,
-											orders, and records. The system includes an integrated
-											chatbot to support customer inquiries and streamline
-											interactions, along with a Dark Mode interface for
-											improved accessibility, modern aesthetics, and comfortable
-											use in low-light environments.
-										</motion.p>
-										<div className="flex flex-wrap gap-3">
-											{["PHP", "XAMPP", "CRUD", "MySQL"].map((tool) => (
-												<motion.span
-													key={tool}
-													variants={badge}
-													whileHover={{ scale: 1.05 }}
-													className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
-												>
-													{tool}
-												</motion.span>
-											))}
-										</div>
-									</div>
-									<div className="w-[10%] shrink-0"></div>
-									<div className="w-[45%] pl-6">
-										<ImageCarousel
-											images={[
-												cafe1,
-												cafe2,
-												cafe3,
-												cafe4,
-												cafe5,
-												cafe6,
-												cafe7,
-												cafe8,
-												cafe9,
-												cafe10,
-											]}
-											title="Malvar Bat Cave Café"
-										/>
-									</div>
-								</div>
-
-								{/* Mobile layout: Content left, Timeline right */}
-								<div className="md:hidden flex gap-4 pr-8">
-									<div className="flex-1 space-y-4">
-										<ImageCarousel
-											images={[
-												cafe1,
-												cafe2,
-												cafe3,
-												cafe4,
-												cafe5,
-												cafe6,
-												cafe7,
-												cafe8,
-												cafe9,
-												cafe10,
-											]}
-											title="Malvar Bat Cave Café"
-											dateBadge="3rd Yr 1st Sem 2025"
-										/>
-										<div>
-											<motion.h3
-												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
-												transition={{
-													delay: 0.3,
-													duration: 0.7,
-													ease: [0.22, 1, 0.36, 1],
-												}}
-												className="text-2xl font-semibold mb-4 tracking-tight"
-											>
-												Malvar Bat Cave Café
-											</motion.h3>
-											<motion.p
-												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
-												transition={{
-													delay: 0.4,
-													duration: 0.7,
-													ease: [0.22, 1, 0.36, 1],
-												}}
-												className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6"
-											>
-												A café management system built with PHP and XAMPP,
-												featuring full CRUD functionality for managing products,
-												orders, and records. The system includes an integrated
-												chatbot to support customer inquiries and streamline
-												interactions, along with a Dark Mode interface for
-												improved accessibility, modern aesthetics, and
-												comfortable use in low-light environments.
-											</motion.p>
-											<div className="flex flex-wrap gap-3">
-												{["PHP", "XAMPP", "CRUD", "MySQL"].map((tool) => (
-													<motion.span
-														key={tool}
-														variants={badge}
-														whileHover={{ scale: 1.05 }}
-														className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
-													>
-														{tool}
-													</motion.span>
-												))}
-											</div>
-										</div>
-									</div>
-								</div>
-							</motion.div>
-
-							{/* Project 5: Vehicle Rental - 3rd yr 1st Sem 2025 (Left) */}
-							<motion.div
-								id="project-vehicle-rental"
-								variants={projectItemLeft}
-								className="relative"
-							>
-								{/* Timeline Dot - Desktop (center) */}
-								<motion.div
-									variants={timelineDot}
-									className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-gray-700 rounded-full border-4 border-white shadow-lg z-10 items-center justify-center"
-								>
-									<motion.div
-										animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-										transition={{
-											duration: 2,
-											repeat: Infinity,
-											ease: "easeInOut",
-										}}
-										className="absolute w-full h-full rounded-full bg-gray-400"
-									/>
-								</motion.div>
-								{/* Timeline Dot - Mobile (right) */}
-								<motion.div
-									variants={timelineDot}
-									className="md:hidden flex absolute right-0 transform translate-x-1/2 w-4 h-4 bg-gray-700 rounded-full border-4 border-white shadow-lg z-10 items-center justify-center"
-								>
-									<motion.div
-										animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0, 0.5] }}
-										transition={{
-											duration: 2,
-											repeat: Infinity,
-											ease: "easeInOut",
-										}}
-										className="absolute w-full h-full rounded-full bg-gray-400"
-									/>
-								</motion.div>
-
-								{/* Date Badge - Desktop (center) */}
-								<motion.div
-									variants={dateBadgeLeft}
-									className="hidden md:block absolute left-1/2 transform -translate-x-1/2 -translate-y-8 px-4 py-1.5 rounded-full bg-white/80 dark:bg-gray-700/80 backdrop-blur-md border border-white/50 dark:border-gray-600/50 text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-md whitespace-nowrap z-20"
-								>
-									3rd Yr 1st Sem 2025
-								</motion.div>
-
-								{/* Glow background */}
-								<motion.div
-									aria-hidden
-									initial={{ scale: 0.8, opacity: 0 }}
-									whileInView={{ scale: 1, opacity: 1 }}
-									viewport={{ once: true, amount: 0.1 }}
-									transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-									className="absolute -inset-6 rounded-3xl bg-gradient-to-br from-white/40 via-white/10 to-transparent blur-2xl -z-10"
-								/>
-
-								{/* Project content - Desktop: Image left, Timeline center, Description right */}
-								<div className="hidden md:flex gap-4 items-center relative pt-8">
-									<div className="w-[45%] pr-6">
-										<ImageCarousel
-											images={[
-												rental1,
-												rental2,
-												rental3,
-												rental4,
-												rental5,
-												rental6,
-												rental7,
-												rental8,
-												rental9,
-												rental10,
-											]}
-											title="Vehicle Rental System"
-										/>
-									</div>
-									<div className="w-[10%] shrink-0"></div>
-									<div className="w-[45%] pl-6">
-										<motion.h3
-											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
-											transition={{
-												delay: 0.3,
-												duration: 0.7,
-												ease: [0.22, 1, 0.36, 1],
-											}}
-											className="text-2xl font-semibold mb-4 tracking-tight"
-										>
-											Vehicle Rental System
-										</motion.h3>
-										<motion.p
-											initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-											whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-											viewport={{ once: true, amount: 0.1 }}
-											transition={{
-												delay: 0.4,
-												duration: 0.7,
-												ease: [0.22, 1, 0.36, 1],
-											}}
-											className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6 max-w-lg"
-										>
-											A PHP-based vehicle rental system using CRUD operations
-											and XML for structured data handling, enhanced with an
-											integrated chatbot to assist users with vehicle inquiries,
-											availability, and booking guidance.
-										</motion.p>
-										<div className="flex flex-wrap gap-3">
-											{["PHP", "CRUD", "XML"].map((tool) => (
-												<motion.span
-													key={tool}
-													variants={badge}
-													whileHover={{ scale: 1.05 }}
-													className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
-												>
-													{tool}
-												</motion.span>
-											))}
-										</div>
-									</div>
-								</div>
-
-								{/* Mobile layout: Content left, Timeline right */}
-								<div className="md:hidden flex gap-4 pr-8">
-									<div className="flex-1 space-y-4">
-										<ImageCarousel
-											images={[
-												rental1,
-												rental2,
-												rental3,
-												rental4,
-												rental5,
-												rental6,
-												rental7,
-												rental8,
-												rental9,
-												rental10,
-											]}
-											title="Vehicle Rental System"
-											dateBadge="3rd Yr 1st Sem 2025"
-										/>
-										<div>
-											<motion.h3
-												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
-												transition={{
-													delay: 0.3,
-													duration: 0.7,
-													ease: [0.22, 1, 0.36, 1],
-												}}
-												className="text-2xl font-semibold mb-4 tracking-tight"
-											>
-												Vehicle Rental System
-											</motion.h3>
-											<motion.p
-												initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-												whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-												viewport={{ once: true, amount: 0.1 }}
-												transition={{
-													delay: 0.4,
-													duration: 0.7,
-													ease: [0.22, 1, 0.36, 1],
-												}}
-												className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6"
-											>
-												A PHP-based vehicle rental system using CRUD operations
-												and XML for structured data handling, enhanced with an
-												integrated chatbot to assist users with vehicle
-												inquiries, availability, and booking guidance.
-											</motion.p>
-											<div className="flex flex-wrap gap-3">
-												{["PHP", "CRUD", "XML"].map((tool) => (
-													<motion.span
-														key={tool}
-														variants={badge}
-														whileHover={{ scale: 1.05 }}
-														className="px-4 py-1.5 rounded-full text-sm font-medium bg-white/60 dark:bg-gray-700/60 backdrop-blur-md border border-white/40 dark:border-gray-600/40 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/80 dark:hover:bg-gray-600/80 transition"
-													>
-														{tool}
-													</motion.span>
-												))}
-											</div>
-										</div>
-									</div>
-								</div>
-							</motion.div>
+							<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white" />
+							<h3 className="text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+								Academic Projects
+							</h3>
 						</motion.div>
+
+						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+							{projects.map((proj) => (
+								<ProjectCard key={proj.title} {...proj} />
+							))}
+						</div>
+					</div>
+
+					{/* ── Section 4: Learning Timeline ── */}
+					<div className="px-7 py-6 sm:px-9 sm:py-7" ref={timelineRef}>
+						<motion.div
+							initial={{ opacity: 0, y: 14 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5 }}
+							className="flex items-center gap-2 mb-8"
+						>
+							<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white" />
+							<h3 className="text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+								Learning Timeline
+							</h3>
+						</motion.div>
+
+						<div className="relative">
+							{/* Base vertical line */}
+							<div className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-gray-200 dark:bg-gray-700" />
+							{/* Animated progress fill */}
+							<motion.div
+								style={{ scaleY, originY: 0 }}
+								className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-gray-500 dark:bg-gray-400"
+							/>
+
+							<div className="space-y-10 pb-2">
+								{timelineItems.map((item, i) => (
+									<motion.div
+										key={i}
+										initial={{
+											opacity: 0,
+											x: item.side === "left" ? -28 : 28,
+										}}
+										whileInView={{ opacity: 1, x: 0 }}
+										viewport={{ once: true, amount: 0.3 }}
+										transition={{ duration: 0.55, ease: "easeOut" }}
+										className={`relative flex items-start gap-4 ${item.side === "right" ? "flex-row-reverse" : ""}`}
+									>
+										{/* Dot */}
+										<div className="absolute left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-gray-400 dark:bg-gray-500 border-2 border-white dark:border-gray-800 z-10 mt-1.5" />
+
+										{/* Content */}
+										<div
+											className={`w-[calc(50%-18px)] ${item.side === "right" ? "text-right" : ""}`}
+										>
+											<span className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+												{item.date}
+											</span>
+											<h4 className="text-sm font-semibold text-gray-900 dark:text-white mt-0.5 mb-1">
+												{item.title}
+											</h4>
+											<p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+												{item.desc}
+											</p>
+										</div>
+
+										{/* Spacer */}
+										<div className="w-[calc(50%-18px)]" />
+									</motion.div>
+								))}
+							</div>
+						</div>
 					</div>
 				</motion.div>
 			</div>
