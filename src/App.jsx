@@ -6,10 +6,16 @@ import Job from "./Job.jsx";
 import Certificate from "./Certificate.jsx";
 import Footer from "./components/Footer.jsx";
 import DarkModeToggle from "./components/DarkModeToggle.jsx";
+import { motion } from "framer-motion";
 
 function App() {
 	return (
-		<div className="bg-white dark:bg-gray-900 min-h-screen transition-colors duration-500">
+		<motion.div
+			initial={{ opacity: 0, y: 24 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ duration: 0.7, ease: "easeOut" }}
+			className="bg-white dark:bg-gray-900 min-h-screen transition-colors duration-500"
+		>
 			<DarkModeToggle />
 			<Home />
 			<About />
@@ -18,7 +24,7 @@ function App() {
 			<Job />
 			<Certificate />
 			<Footer />
-		</div>
+		</motion.div>
 	);
 }
 

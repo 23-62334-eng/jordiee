@@ -64,3 +64,30 @@ html,
 body {
 	overflow-x: hidden;
 }
+
+/* Marquee animations */
+@keyframes marquee {
+	0% {
+		transform: translateX(0);
+	}
+	100% {
+		transform: translateX(-25%);
+	}
+}
+
+@keyframes marquee-reverse {
+	0% {
+		transform: translateX(-25%);
+	}
+	100% {
+		transform: translateX(0);
+	}
+}
+
+.marquee {
+	animation: marquee 20s linear infinite;
+}
+
+.marquee-reverse {
+	animation: marquee-reverse 20s linear infinite;
+}
