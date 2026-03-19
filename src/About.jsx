@@ -164,7 +164,7 @@ function About() {
 						{/* Action Buttons */}
 						<motion.div variants={fadeUp} className="flex items-center gap-2.5">
 							<a
-								href="https://calendly.com"
+								href="https://calendly.com/javiermarkjordan/30min"
 								target="_blank"
 								rel="noopener noreferrer"
 								className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold
@@ -174,7 +174,7 @@ function About() {
 									transition-all duration-200 active:scale-95"
 							>
 								<FiCalendar className="w-3.5 h-3.5" />
-								Schedule a Call
+								Schedule a Meeting
 							</a>
 							<a
 								href="mailto:javiermarkjordan@gmail.com"
