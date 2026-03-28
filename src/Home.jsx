@@ -16,6 +16,7 @@ import { SiTailwindcss, SiMysql, SiJavascript, SiN8N } from "react-icons/si";
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef, useCallback } from "react";
 import resumePdf from "./assets/resume/RESUME.pdf";
+import cvPDF from "./assets/cv/markjordanjavier_cv.pdf";
 import me from "./assets/me/jordie.jpg";
 import AsciiPortrait from "./components/AsciiPortrait";
 import TiltCard from "./components/TiltCard";
@@ -317,8 +318,8 @@ function Home() {
 								{/* Resume button */}
 								<div>
 									<motion.a
-										href={resumePdf}
-										download="Mark_Jordan_Javier_RESUME.pdf"
+										href={cvPDF}
+										download="markjordanjavier-CV.pdf"
 										className="group relative inline-flex items-center gap-2 font-semibold py-2 sm:py-2.5 px-5 sm:px-6 rounded-full text-gray-600 dark:text-gray-200 text-sm sm:text-base bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 shadow-lg dark:shadow-gray-900/50 overflow-hidden"
 										whileHover={{ y: -4, scale: 1.02 }}
 										whileTap={{ scale: 0.98 }}
@@ -327,7 +328,7 @@ function Home() {
 										<span className="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-400/20 dark:from-blue-500/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out"></span>
 										<span className="relative flex items-center gap-2">
 											<span className="text-base sm:text-lg">📄</span>
-											<span>Download Resume</span>
+											<span>Download CV</span>
 										</span>
 									</motion.a>
 								</div>
@@ -613,8 +614,8 @@ function Home() {
 							style={{ zIndex: 20 }}
 						>
 							<motion.a
-								href={resumePdf}
-								download="Mark_Jordan_Javier_RESUME.pdf"
+								href={cvPDF}
+								download="markjordanjavier-CV.pdf"
 								className="group relative inline-flex items-center gap-2 font-semibold py-2 px-5 rounded-full text-gray-600 dark:text-gray-200 text-sm bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 shadow-lg dark:shadow-gray-900/50 overflow-hidden"
 								whileHover={{ y: -4, scale: 1.02 }}
 								whileTap={{ scale: 0.98 }}
@@ -623,7 +624,7 @@ function Home() {
 								<span className="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-400/20 dark:from-blue-500/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out"></span>
 								<span className="relative flex items-center gap-2">
 									<span className="text-lg">📄</span>
-									<span>Download Resume</span>
+									<span>Download CV</span>
 								</span>
 							</motion.a>
 
