@@ -17,9 +17,18 @@ import cert2 from "./assets/cert/cert2.jpg";
 import cert3 from "./assets/cert/cert3.jpg";
 import cert4 from "./assets/cert/cert4.jpg";
 import certMicroPBI from "./assets/cert/MicroPBI.jpg";
+import certClaudeInAction from "./assets/cert/ClaudeInAction.jpg";
 
 /* ─── Data ───────────────────────────────────────────────── */
 const certificates = [
+	{
+		title: "Claude in Action",
+		org: "Anthropic",
+		year: "2026",
+		img: certClaudeInAction,
+		category: "Professional",
+		verified: true,
+	},
 	{
 		title: "Microsoft Power BI Data Analyst",
 		org: "Microsoft",
