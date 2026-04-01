@@ -18,9 +18,18 @@ import cert3 from "./assets/cert/cert3.jpg";
 import cert4 from "./assets/cert/cert4.jpg";
 import certMicroPBI from "./assets/cert/MicroPBI.jpg";
 import certClaudeInAction from "./assets/cert/ClaudeInAction.jpg";
+import certClaude101 from "./assets/cert/Claude101.jpg";
 
 /* ─── Data ───────────────────────────────────────────────── */
 const certificates = [
+	{
+		title: "Claude 101",
+		org: "Anthropic",
+		year: "2026",
+		img: certClaude101,
+		category: "Professional",
+		verified: true,
+	},
 	{
 		title: "Claude in Action",
 		org: "Anthropic",
@@ -87,6 +96,8 @@ function OrgLogo({ org, size = "sm" }) {
 			? "w-6 h-6 rounded-md text-[9px] font-bold"
 			: "w-10 h-10 rounded-lg text-xs font-bold";
 	const map = {
+		Anthropic:
+			"bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-300",
 		Microsoft:
 			"bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300",
 		"Batangas Information Technology Society":
@@ -95,6 +106,7 @@ function OrgLogo({ org, size = "sm" }) {
 			"bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-300",
 	};
 	const initials = {
+		Anthropic: "AI",
 		Microsoft: "MS",
 		"Batangas Information Technology Society": "BI",
 		"CICS Student Council": "CC",
