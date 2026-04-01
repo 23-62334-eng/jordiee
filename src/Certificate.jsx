@@ -18,7 +18,7 @@ import cert3 from "./assets/cert/cert3.jpg";
 import cert4 from "./assets/cert/cert4.jpg";
 import certMicroPBI from "./assets/cert/MicroPBI.jpg";
 import certClaudeInAction from "./assets/cert/ClaudeInAction.jpg";
-import certClaude101 from "./assets/cert/Claude101.jpg";
+import certClaude101 from "./assets/cert/Claude_101.jpg";
 
 /* ─── Data ───────────────────────────────────────────────── */
 const certificates = [
