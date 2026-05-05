@@ -74,7 +74,7 @@ const techCategories = [
 		items: ["PHP", "MySQL", "Python", "Java", "Node.js", "Express.js"],
 	},
 	{ label: "Cloud", items: ["Docker", "XAMPP", "MongoDB"] },
-	{ label: "CMS & No-Code", items: ["n8n"] },
+	{ label: "Automation", items: ["n8n"] },
 	{
 		label: "Developer Tools",
 		items: [
