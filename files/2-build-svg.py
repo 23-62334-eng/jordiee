@@ -15,6 +15,7 @@ BAR = 34                       # window title bar height
 GAP = 46                       # gap between art and panel
 LABEL_W = 114                  # panel label column width
 
+MONO_ART = True   # render the portrait in greyscale
 MONO = "ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono','DejaVu Sans Mono',monospace"
 
 ART_W = COLS * ACW
@@ -24,6 +25,7 @@ ART_H = ROWS * ACH
 USER = "jordiee"
 HOST = "macbook"
 CWD = "~/github"
+QUOTE = "Never stop learning; every day holds something new to discover."
 
 PANEL = [
     ("Name",        "Mark Jordan B. Javier"),
@@ -70,17 +72,17 @@ THEMES = {
                  user="#7ee787", host="#7ee787", path="#79c0ff", prompt="#8b949e",
                  cmd="#c9d1d9", head_a="#7ee787", head_b="#79c0ff",
                  label="#ffa657", value="#c9d1d9", rule="#30363d",
-                 cursor="#7ee787", sw=SWATCH, sw2=SWATCH2, ink_lo=0.44, ink_hi=1.00),
+                 cursor="#7ee787", string="#a5d6ff", quote="#8b949e", sw=SWATCH, sw2=SWATCH2, ink_lo=0.36, ink_hi=1.00),
     "light": dict(bg="#ffffff", bar="#f6f8fa", border="#d0d7de", title="#57606a",
                   user="#1a7f37", host="#1a7f37", path="#0969da", prompt="#57606a",
                   cmd="#24292f", head_a="#1a7f37", head_b="#0969da",
                   label="#bc4c00", value="#24292f", rule="#d0d7de",
-                  cursor="#1a7f37",
+                  cursor="#1a7f37", string="#0a3069", quote="#57606a",
                   sw=["#afb8c1", "#cf222e", "#1a7f37", "#9a6700",
                       "#0969da", "#8250df", "#1b7c83", "#57606a"],
                   sw2=["#8c959f", "#a40e26", "#116329", "#7d4e00",
                        "#0550ae", "#6639ba", "#155d63", "#24292f"],
-                  ink_lo=0.66, ink_hi=0.07),
+                  ink_lo=0.60, ink_hi=0.04),
 }
 
 
@@ -104,7 +106,7 @@ def retone(hexcol, lo, hi):
     h, l, s = colorsys.rgb_to_hls(r, g, b)
     lum = 0.2126 * r + 0.7152 * g + 0.0722 * b
     target = lo + (hi - lo) * lum
-    s = min(1.0, s * (0.85 if hi > lo else 1.05))
+    s = 0.0 if MONO_ART else min(1.0, s * (0.85 if hi > lo else 1.05))
     return rgb2hex(*colorsys.hls_to_rgb(h, target, s))
 
 
@@ -143,7 +145,8 @@ def build(name):
     prompt_h = PLH * 1.4
 
     W = PAD * 2 + ART_W + GAP + panel_w
-    H = BAR + PAD + prompt_h + 12 + body_h + 14 + prompt_h + PAD
+    bottom_h = prompt_h + PLH * 2
+    H = BAR + PAD + prompt_h + 12 + body_h + 14 + bottom_h + PAD
     W, H = round(W), round(H)
 
     art_x = PAD
@@ -217,14 +220,24 @@ def build(name):
     a('</g>')
 
     # ---- bottom prompt + cursor
-    by = H - PAD - 2
-    a(f'<text x="{PAD}" y="{by}" font-size="{PF}" font-weight="700" '
-      f'xml:space="preserve" style="white-space:pre">'
-      f'<tspan fill="{t["user"]}">{USER}@{HOST}</tspan>'
-      f'<tspan fill="{t["prompt"]}">:</tspan>'
-      f'<tspan fill="{t["path"]}">{esc(CWD)}</tspan>'
-      f'<tspan fill="{t["prompt"]}">$ </tspan>'
-      f'<tspan fill="{t["cursor"]}">\u2588</tspan></text>')
+    by = round(H - PAD - 2, 2)
+    by_out = round(by - PLH, 2)
+    by_echo = round(by_out - PLH, 2)
+
+    def prompt(y, tail):
+        return (f'<text x="{PAD}" y="{y}" font-size="{PF}" font-weight="700" '
+                f'xml:space="preserve" style="white-space:pre">'
+                f'<tspan fill="{t["user"]}">{USER}@{HOST}</tspan>'
+                f'<tspan fill="{t["prompt"]}">:</tspan>'
+                f'<tspan fill="{t["path"]}">{esc(CWD)}</tspan>'
+                f'<tspan fill="{t["prompt"]}">$ </tspan>' + tail + '</text>')
+
+    a(prompt(by_echo,
+             f'<tspan fill="{t["cmd"]}" font-weight="400">echo </tspan>'
+             f'<tspan fill="{t["string"]}" font-weight="400">"{esc(QUOTE)}"</tspan>'))
+    a(f'<text x="{PAD}" y="{by_out}" font-size="{PF}" fill="{t["quote"]}" '
+      f'font-style="italic">{esc(QUOTE)}</text>')
+    a(prompt(by, f'<tspan fill="{t["cursor"]}">\u2588</tspan>'))
 
     a('</svg>')
     return "\n".join(s), W, H

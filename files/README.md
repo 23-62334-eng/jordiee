@@ -12,12 +12,6 @@
 
 ---
 
-<div align="center">
-  <em>"Never stop learning; every day holds something new to discover."</em>
-</div>
-
-<br/>
-
 ## What I build
 
 Full stack web systems, with a focus on integrating AI into them rather than bolting it on. 4th year BSIT — Business Analytics at Batangas State University. I work solo end to end: schema, API, UI, deploy.
