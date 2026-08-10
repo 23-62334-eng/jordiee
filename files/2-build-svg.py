@@ -5,7 +5,7 @@ ROWS = len(grid)
 COLS = len(grid[0])
 
 # ---------------------------------------------------------------- geometry
-AF = 12.0                      # ascii font-size
+AF = 14.0                      # ascii font-size
 ACW = AF * 0.60                # ascii cell width
 ACH = AF * 1.14                # ascii line height
 PF = 12.5                      # panel font-size
@@ -54,7 +54,12 @@ PANEL = [
     ("",            "Online Thrift Shop · Malvar Bat Cave Café"),
     ("",            "Time Scheduling System · Portfolio Website"),
     None,
-    ("Certified",   "Microsoft Power BI Data Analyst"),
+    ("Certified",   "Claude 101 · Claude Code in Action · Agent Skills"),
+    ("",            "Anthropic · 2026"),
+    ("",            "Microsoft Power BI Data Analyst · 2025"),
+    ("Conferences", "DataBiz 2024 · DataBiz 2025 · BITCON 2025"),
+    ("",            "TechTalks S3 · CICS Student Council · 2025"),
+    None,
     ("Currently",   "Capstone development · open to internships"),
     None,
     ("Portfolio",   "jordiee.me"),
@@ -138,14 +143,14 @@ def build(name):
 
     panel_lines = len(PANEL)
     header_block = PLH * 2.4
-    panel_h = header_block + panel_lines * PLH + PLH * 1.6 + 34  # + swatches
+    panel_h = header_block + panel_lines * PLH + PLH * 1.9
     panel_w = 512
 
     body_h = max(ART_H, panel_h)
     prompt_h = PLH * 1.4
 
     W = PAD * 2 + ART_W + GAP + panel_w
-    bottom_h = prompt_h + PLH * 2
+    bottom_h = prompt_h
     H = BAR + PAD + prompt_h + 12 + body_h + 14 + bottom_h + PAD
     W, H = round(W), round(H)
 
@@ -213,16 +218,15 @@ def build(name):
         a(f'<text x="{panel_x + LABEL_W}" y="{round(y,2)}" fill="{t["value"]}">{esc(value)}</text>')
         y += PLH
 
-    y += PLH * 0.5
-    for r, pal in enumerate((t["sw"], t["sw2"])):
-        for i, c in enumerate(pal):
-            a(f'<rect x="{panel_x + i * 30}" y="{round(y + r * 15,2)}" width="28" height="13" fill="{c}"/>')
+    y += PLH * 0.55
+    a(f'<line x1="{panel_x}" y1="{round(y - PLH * 0.85, 2)}" x2="{panel_x + panel_w - 20}" '
+      f'y2="{round(y - PLH * 0.85, 2)}" stroke="{t["rule"]}" stroke-width="1"/>')
+    a(f'<text x="{panel_x}" y="{round(y, 2)}" fill="{t["quote"]}" font-style="italic" '
+      f'font-size="{PF}">"{esc(QUOTE)}"</text>')
     a('</g>')
 
     # ---- bottom prompt + cursor
     by = round(H - PAD - 2, 2)
-    by_out = round(by - PLH, 2)
-    by_echo = round(by_out - PLH, 2)
 
     def prompt(y, tail):
         return (f'<text x="{PAD}" y="{y}" font-size="{PF}" font-weight="700" '
@@ -232,11 +236,6 @@ def build(name):
                 f'<tspan fill="{t["path"]}">{esc(CWD)}</tspan>'
                 f'<tspan fill="{t["prompt"]}">$ </tspan>' + tail + '</text>')
 
-    a(prompt(by_echo,
-             f'<tspan fill="{t["cmd"]}" font-weight="400">echo </tspan>'
-             f'<tspan fill="{t["string"]}" font-weight="400">"{esc(QUOTE)}"</tspan>'))
-    a(f'<text x="{PAD}" y="{by_out}" font-size="{PF}" fill="{t["quote"]}" '
-      f'font-style="italic">{esc(QUOTE)}</text>')
     a(prompt(by, f'<tspan fill="{t["cursor"]}">\u2588</tspan>'))
 
     a('</svg>')

@@ -3,7 +3,7 @@
 <picture>
   <source media="(prefers-color-scheme: dark)"  srcset="./assets/neofetch-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="./assets/neofetch-light.svg">
-  <img alt="Mark Jordan Javier — full stack web developer based in Batangas, Philippines. AI integration, React, Next.js, Node.js, PostgreSQL, PHP, MySQL." src="./assets/neofetch-dark.svg" width="960">
+  <img alt="Mark Jordan Javier — full stack web developer based in Batangas, Philippines. AI integration, React, Next.js, Node.js, PostgreSQL, PHP, MySQL." src="./assets/neofetch-dark.svg" width="980">
 </picture>
 
 [**jordiee.me**](https://jordiee.me) · [LinkedIn](https://www.linkedin.com/in/mark-jordan-javier-29b72935a/) · [Email](mailto:javiermarkjordan@gmail.com) · [Book a call](https://calendly.com/javiermarkjordan/30min)
@@ -50,7 +50,16 @@ Payroll processing and a mobile commercial layer for a live municipal water util
 **Tools** Git · GitHub · Postman · Power BI
 **Editors** VS Code · Cursor · IntelliJ IDEA · PyCharm · NetBeans · Xcode
 
-Microsoft Power BI Data Analyst · BSIT — Business Analytics, Batangas State University
+## Certifications
+
+| Credential | Issuer | Year |
+| --- | --- | --- |
+| Claude 101 | Anthropic | 2026 |
+| Claude Code in Action | Anthropic | 2026 |
+| Introduction to Agent Skills | Anthropic | 2026 |
+| Microsoft Power BI Data Analyst | Microsoft | 2025 |
+
+**Conferences attended** DataBiz 2024 · DataBiz 2025 · BITCON 2025 · TechTalks S3 (CICS Student Council)
 
 ## Currently
 
