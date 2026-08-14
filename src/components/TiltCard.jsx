@@ -12,7 +12,13 @@ function TiltCard({
 	tiltDegree = 12,
 	scale = 1.04,
 	glareOpacity = 0.25,
+	// Lets a card be rendered as a real control (e.g. as="button") and pass
+	// through onClick/aria-*; without this the extra props were dropped
+	// silently and the card looked interactive but did nothing.
+	as = "div",
+	...rest
 }) {
+	const Tag = motion[as] ?? motion.div;
 	const cardRef = useRef(null);
 	const glareRef = useRef(null);
 	const rafRef = useRef(null);
@@ -73,9 +79,10 @@ function TiltCard({
 	}, []);
 
 	return (
-		<motion.div
+		<Tag
 			variants={variants}
 			ref={cardRef}
+			{...rest}
 			onMouseMove={handleMouseMove}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
@@ -113,7 +120,7 @@ function TiltCard({
 						"inset 0 0 30px rgba(255,255,255,0.08), 0 15px 40px -10px rgba(0,0,0,0.3)",
 				}}
 			/>
-		</motion.div>
+		</Tag>
 	);
 }
 
