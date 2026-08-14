@@ -20,10 +20,17 @@ const CONTRIBUTIONS_URL = `${import.meta.env.BASE_URL}contributions.json`;
    sm  → 26 columns at 8px/2px  = 260px, fits inside the About card at 375px.
    md/lg → 53 columns at 11px/3px = 742px, fits at ≥1024px, scrolls below.   */
 const LAYOUT = {
-	sm: { cell: 8, gap: 2, weeks: 26, label: "the last 6 months" },
-	md: { cell: 11, gap: 3, weeks: 53, label: "the last year" },
-	lg: { cell: 11, gap: 3, weeks: 53, label: "the last year" },
+	sm: { cell: 8, gap: 2 },
+	md: { cell: 11, gap: 3 },
+	lg: { cell: 11, gap: 3 },
 };
+
+// Every breakpoint renders the same 52 weeks. Small screens used to window
+// down to 6 months to avoid a horizontal scroll, but selecting a year already
+// scrolls there — so the only thing that bought was a headline number that
+// disagreed with the same page on desktop.
+const ROLLING_WEEKS = 53;
+const ROLLING_LABEL = "the last year";
 
 const WEEKDAY_COLUMN = 26;
 const MONTH_ROW = 16;
@@ -278,7 +285,7 @@ function Skeleton({ layout, mode }) {
 						<div style={{ height: MONTH_ROW }} />
 						<div className="flex" style={{ gap: layout.gap }}>
 							<div style={{ width: WEEKDAY_COLUMN }} />
-							{Array.from({ length: layout.weeks }, (_, week) => (
+							{Array.from({ length: ROLLING_WEEKS }, (_, week) => (
 								<div key={week} className="flex flex-col" style={{ gap: layout.gap }}>
 									{Array.from({ length: 7 }, (_, day) => (
 										<div
@@ -331,12 +338,12 @@ function GitHubCalendar() {
 		// widest window any breakpoint renders — so a day keeps its colour
 		// across breakpoints, while each year still gets its own gradient
 		// rather than being flattened by a busier one.
-		const scaleWeeks = year ? allWeeks : allWeeks.slice(-LAYOUT.lg.weeks);
+		const scaleWeeks = year ? allWeeks : allWeeks.slice(-ROLLING_WEEKS);
 		const level = makeLevelScale(scaleWeeks.flat().filter(Boolean));
 
 		// A selected year always shows Jan–Dec; only the rolling view narrows
 		// to a six-month window on small screens.
-		const weeks = year ? allWeeks : allWeeks.slice(-layout.weeks);
+		const weeks = year ? allWeeks : allWeeks.slice(-ROLLING_WEEKS);
 		// Padding days and out-of-range days are structure, not data: they must
 		// not reach the total or the monthly summary.
 		const visible = weeks.flat().filter((day) => day && !day.outside);
@@ -363,7 +370,7 @@ function GitHubCalendar() {
 				)
 				.join(". "),
 		};
-	}, [days, layout.weeks, year]);
+	}, [days, year]);
 
 	// Start scrolled to today. Assigning scrollLeft directly rather than using
 	// scrollIntoView, which would also scroll the page to reach this element.
@@ -380,7 +387,7 @@ function GitHubCalendar() {
 	const gridWidth = model.weeks.length * column - layout.gap;
 	const isEmpty = model.total === 0;
 
-	const scope = year ?? layout.label;
+	const scope = year ?? ROLLING_LABEL;
 	const caption = isEmpty
 		? `No contributions in ${scope}`
 		: `${model.total} contribution${model.total === 1 ? "" : "s"} in ${scope}`;
