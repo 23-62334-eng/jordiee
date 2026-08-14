@@ -21,10 +21,10 @@ import PaintPortrait from "./components/PaintPortrait";
 import TiltCard from "./components/TiltCard";
 
 // Project thumbnail images
-import projTimeSched from "./assets/proj/timeSched/TSS1.jpeg";
-import projThrift from "./assets/proj/thriftStore/img1.png";
-import projBatCafe from "./assets/proj/batCafe/batCafe1.png";
-import projVehiRental from "./assets/proj/vehiRental/vRental1.png";
+import projTimeSched from "./assets/proj/timeSched/TSS1.webp";
+import projThrift from "./assets/proj/thriftStore/img1.webp";
+import projBatCafe from "./assets/proj/batCafe/batCafe1.webp";
+import projVehiRental from "./assets/proj/vehiRental/vRental1.webp";
 
 // Orbiting tech stack icons around the portrait
 const orbitIcons = [

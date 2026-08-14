@@ -7,14 +7,14 @@ import { useState, useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 import TiltCard from "./components/TiltCard";
 
-import cert1 from "./assets/cert/cert1.jpg";
-import cert2 from "./assets/cert/cert2.jpg";
-import cert3 from "./assets/cert/cert3.jpg";
-import cert4 from "./assets/cert/cert4.jpg";
-import certMicroPBI from "./assets/cert/MicroPBI.jpg";
-import certClaudeInAction from "./assets/cert/ClaudeInAction.jpg";
-import certClaude101 from "./assets/cert/Claude_101.jpg";
-import certClaudeAgent from "./assets/cert/Claude_Agent.jpg";
+import cert1 from "./assets/cert/cert1.webp";
+import cert2 from "./assets/cert/cert2.webp";
+import cert3 from "./assets/cert/cert3.webp";
+import cert4 from "./assets/cert/cert4.webp";
+import certMicroPBI from "./assets/cert/MicroPBI.webp";
+import certClaudeInAction from "./assets/cert/ClaudeInAction.webp";
+import certClaude101 from "./assets/cert/Claude_101.webp";
+import certClaudeAgent from "./assets/cert/Claude_Agent.webp";
 
 /* ─── Data ───────────────────────────────────────────────── */
 const certificates = [
@@ -92,9 +92,11 @@ const CATEGORY_BADGE =
 /* ─── Org Logo ───────────────────────────────────────────── */
 function OrgLogo({ org, size = "sm" }) {
 	const base =
-		size === "sm"
-			? "w-6 h-6 rounded-md text-[9px] font-bold"
-			: "w-10 h-10 rounded-lg text-xs font-bold";
+		size === "xs"
+			? "w-4 h-4 rounded text-[7px] font-bold"
+			: size === "sm"
+				? "w-6 h-6 rounded-md text-[9px] font-bold"
+				: "w-10 h-10 rounded-lg text-xs font-bold";
 	const map = {
 		Anthropic:
 			"bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-300",
@@ -137,55 +139,62 @@ function CertificationCard({ cert, onView }) {
 				type="button"
 				onClick={() => onView(cert)}
 				aria-label={`View certificate: ${cert.title}`}
-				className="group flex flex-col rounded-2xl overflow-hidden text-left w-full
+				className="group flex flex-col rounded-xl overflow-hidden text-left w-full
 				bg-white dark:bg-gray-900
 				border border-gray-200 dark:border-gray-700/60
 				shadow-sm dark:shadow-none h-full cursor-pointer
 				focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent))] focus-visible:ring-offset-2"
-				borderRadius="rounded-2xl"
-				tiltDegree={8}
+				borderRadius="rounded-xl"
+				tiltDegree={6}
 				scale={1.03}
 				glareOpacity={0.2}
 			>
 				{/* Image */}
-				<div className="relative h-44 overflow-hidden bg-gray-100 dark:bg-gray-800">
+				<div className="relative h-24 overflow-hidden bg-gray-100 dark:bg-gray-800">
 					<img
 						src={cert.img}
 						alt={cert.title}
 						loading="lazy"
+						decoding="async"
 						className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
 					/>
+					{/* At four across there is no room for a "Verified" pill beside the
+					    category, so the tick moves onto the image as an icon. */}
+					{cert.verified && (
+						<span
+							className="absolute top-1.5 right-1.5 p-1 rounded-full
+								bg-white/90 dark:bg-gray-900/80 backdrop-blur-sm
+								text-green-600 dark:text-green-400"
+							title="Verified"
+						>
+							<FiCheckCircle className="w-3 h-3" aria-hidden="true" />
+							<span className="sr-only">Verified</span>
+						</span>
+					)}
 				</div>
 
 				{/* Body */}
-				<div className="flex flex-col gap-2 p-4 flex-1">
-					{/* Category + Verified */}
-					<div className="flex items-center gap-1.5 flex-wrap">
-						<span
-							className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${CATEGORY_BADGE}`}
-						>
-							{cert.category}
-						</span>
-						{cert.verified && (
-							<span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200/60 dark:border-green-700/40">
-								<FiCheckCircle className="w-2.5 h-2.5" />
-								Verified
-							</span>
-						)}
-					</div>
+				<div className="flex flex-col gap-1.5 p-2.5 flex-1">
+					{/* Category */}
+					<span
+						className={`self-start px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${CATEGORY_BADGE}`}
+					>
+						{cert.category}
+					</span>
 
-					{/* Title */}
-					<h3 className="text-sm font-bold text-gray-900 dark:text-white leading-snug">
+					{/* Title — clamped, since a few of these run long and would
+					    otherwise set the height of the whole row. */}
+					<h3 className="text-xs font-bold text-gray-900 dark:text-white leading-snug line-clamp-2">
 						{cert.title}
 					</h3>
 
 					{/* Org row */}
-					<div className="flex items-center gap-2 mt-auto pt-2 border-t border-gray-100 dark:border-gray-800">
-						<OrgLogo org={cert.org} size="sm" />
-						<p className="text-xs text-gray-500 dark:text-gray-400 truncate flex-1 min-w-0">
+					<div className="flex items-center gap-1.5 mt-auto pt-1.5 border-t border-gray-100 dark:border-gray-800">
+						<OrgLogo org={cert.org} size="xs" />
+						<p className="text-[10px] text-gray-500 dark:text-gray-400 truncate flex-1 min-w-0">
 							{cert.org}
 						</p>
-						<span className="text-[10px] text-gray-400 dark:text-gray-500 shrink-0 font-medium">
+						<span className="text-[9px] text-gray-400 dark:text-gray-500 shrink-0 font-medium">
 							{cert.year}
 						</span>
 					</div>
@@ -309,9 +318,12 @@ function CertificateModal({ cert, onClose }) {
 function Certificate() {
 	const [expandedCert, setExpandedCert] = useState(null);
 
+	// No min-h-screen on the section: the compact four-across grid is ~550px,
+	// so forcing a full viewport left ~350px of dead air that read as a gap
+	// between this section and Experience above it.
 	return (
-		<section id="certificate" className="min-h-screen relative z-0">
-			<div className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16">
+		<section id="certificate" className="relative z-0">
+			<div className="flex items-center justify-center px-4 sm:px-6 py-12">
 				<motion.div
 					initial={{ opacity: 0, y: 60 }}
 					whileInView={{ opacity: 1, y: 0 }}
@@ -347,7 +359,7 @@ function Certificate() {
 						</motion.div>
 
 						{/* ── Certification Grid ── */}
-						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+						<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
 							{certificates.map((cert, i) => (
 								<CertificationCard
 									key={i}

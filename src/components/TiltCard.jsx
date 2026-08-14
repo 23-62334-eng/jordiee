@@ -92,7 +92,11 @@ function TiltCard({
 			style={{
 				...(borderRadiusStyle ? { borderRadius: borderRadiusStyle } : {}),
 				transformStyle: "preserve-3d",
-				willChange: "transform",
+				// Only promote to its own compositor layer while the tilt is
+				// actually running. Leaving it on parks a GPU layer per card for
+				// the life of the page, which is what made scrolling past the
+				// project grid stutter.
+				willChange: isHovered ? "transform" : "auto",
 				transition: "box-shadow 0.4s ease-out",
 				boxShadow: isHovered
 					? isDark

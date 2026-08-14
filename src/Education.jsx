@@ -2,38 +2,38 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { FiBookOpen } from "react-icons/fi";
 import { useState, useRef } from "react";
 import TiltCard from "./components/TiltCard";
-import portfolio1 from "./assets/proj/1stPortfolio/portfolio1.png";
-import portfolio2 from "./assets/proj/1stPortfolio/portfolio2.png";
-import portfolio3 from "./assets/proj/1stPortfolio/portfolio3.png";
-import portfolio4 from "./assets/proj/1stPortfolio/portfolio4.png";
-import thrift1 from "./assets/proj/thriftStore/img1.png";
-import thrift2 from "./assets/proj/thriftStore/img2.png";
-import thrift3 from "./assets/proj/thriftStore/img3.png";
-import thrift4 from "./assets/proj/thriftStore/img4.png";
-import thrift5 from "./assets/proj/thriftStore/img5.png";
-import time1 from "./assets/proj/timeSched/TSS1.jpeg";
-import time2 from "./assets/proj/timeSched/TSS2.jpeg";
-import time3 from "./assets/proj/timeSched/TSS3.jpeg";
-import cafe1 from "./assets/proj/batCafe/batCafe1.png";
-import cafe2 from "./assets/proj/batCafe/batCafe2.png";
-import cafe3 from "./assets/proj/batCafe/batCafe3.png";
-import cafe4 from "./assets/proj/batCafe/batCafe4.png";
-import cafe5 from "./assets/proj/batCafe/batCafe5.png";
-import cafe6 from "./assets/proj/batCafe/batCafe6.png";
-import cafe7 from "./assets/proj/batCafe/batCafe7.png";
-import cafe8 from "./assets/proj/batCafe/batCafe8.png";
-import cafe9 from "./assets/proj/batCafe/batCafe9.png";
-import cafe10 from "./assets/proj/batCafe/batCafe10.png";
-import rental1 from "./assets/proj/vehiRental/vRental1.png";
-import rental2 from "./assets/proj/vehiRental/vRental2.png";
-import rental3 from "./assets/proj/vehiRental/vRental3.png";
-import rental4 from "./assets/proj/vehiRental/vRental4.png";
-import rental5 from "./assets/proj/vehiRental/vRental5.png";
-import rental6 from "./assets/proj/vehiRental/vRental6.png";
-import rental7 from "./assets/proj/vehiRental/vRental7.png";
-import rental8 from "./assets/proj/vehiRental/vRental8.png";
-import rental9 from "./assets/proj/vehiRental/vrental9.png";
-import rental10 from "./assets/proj/vehiRental/vRental10.png";
+import portfolio1 from "./assets/proj/1stPortfolio/portfolio1.webp";
+import portfolio2 from "./assets/proj/1stPortfolio/portfolio2.webp";
+import portfolio3 from "./assets/proj/1stPortfolio/portfolio3.webp";
+import portfolio4 from "./assets/proj/1stPortfolio/portfolio4.webp";
+import thrift1 from "./assets/proj/thriftStore/img1.webp";
+import thrift2 from "./assets/proj/thriftStore/img2.webp";
+import thrift3 from "./assets/proj/thriftStore/img3.webp";
+import thrift4 from "./assets/proj/thriftStore/img4.webp";
+import thrift5 from "./assets/proj/thriftStore/img5.webp";
+import time1 from "./assets/proj/timeSched/TSS1.webp";
+import time2 from "./assets/proj/timeSched/TSS2.webp";
+import time3 from "./assets/proj/timeSched/TSS3.webp";
+import cafe1 from "./assets/proj/batCafe/batCafe1.webp";
+import cafe2 from "./assets/proj/batCafe/batCafe2.webp";
+import cafe3 from "./assets/proj/batCafe/batCafe3.webp";
+import cafe4 from "./assets/proj/batCafe/batCafe4.webp";
+import cafe5 from "./assets/proj/batCafe/batCafe5.webp";
+import cafe6 from "./assets/proj/batCafe/batCafe6.webp";
+import cafe7 from "./assets/proj/batCafe/batCafe7.webp";
+import cafe8 from "./assets/proj/batCafe/batCafe8.webp";
+import cafe9 from "./assets/proj/batCafe/batCafe9.webp";
+import cafe10 from "./assets/proj/batCafe/batCafe10.webp";
+import rental1 from "./assets/proj/vehiRental/vRental1.webp";
+import rental2 from "./assets/proj/vehiRental/vRental2.webp";
+import rental3 from "./assets/proj/vehiRental/vRental3.webp";
+import rental4 from "./assets/proj/vehiRental/vRental4.webp";
+import rental5 from "./assets/proj/vehiRental/vRental5.webp";
+import rental6 from "./assets/proj/vehiRental/vRental6.webp";
+import rental7 from "./assets/proj/vehiRental/vRental7.webp";
+import rental8 from "./assets/proj/vehiRental/vRental8.webp";
+import rental9 from "./assets/proj/vehiRental/vRental9.webp";
+import rental10 from "./assets/proj/vehiRental/vRental10.webp";
 
 /* ─── Image Carousel ─────────────────────────────────────── */
 const ImageCarousel = ({ images, title, dateBadge }) => {
@@ -95,6 +95,13 @@ const ImageCarousel = ({ images, title, dateBadge }) => {
 										src={images[imgIndex]}
 										alt={`${title} - ${imgIndex + 1}`}
 										loading="lazy"
+										decoding="async"
+										// Intrinsic size lets the browser reserve the box and pick a
+										// decode size instead of holding a full-res bitmap per layer.
+										width={1200}
+										height={750}
+										fetchPriority={isFront ? "auto" : "low"}
+										draggable={false}
 										className={`w-full h-full object-cover ${isFront ? "group-hover:scale-105 transition-transform duration-700 ease-out" : ""}`}
 									/>
 									{isFront && (
@@ -233,6 +240,9 @@ function ProjectCard({
 			whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
 			viewport={{ once: true, amount: 0.12 }}
 			transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+			// Cards that are off screen skip layout, paint and image decode
+			// entirely; the intrinsic size keeps the scrollbar from jumping.
+			style={{ contentVisibility: "auto", containIntrinsicSize: "1px 380px" }}
 			className="rounded-2xl overflow-hidden
 				bg-white dark:bg-gray-900/60
 				border border-gray-200 dark:border-gray-700/60

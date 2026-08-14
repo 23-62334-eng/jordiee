@@ -1,7 +1,8 @@
-// Rasterised from assets/me/mee.svg — the source vector is 6.7 MB across
-// 7,819 paths, which is indefensible for a 64px avatar. This crop is
-// the same image at 256px (3x the display size) and 228x smaller.
-import profileImg from "./assets/me/me.svg";
+// Rasterised from assets/me/me.svg — the source vector is 7.4 MB across
+// 8,930 auto-traced paths, which is indefensible for a 64px avatar: every
+// one of those paths is re-rasterised on load and on resize. This is the
+// same artwork at 192px (3x the display size) as WebP, and 1,000x smaller.
+import profileImg from "./assets/me/me-avatar.webp";
 import { motion } from "framer-motion";
 import { FiMapPin, FiCalendar, FiMail } from "react-icons/fi";
 import TechLogoMarquee from "./components/TechLogoMarquee";
