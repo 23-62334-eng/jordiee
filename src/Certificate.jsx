@@ -2,9 +2,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
 	FiX,
 	FiCheckCircle,
-	FiAward,
-	FiUsers,
-	FiStar,
 } from "react-icons/fi";
 import { useState, useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
@@ -87,14 +84,10 @@ const certificates = [
 	},
 ];
 
-const categoryColors = {
-	Professional:
-		"bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200/50 dark:border-blue-700/50",
-	Conference:
-		"bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 border border-purple-200/50 dark:border-purple-700/50",
-	Event:
-		"bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-700/50",
-};
+// One neutral badge for every category. The three used to be blue / purple /
+// emerald, which were the last colours left in this section.
+const CATEGORY_BADGE =
+	"bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700";
 
 /* ─── Org Logo ───────────────────────────────────────────── */
 function OrgLogo({ org, size = "sm" }) {
@@ -169,7 +162,7 @@ function CertificationCard({ cert, onView }) {
 					{/* Category + Verified */}
 					<div className="flex items-center gap-1.5 flex-wrap">
 						<span
-							className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${categoryColors[cert.category]}`}
+							className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${CATEGORY_BADGE}`}
 						>
 							{cert.category}
 						</span>
@@ -316,30 +309,6 @@ function CertificateModal({ cert, onClose }) {
 function Certificate() {
 	const [expandedCert, setExpandedCert] = useState(null);
 
-	const counts = certificates.reduce((acc, c) => {
-		acc[c.category] = (acc[c.category] || 0) + 1;
-		return acc;
-	}, {});
-
-	const stats = [
-		{
-			icon: FiAward,
-			label: "Professional Certifications",
-			value: counts.Professional || 0,
-		},
-		{
-			icon: FiUsers,
-			label: "Conferences Attended",
-			value: counts.Conference || 0,
-		},
-		{ icon: FiStar, label: "Tech Events", value: counts.Event || 0 },
-	];
-
-	const stagger = {
-		hidden: {},
-		visible: { transition: { staggerChildren: 0.08 } },
-	};
-
 	return (
 		<section id="certificate" className="min-h-screen relative z-0">
 			<div className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16">
@@ -376,44 +345,6 @@ function Certificate() {
 								that contributed to my development journey.
 							</p>
 						</motion.div>
-
-						{/* ── Stats Row ── */}
-						<motion.div
-							variants={stagger}
-							initial="hidden"
-							whileInView="visible"
-							viewport={{ once: true }}
-							className="grid grid-cols-3 gap-3 mb-8"
-						>
-							{stats.map(({ icon: Icon, label, value }) => (
-								<motion.div
-									key={label}
-									variants={{
-										hidden: { opacity: 0, y: 12 },
-										visible: {
-											opacity: 1,
-											y: 0,
-											transition: { duration: 0.45, ease: "easeOut" },
-										},
-									}}
-									className="flex flex-col items-center justify-center gap-1 py-4 px-3 rounded-2xl
-										bg-white/60 dark:bg-gray-900/60
-										border border-white/60 dark:border-gray-700/60
-										backdrop-blur-sm text-center"
-								>
-									<Icon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-									<span className="text-2xl font-bold text-gray-900 dark:text-white leading-none">
-										{value}
-									</span>
-									<span className="text-[10px] text-gray-500 dark:text-gray-400 leading-snug">
-										{label}
-									</span>
-								</motion.div>
-							))}
-						</motion.div>
-
-						{/* ── Divider ── */}
-						<div className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent mb-8" />
 
 						{/* ── Certification Grid ── */}
 						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

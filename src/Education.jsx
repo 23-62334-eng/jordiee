@@ -144,7 +144,16 @@ function SkillBadge({ skill }) {
 }
 
 /* ─── Work Card (no screenshots — capstone & client builds) ─ */
-function WorkCard({ id, label, title, description, tags, status, slideFrom }) {
+function WorkCard({
+	id,
+	label,
+	year,
+	title,
+	description,
+	tags,
+	status,
+	slideFrom,
+}) {
 	return (
 		<motion.div
 			id={id}
@@ -166,10 +175,16 @@ function WorkCard({ id, label, title, description, tags, status, slideFrom }) {
 			<div className="flex items-center justify-between gap-3 mb-2">
 				<span className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
 					{label}
+					{year && (
+						<>
+							<span className="mx-1.5 text-gray-300 dark:text-gray-600">·</span>
+							{year}
+						</>
+					)}
 				</span>
 				{status && (
 					<span className="flex items-center gap-1.5 text-[10px] font-medium text-gray-500 dark:text-gray-400">
-						<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+						<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white animate-pulse" />
 						{status}
 					</span>
 				)}
@@ -285,6 +300,7 @@ function Projects() {
 		{
 			id: "project-capstone",
 			label: "Capstone",
+			year: "2026",
 			title:
 				"Web-Based Integrated Payroll and Mobile Commercial System — Tanauan City Water District",
 			description:
@@ -296,6 +312,7 @@ function Projects() {
 		{
 			id: "project-twd-monitoring",
 			label: "Client work",
+			year: "2026",
 			title: "TWD Project Monitoring System",
 			description:
 				"Replaces manual office-to-office, file-based progress reporting with a single web system for tracking project status across departments.",
@@ -304,11 +321,12 @@ function Projects() {
 		},
 		{
 			id: "project-school-evaluation",
-			label: "Client work",
+			label: "School project",
+			year: "2026",
 			title: "School Evaluation System",
 			description:
 				"A structured evaluation workflow with role-based access and reporting, replacing paper-based evaluation forms.",
-			tags: ["Role-Based Access", "Reporting", "Client Work"],
+			tags: ["Role-Based Access", "Reporting", "School Project"],
 			slideFrom: "left",
 		},
 	];
@@ -427,7 +445,7 @@ function Projects() {
 		{
 			date: "4th Year · 2026",
 			title: "School Evaluation System",
-			desc: "Client work — a structured evaluation workflow with role-based access and reporting.",
+			desc: "School project — a structured evaluation workflow with role-based access and reporting.",
 			side: "left",
 		},
 		{
