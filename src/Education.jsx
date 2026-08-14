@@ -83,7 +83,7 @@ const work = [
 	{
 		id: "project-capstone",
 		year: "2026",
-		term: "4th Year",
+		term: "4th Yr · Sem 1",
 		kind: "Capstone",
 		status: "In development",
 		title: "Integrated Payroll & Mobile Commercial System",
@@ -95,7 +95,7 @@ const work = [
 	{
 		id: "project-twd-monitoring",
 		year: "2026",
-		term: "4th Year",
+		term: "4th Yr · Sem 1",
 		kind: "Client work",
 		title: "TWD Project Monitoring System",
 		description:
@@ -105,7 +105,7 @@ const work = [
 	{
 		id: "project-school-evaluation",
 		year: "2026",
-		term: "4th Year",
+		term: "4th Yr · Summer",
 		kind: "School project",
 		title: "School Evaluation System",
 		description:
