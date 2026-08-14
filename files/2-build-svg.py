@@ -36,14 +36,15 @@ PANEL = [
     None,
     ("Focus",       "AI Integration  ·  Web Systems  ·  Data Analytics"),
     None,
-    ("Languages",   "TypeScript · JavaScript · Python · PHP · Java · C#"),
-    ("Frontend",    "React · Next.js · React Native · Tailwind CSS"),
-    ("Backend",     "Node.js · Express.js · Prisma · REST APIs"),
-    ("Data",        "PostgreSQL · MySQL · MongoDB · Supabase"),
+    ("UI / UX",     "Figma"),
+    ("Frontend",    "JavaScript · TypeScript · React · Next.js"),
+    ("",            "React Native · Tailwind CSS · Prettier"),
+    ("Backend",     "PHP · MySQL · Python · Java · C# · Node.js"),
+    ("",            "Express.js · Prisma · REST APIs"),
+    ("Cloud",       "Docker · XAMPP · MongoDB · PostgreSQL · Supabase"),
     ("AI / ML",     "TensorFlow Lite · XGBoost · MobileNetV2"),
-    ("Automation",  "n8n · Docker · XAMPP"),
-    ("Design",      "Figma · Prettier"),
-    ("Tools",       "Git · GitHub · Postman · Power BI"),
+    ("Automation",  "n8n"),
+    ("Dev Tools",   "Git · GitHub · Postman · Power BI"),
     ("Editors",     "VS Code · Cursor · IntelliJ IDEA · PyCharm"),
     ("",            "NetBeans · Xcode"),
     None,
@@ -87,7 +88,12 @@ THEMES = {
                       "#0969da", "#8250df", "#1b7c83", "#57606a"],
                   sw2=["#8c959f", "#a40e26", "#116329", "#7d4e00",
                        "#0550ae", "#6639ba", "#155d63", "#24292f"],
-                  ink_lo=0.60, ink_hi=0.04),
+                  # Exact tonal mirror of the dark theme's 0.36 -> 1.00, so the
+                  # light portrait is the dark one with its ink inverted. A
+                  # photographically "correct" ramp (dark pixels -> dark ink)
+                  # was tried and is worse: most of the portrait is mid-to-
+                  # bright, so it lands on pale greys and washes out on white.
+                  ink_lo=0.64, ink_hi=0.00),
 }
 
 

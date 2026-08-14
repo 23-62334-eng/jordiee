@@ -2,13 +2,46 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<link rel="icon" type="image/png" href="/me.png" />
+		<link rel="icon" href="/favicon.ico" sizes="any" />
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+		<link rel="manifest" href="/site.webmanifest" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Jordiee</title>
-		<link rel="apple-touch-icon" href="/me.png" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<meta name="theme-color" content="#000000" />
 	</head>
-	<body class="bg-gray-200">
+	<body>
+		<script>
+			// Runs before first paint so a dark-theme visitor never sees a white
+			// flash. Mirrors the resolution order in DarkModeContext; React then
+			// takes over on mount and agrees with whatever this decided.
+			(function () {
+				try {
+					// One-time reset. The previous two-state toggle persisted
+					// "light"/"dark" on every page load, so returning visitors carry
+					// a preference they never chose — which would permanently mask
+					// the System default. Cleared once; real choices made from here
+					// on are kept.
+					if (!localStorage.getItem("theme-mode-v2")) {
+						localStorage.removeItem("theme");
+						localStorage.setItem("theme-mode-v2", "1");
+					}
+					var saved = localStorage.getItem("theme");
+					// Anything that is not an explicit light/dark choice — absent,
+					// "system", or corrupted — resolves to the OS preference, which
+					// is exactly how DarkModeContext treats it.
+					var dark =
+						saved === "light"
+							? false
+							: saved === "dark"
+								? true
+								: matchMedia("(prefers-color-scheme: dark)").matches;
+					document.documentElement.classList.toggle("dark", dark);
+					document.documentElement.style.colorScheme = dark ? "dark" : "light";
+				} catch (e) {}
+			})();
+		</script>
 		<div id="root"></div>
 		<script type="module" src="/src/main.jsx"></script>
 	</body>

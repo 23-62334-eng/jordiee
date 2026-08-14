@@ -5,7 +5,7 @@ import Education from "./Education.jsx";
 import Job from "./Job.jsx";
 import Certificate from "./Certificate.jsx";
 import Footer from "./components/Footer.jsx";
-import DarkModeToggle from "./components/DarkModeToggle.jsx";
+import ThemeToggle from "./components/ThemeToggle.jsx";
 import { motion } from "framer-motion";
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
 			transition={{ duration: 0.7, ease: "easeOut" }}
 			className="bg-white dark:bg-gray-900 min-h-screen transition-colors duration-500"
 		>
-			<DarkModeToggle />
+			<ThemeToggle />
 			<Home />
 			<About />
 			<NavBar />

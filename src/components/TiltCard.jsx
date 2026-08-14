@@ -79,8 +79,11 @@ function TiltCard({
 			onMouseMove={handleMouseMove}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
-			className={className}
+			// The radius has to reach the root too, or the hover box-shadow is
+			// drawn around a square box regardless of the card's actual shape.
+			className={`${borderRadiusStyle ? "" : borderRadius} ${className}`}
 			style={{
+				...(borderRadiusStyle ? { borderRadius: borderRadiusStyle } : {}),
 				transformStyle: "preserve-3d",
 				willChange: "transform",
 				transition: "box-shadow 0.4s ease-out",

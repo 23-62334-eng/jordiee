@@ -11,12 +11,13 @@ import {
 	FaPython,
 	FaDocker,
 	FaFigma,
+	FaWater,
 } from "react-icons/fa";
 import { SiTailwindcss, SiMysql, SiJavascript, SiN8N } from "react-icons/si";
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef, useCallback } from "react";
 import cvPDF from "./assets/cv/markjordanjavier_cv.pdf";
-import AsciiPortrait from "./components/AsciiPortrait";
+import PaintPortrait from "./components/PaintPortrait";
 import TiltCard from "./components/TiltCard";
 
 // Project thumbnail images
@@ -97,8 +98,15 @@ function OrbitingIcons({ icons, radiusX, radiusY, duration, tileClass }) {
 					}}
 					title={item.label}
 				>
-					<div className={tileClass}>
-						<item.icon style={{ color: item.color }} />
+					<div
+						className={`group/orbit ${tileClass}`}
+						style={{ "--brand": item.color }}
+					>
+						<item.icon
+							className="text-gray-800 dark:text-gray-100
+								group-hover/orbit:text-[var(--brand)]
+								transition-colors duration-200"
+						/>
 					</div>
 				</div>
 			))}
@@ -223,26 +231,19 @@ function Home() {
 					{/* Portrait with floating icons */}
 					<div className="relative mt-4 sm:mt-4">
 						<div className="relative z-10">
-							<TiltCard
-								className="relative overflow-hidden"
-								borderRadiusStyle="50%"
-								style={{ borderRadius: "50%" }}
-								tiltDegree={8}
-								scale={1.05}
-								glareOpacity={0.15}
-							>
-								<AsciiPortrait className="w-48 h-72 sm:w-64 sm:h-96 md:w-72 md:h-[28rem]" />
-							</TiltCard>
+							<div className="relative">
+								<PaintPortrait className="w-56 h-72 sm:w-64 sm:h-80 md:w-72 md:h-[23rem]" />
+							</div>
 						</div>
 
 						{/* Orbiting tech icons - mobile/tablet (behind & in front) */}
 						<OrbitingIcons
 							icons={orbitIcons}
 							radiusX={
-								screenTier === "xs" ? 100 : screenTier === "sm" ? 120 : 150
+								screenTier === "xs" ? 110 : screenTier === "sm" ? 135 : 160
 							}
 							radiusY={
-								screenTier === "xs" ? 160 : screenTier === "sm" ? 185 : 220
+								screenTier === "xs" ? 125 : screenTier === "sm" ? 150 : 175
 							}
 							duration={22}
 							tileClass={`${screenTier === "xs" ? "w-10 h-10 text-lg" : "w-12 h-12 sm:w-14 sm:h-14 text-xl sm:text-2xl"} rounded-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-md border border-white/50 dark:border-gray-600/50 shadow-lg flex items-center justify-center cursor-default`}
@@ -274,23 +275,23 @@ function Home() {
 										Mark Jordan Javier
 									</motion.span>
 									<motion.div
-										className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/40 relative cursor-pointer"
+										className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-900/10 dark:bg-white/20 relative cursor-pointer"
 										title="Certified Developer"
 										whileHover={{ scale: 1.2, rotate: 10 }}
 										transition={{ type: "spring", stiffness: 400, damping: 15 }}
 									>
 										<svg
-											fill="#009dff"
+											fill="currentColor"
 											viewBox="-960 -960 3840 3840"
 											xmlns="http://www.w3.org/2000/svg"
-											className="w-10 h-10"
+											className="w-10 h-10 text-gray-900 dark:text-white"
 										>
 											<path
 												d="M960 15 693.227 257.027 333.44 243.053 284.693 599.96 0 820.547l192 304.64-76.267 352 342.934 109.973 167.893 318.613L960 1769.56l333.44 136.213 167.893-318.613 342.934-109.973-76.267-352 192-304.64-284.693-220.587-48.747-356.907-359.893 13.974L960 15Zm352.747 616.427 147.84 153.813-600 577.28-402.774-402.773L608.64 808.92l254.933 254.827 449.174-432.32Z"
 												fillRule="evenodd"
 											/>
 										</svg>
-										<span className="absolute inset-0 rounded-full bg-blue-300 dark:bg-blue-500 opacity-30 dark:opacity-20 animate-ping"></span>
+										<span className="absolute inset-0 rounded-full bg-gray-900 dark:bg-white opacity-30 dark:opacity-20 animate-ping"></span>
 									</motion.div>
 								</div>
 
@@ -323,7 +324,7 @@ function Home() {
 										whileTap={{ scale: 0.98 }}
 										transition={{ type: "spring", stiffness: 400, damping: 20 }}
 									>
-										<span className="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-400/20 dark:from-blue-500/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out"></span>
+										<span className="absolute inset-0 rounded-full bg-gradient-to-tr from-gray-900/10 dark:from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out"></span>
 										<span className="relative flex items-center gap-2">
 											<span className="text-base sm:text-lg">📄</span>
 											<span>Download CV</span>
@@ -336,7 +337,7 @@ function Home() {
 									<motion.a
 										href="https://www.facebook.com/markjordan.javier"
 										target="_blank"
-										className="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400"
+										className="text-gray-700 dark:text-gray-200 hover:text-[#1877F2]"
 										whileHover={{ scale: 1.2, y: -3 }}
 										transition={{ type: "spring", stiffness: 400, damping: 15 }}
 									>
@@ -354,7 +355,7 @@ function Home() {
 									<motion.a
 										href="https://www.linkedin.com/in/mark-jordan-javier-29b72935a/"
 										target="_blank"
-										className="text-gray-700 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400"
+										className="text-gray-700 dark:text-gray-200 hover:text-[#0A66C2]"
 										whileHover={{ scale: 1.2, y: -3 }}
 										transition={{ type: "spring", stiffness: 400, damping: 15 }}
 									>
@@ -392,23 +393,23 @@ function Home() {
 									Mark Jordan Javier
 								</motion.span>
 								<motion.div
-									className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/40 relative cursor-pointer"
+									className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-900/10 dark:bg-white/20 relative cursor-pointer"
 									title="Certified Developer"
 									whileHover={{ scale: 1.2, rotate: 10 }}
 									transition={{ type: "spring", stiffness: 400, damping: 15 }}
 								>
 									<svg
-										fill="#009dff"
+										fill="currentColor"
 										viewBox="-960 -960 3840 3840"
 										xmlns="http://www.w3.org/2000/svg"
-										className="w-10 h-10"
+										className="w-10 h-10 text-gray-900 dark:text-white"
 									>
 										<path
 											d="M960 15 693.227 257.027 333.44 243.053 284.693 599.96 0 820.547l192 304.64-76.267 352 342.934 109.973 167.893 318.613L960 1769.56l333.44 136.213 167.893-318.613 342.934-109.973-76.267-352 192-304.64-284.693-220.587-48.747-356.907-359.893 13.974L960 15Zm352.747 616.427 147.84 153.813-600 577.28-402.774-402.773L608.64 808.92l254.933 254.827 449.174-432.32Z"
 											fillRule="evenodd"
 										/>
 									</svg>
-									<span className="absolute inset-0 rounded-full bg-blue-300 dark:bg-blue-500 opacity-30 dark:opacity-20 animate-ping"></span>
+									<span className="absolute inset-0 rounded-full bg-gray-900 dark:bg-white opacity-30 dark:opacity-20 animate-ping"></span>
 								</motion.div>
 							</div>
 
@@ -439,28 +440,21 @@ function Home() {
 						className="relative flex justify-center"
 					>
 						{/* Glow effect behind portrait */}
-						<div className="absolute left-1/2 top-[55%] -translate-x-1/2 -translate-y-1/2 w-[500px] h-[120px] bg-blue-400/15 dark:bg-blue-500/10 rounded-full blur-[80px] z-0 pointer-events-none" />
+						<div className="absolute left-1/2 top-[55%] -translate-x-1/2 -translate-y-1/2 w-[500px] h-[120px] bg-gray-900/5 dark:bg-white/5 rounded-full blur-[80px] z-0 pointer-events-none" />
 
 						<div className="relative z-10">
-							<TiltCard
-								className="relative overflow-hidden"
-								borderRadiusStyle="50%"
-								style={{ borderRadius: "50%" }}
-								tiltDegree={8}
-								scale={1.05}
-								glareOpacity={0.15}
-							>
-								<AsciiPortrait className="w-64 h-[28rem] xl:w-80 xl:h-[36rem] 2xl:w-96 2xl:h-[40rem]" />
-							</TiltCard>
+							<div className="relative">
+								<PaintPortrait className="w-[18rem] h-[23rem] xl:w-[21rem] xl:h-[27rem] 2xl:w-[24rem] 2xl:h-[31rem]" />
+							</div>
 						</div>
 
 						{/* Orbiting tech stack icons (behind & in front of portrait) */}
 						<OrbitingIcons
 							icons={orbitIcons}
 							radiusX={
-								screenTier === "lg" ? 170 : screenTier === "xl" ? 200 : 230
+								screenTier === "lg" ? 195 : screenTier === "xl" ? 225 : 255
 							}
-							radiusY={screenTier === "lg" ? 100 : 120}
+							radiusY={screenTier === "lg" ? 115 : 135}
 							duration={25}
 							tileClass={`${screenTier === "lg" ? "w-12 h-12 text-2xl rounded-xl" : "w-14 h-14 xl:w-16 xl:h-16 text-2xl xl:text-3xl rounded-2xl"} bg-white/90 dark:bg-gray-800/90 backdrop-blur-md border border-white/50 dark:border-gray-600/50 shadow-lg dark:shadow-gray-900/40 flex items-center justify-center cursor-default`}
 						/>
@@ -502,6 +496,13 @@ function Home() {
 									img: projBatCafe,
 									time: "3rd Year",
 									scrollId: "project-bat-cafe",
+								},
+								{
+									title: "Integrated Payroll & Commercial System",
+									desc: "Capstone — payroll processing and a mobile commercial layer for Tanauan City Water District.",
+									icon: FaWater,
+									time: "Capstone",
+									scrollId: "project-capstone",
 								},
 							].map((project, i, arr) => {
 								const total = arr.length;
@@ -574,17 +575,23 @@ function Home() {
 
 													{/* Project thumbnail */}
 													<div className="shrink-0 w-11 h-11 xl:w-13 xl:h-13 rounded-xl overflow-hidden shadow-md bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-white/10 group-hover:opacity-30 transition-opacity duration-300 mt-0.5">
-														<img
-															src={project.img}
-															alt={project.title}
-															className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
-														/>
+														{project.img ? (
+															<img
+																src={project.img}
+																alt={project.title}
+																className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
+															/>
+														) : (
+															<div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900/10 to-gray-900/5 dark:from-white/15 dark:to-white/5 text-gray-900 dark:text-white group-hover:scale-110 transition-transform duration-500 ease-out">
+																<project.icon className="w-5 h-5" />
+															</div>
+														)}
 													</div>
 
 													{/* Content */}
 													<div className="flex-1 min-w-0 group-hover:opacity-30 transition-opacity duration-300">
 														<div className="flex items-start justify-between gap-2">
-															<h4 className="text-sm xl:text-base font-bold text-gray-900 dark:text-white leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-300 transition-colors duration-300">
+															<h4 className="text-sm xl:text-base font-bold text-gray-900 dark:text-white leading-snug group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300">
 																{project.title}
 															</h4>
 															<span className="text-[10px] xl:text-xs text-gray-400 dark:text-gray-400 whitespace-nowrap mt-0.5 shrink-0">
@@ -619,7 +626,7 @@ function Home() {
 								whileTap={{ scale: 0.98 }}
 								transition={{ type: "spring", stiffness: 400, damping: 20 }}
 							>
-								<span className="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-400/20 dark:from-blue-500/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out"></span>
+								<span className="absolute inset-0 rounded-full bg-gradient-to-tr from-gray-900/10 dark:from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out"></span>
 								<span className="relative flex items-center gap-2">
 									<span className="text-lg">📄</span>
 									<span>Download CV</span>
@@ -630,7 +637,7 @@ function Home() {
 								<motion.a
 									href="https://www.facebook.com/markjordan.javier"
 									target="_blank"
-									className="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400"
+									className="text-gray-700 dark:text-gray-200 hover:text-[#1877F2]"
 									whileHover={{ scale: 1.2, y: -3 }}
 									transition={{ type: "spring", stiffness: 400, damping: 15 }}
 								>
@@ -648,7 +655,7 @@ function Home() {
 								<motion.a
 									href="https://www.linkedin.com/in/mark-jordan-javier-29b72935a/"
 									target="_blank"
-									className="text-gray-700 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400"
+									className="text-gray-700 dark:text-gray-200 hover:text-[#0A66C2]"
 									whileHover={{ scale: 1.2, y: -3 }}
 									transition={{ type: "spring", stiffness: 400, damping: 15 }}
 								>

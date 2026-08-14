@@ -74,7 +74,7 @@ function Job() {
 	];
 
 	const highlightTags = [
-		"3rd Year IT Student",
+		"4th Year IT Student",
 		"Full Stack Development",
 		"Capstone Project",
 		"Clean Code",
@@ -124,10 +124,10 @@ function Job() {
 							>
 								I am a{" "}
 								<span className="font-semibold text-gray-900 dark:text-white">
-									3rd Year BS Information Technology
+									4th Year BS Information Technology
 								</span>{" "}
-								student currently developing full-stack applications through
-								academic and capstone projects.
+								student, currently developing our capstone project alongside
+								full-stack applications built through academic and client work.
 							</motion.p>
 							<motion.p
 								variants={fadeUp}

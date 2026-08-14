@@ -5,7 +5,9 @@ import {
 	useMotionValue,
 	useSpring,
 	useTransform,
+	useReducedMotion,
 } from "framer-motion";
+import { useAutoHideOnScroll } from "../hooks/useAutoHideOnScroll";
 
 // Dock icon component with magnification effect
 function DockIcon({
@@ -67,6 +69,10 @@ function NavBar() {
 	const [active, setActive] = useState("home");
 	const [hoveredIndex, setHoveredIndex] = useState(null);
 	const mouseX = useMotionValue(Infinity);
+	const prefersReducedMotion = useReducedMotion();
+
+	// Dock rides in on scroll and tucks away after 1.5s of stillness.
+	const { visible, pin, unpin, reveal } = useAutoHideOnScroll(1500);
 
 	// Track active section
 	useEffect(() => {
@@ -262,10 +268,18 @@ function NavBar() {
 	return (
 		<motion.nav
 			initial={{ y: 100, opacity: 0 }}
-			animate={{ y: 0, opacity: 1 }}
-			transition={{ duration: 0.6, ease: "easeInOut" }}
-			onMouseMove={(e) => mouseX.set(e.pageX)}
-			onMouseLeave={() => mouseX.set(Infinity)}
+			animate={
+				visible
+					? { y: 0, opacity: 1 }
+					: { y: prefersReducedMotion ? 0 : 120, opacity: 0 }
+			}
+			transition={
+				prefersReducedMotion
+					? { duration: 0.2, ease: "linear" }
+					: visible
+						? { type: "spring", stiffness: 400, damping: 30, mass: 0.7 }
+						: { duration: 0.35, ease: [0.4, 0, 1, 1] }
+			}
 			className="
 				fixed
 				left-0
@@ -313,9 +327,31 @@ function NavBar() {
 					animation: float 5s ease-in-out infinite;
 				}
 
+				/* The dock surface itself responds to the cursor, not just its
+				   icons — it lightens toward the page ink on hover. */
+				.glass-nav {
+					transition: background 0.35s ease, box-shadow 0.35s ease;
+				}
+
+				.glass-nav:hover {
+					background: rgba(0, 0, 0, 0.06);
+					box-shadow:
+						0 12px 40px rgba(0, 0, 0, 0.16),
+						0 4px 12px rgba(0, 0, 0, 0.08),
+						inset 0 1px 0 rgba(255, 255, 255, 0.4);
+				}
+
+				.dark .glass-nav:hover {
+					background: rgba(255, 255, 255, 0.14);
+					box-shadow:
+						0 12px 40px rgba(0, 0, 0, 0.55),
+						0 4px 12px rgba(0, 0, 0, 0.35),
+						inset 0 1px 0 rgba(255, 255, 255, 0.18);
+				}
+
 				/* Dark mode glassmorphism */
 				.dark .glass-nav {
-					background: rgba(31, 41, 55, 0.6);
+					background: rgba(20, 20, 20, 0.6);
 					backdrop-filter: blur(80px) saturate(180%);
 					-webkit-backdrop-filter: blur(80px) saturate(180%);
 					box-shadow: 
@@ -348,7 +384,7 @@ function NavBar() {
 				}
 
 				.dark .nav-tooltip {
-					background: rgba(55, 65, 81, 0.95);
+					background: rgba(38, 38, 38, 0.95);
 					backdrop-filter: blur(20px);
 					-webkit-backdrop-filter: blur(20px);
 					box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -362,7 +398,7 @@ function NavBar() {
 
 				/* Active button state - iOS style */
 				.nav-button-active {
-					background: linear-gradient(135deg, #4b5563 0%, #52606d 100%);
+					background: #000000;
 					border: none;
 					box-shadow: 
 						0 4px 16px rgba(0, 0, 0, 0.18),
@@ -374,12 +410,11 @@ function NavBar() {
 				}
 
 				.dark .nav-button-active {
-					background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+					background: #ffffff;
 					box-shadow: 
-						0 4px 16px rgba(59, 130, 246, 0.3),
-						0 2px 8px rgba(59, 130, 246, 0.2),
-						inset 0 1px 2px rgba(255, 255, 255, 0.2);
-					color: white;
+						0 4px 16px rgba(0, 0, 0, 0.5),
+						0 2px 8px rgba(0, 0, 0, 0.35);
+					color: #000000;
 				}
 
 				/* Inactive button state */
@@ -389,19 +424,19 @@ function NavBar() {
 					box-shadow: 
 						0 2px 8px rgba(0, 0, 0, 0.08),
 						0 1px 4px rgba(0, 0, 0, 0.06);
-					color: #374151;
+					color: #404040;
 					transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 				}
 
 				.dark .nav-button {
-					background: rgba(55, 65, 81, 0.8);
+					background: rgba(38, 38, 38, 0.8);
 					backdrop-filter: blur(8px);
 					-webkit-backdrop-filter: blur(8px);
 					box-shadow: 
 						0 2px 8px rgba(0, 0, 0, 0.3),
 						0 1px 4px rgba(0, 0, 0, 0.2),
 						inset 0 1px 0 rgba(255, 255, 255, 0.1);
-					color: #e5e7eb;
+					color: #d4d4d4;
 				}
 
 				/* Hover effect with spring animation - iOS refined */
@@ -412,22 +447,22 @@ function NavBar() {
 						0 6px 20px rgba(0, 0, 0, 0.12),
 						0 3px 10px rgba(0, 0, 0, 0.08);
 					transform: scale(1.15);
-					color: #374151;
+					color: #000000;
 				}
 
 				.dark .nav-button:hover {
-					background: rgba(75, 85, 99, 0.9);
+					background: rgba(64, 64, 64, 0.9);
 					backdrop-filter: blur(8px);
 					-webkit-backdrop-filter: blur(8px);
 					box-shadow: 
 						0 6px 20px rgba(0, 0, 0, 0.4),
 						0 3px 10px rgba(0, 0, 0, 0.3),
 						inset 0 1px 0 rgba(255, 255, 255, 0.15);
-					color: #f3f4f6;
+					color: #ffffff;
 				}
 
 				.nav-button-active:hover {
-					background: linear-gradient(135deg, #3f4551 0%, #475563 100%);
+					background: #1a1a1a;
 					border: none;
 					transform: scale(1.18);
 					box-shadow: 
@@ -437,11 +472,11 @@ function NavBar() {
 				}
 
 				.dark .nav-button-active:hover {
-					background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+					background: #e5e5e5;
 					box-shadow: 
-						0 8px 24px rgba(59, 130, 246, 0.4),
-						0 4px 12px rgba(59, 130, 246, 0.3),
-						inset 0 1px 2px rgba(255, 255, 255, 0.25);
+						0 8px 24px rgba(0, 0, 0, 0.55),
+						0 4px 12px rgba(0, 0, 0, 0.4);
+					color: #000000;
 				}
 
 				/* Neighboring icons scale effect */
@@ -496,18 +531,33 @@ function NavBar() {
 				}
 			`}</style>
 			<div
-				className="
+				onMouseMove={(e) => mouseX.set(e.pageX)}
+				onMouseLeave={() => mouseX.set(Infinity)}
+				// Hover holds the dock open, but only for a real pointer — touch
+				// fires enter/leave around taps and would pin it open forever.
+				onPointerEnter={(e) => {
+					if (e.pointerType === "mouse") pin();
+				}}
+				onPointerLeave={(e) => {
+					if (e.pointerType === "mouse") unpin();
+				}}
+				onPointerDown={reveal}
+				// Keyboard users can Tab to the dock while it is hidden; focus
+				// brings it back and holds it until focus moves away.
+				onFocus={pin}
+				onBlur={unpin}
+				className={`
 					flex items-center
 					gap-2 sm:gap-4 md:gap-5
 					glass-nav
 					rounded-full
 					px-2 py-1.5
 					sm:px-4 sm:py-2.5
-					pointer-events-auto
+					${visible ? "pointer-events-auto" : "pointer-events-none"}
 					border border-gray-200 dark:border-gray-700
 					overflow-visible
 					isolate
-				"
+				`}
 				style={{ contain: "layout" }}
 			>
 				{navItems.map((item, index) => {

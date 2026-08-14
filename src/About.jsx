@@ -1,62 +1,23 @@
-import profileImg from "./assets/me/portrait.png";
+// Rasterised from assets/me/mee.svg — the source vector is 6.7 MB across
+// 7,819 paths, which is indefensible for a 64px avatar. This crop is
+// the same image at 256px (3x the display size) and 228x smaller.
+import profileImg from "./assets/me/mee-avatar.png";
 import { motion } from "framer-motion";
-import { useState } from "react";
 import { FiMapPin, FiCalendar, FiMail } from "react-icons/fi";
 import TechLogoMarquee from "./components/TechLogoMarquee";
-
-const techColors = {
-	Figma: { bg: "#F24E1E", text: "#fff" },
-	JavaScript: { bg: "#F7DF1E", text: "#000" },
-	React: { bg: "#61DAFB", text: "#000" },
-	"Tailwind CSS": { bg: "#38BDF8", text: "#000" },
-	Prettier: { bg: "#F7B93E", text: "#000" },
-	PHP: { bg: "#777BB4", text: "#fff" },
-	MySQL: { bg: "#4479A1", text: "#fff" },
-	Python: { bg: "#3776AB", text: "#fff" },
-	Java: { bg: "#E76F00", text: "#fff" },
-	Docker: { bg: "#2496ED", text: "#fff" },
-	XAMPP: { bg: "#FB7A24", text: "#fff" },
-	n8n: { bg: "#EA4B71", text: "#fff" },
-	GitHub: { bg: "#181717", text: "#fff" },
-	"VS Code": { bg: "#007ACC", text: "#fff" },
-	Cursor: { bg: "#6B7280", text: "#fff" },
-	"IntelliJ IDEA": { bg: "#FE315D", text: "#fff" },
-	PyCharm: { bg: "#21D789", text: "#000" },
-	NetBeans: { bg: "#1B6AC6", text: "#fff" },
-	Xcode: { bg: "#147EFB", text: "#fff" },
-	"Node.js": { bg: "#339933", text: "#fff" },
-	"Express.js": { bg: "#000000", text: "#fff" },
-	MongoDB: { bg: "#13AA52", text: "#fff" },
-	Postman: { bg: "#FF6C37", text: "#fff" },
-};
+import GitHubCalendar from "./components/GitHubCalendar";
 
 function TechPill({ tool }) {
-	const [hovered, setHovered] = useState(false);
-	const brand = techColors[tool];
-	const hoverStyle =
-		hovered && brand
-			? {
-					backgroundColor: brand.bg,
-					color: brand.text,
-					borderColor: brand.bg,
-					boxShadow: `0 0 14px 3px ${brand.bg}70`,
-					transform: "scale(1.05) translateY(-2px)",
-				}
-			: { transform: "scale(1) translateY(0)" };
-
 	return (
 		<span
-			onMouseEnter={() => setHovered(true)}
-			onMouseLeave={() => setHovered(false)}
-			style={{
-				transition:
-					"background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease",
-				...hoverStyle,
-			}}
 			className="px-2.5 py-0.5 rounded-full text-[11px] font-medium cursor-default
 				bg-gray-100 dark:bg-gray-800
 				border border-gray-300 dark:border-gray-600
-				text-gray-700 dark:text-gray-300"
+				text-gray-700 dark:text-gray-300
+				hover:bg-gray-900 hover:text-white hover:border-gray-900
+				dark:hover:bg-white dark:hover:text-gray-900 dark:hover:border-white
+				hover:-translate-y-0.5
+				transition-all duration-200"
 		>
 			{tool}
 		</span>
@@ -67,17 +28,43 @@ const techCategories = [
 	{ label: "UI / UX", items: ["Figma"] },
 	{
 		label: "Frontend",
-		items: ["JavaScript", "React", "Tailwind CSS", "Prettier"],
+		items: [
+			"JavaScript",
+			"TypeScript",
+			"React",
+			"Next.js",
+			"React Native",
+			"Tailwind CSS",
+			"Prettier",
+		],
 	},
 	{
 		label: "Backend",
-		items: ["PHP", "MySQL", "Python", "Java", "Node.js", "Express.js"],
+		items: [
+			"PHP",
+			"MySQL",
+			"Python",
+			"Java",
+			"C#",
+			"Node.js",
+			"Express.js",
+			"Prisma",
+			"REST APIs",
+		],
 	},
-	{ label: "Cloud", items: ["Docker", "XAMPP", "MongoDB"] },
+	{
+		label: "Cloud",
+		items: ["Docker", "XAMPP", "MongoDB", "PostgreSQL", "Supabase"],
+	},
+	{
+		label: "AI / ML",
+		items: ["TensorFlow Lite", "XGBoost", "MobileNetV2"],
+	},
 	{ label: "Automation", items: ["n8n"] },
 	{
 		label: "Developer Tools",
 		items: [
+			"Git",
 			"GitHub",
 			"VS Code",
 			"Cursor",
@@ -86,6 +73,7 @@ const techCategories = [
 			"NetBeans",
 			"Xcode",
 			"Postman",
+			"Power BI",
 		],
 	},
 ];
@@ -133,7 +121,9 @@ function About() {
 						<motion.div variants={fadeUp} className="flex items-center gap-4">
 							<img
 								src={profileImg}
-								alt="Jordan"
+								alt="Mark Jordan Javier"
+								width={64}
+								height={64}
 								className="w-16 h-16 rounded-full object-cover ring-2 ring-white/60 dark:ring-gray-600/60 shadow-md"
 							/>
 							<div>
@@ -142,16 +132,16 @@ function About() {
 										Mark Jordan Javier
 									</h2>
 									<motion.div
-										className="flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/40 cursor-pointer"
+										className="flex items-center justify-center w-5 h-5 rounded-full bg-gray-900/10 dark:bg-white/20 cursor-pointer"
 										title="Certified Developer"
 										whileHover={{ scale: 1.2, rotate: 10 }}
 										transition={{ type: "spring", stiffness: 400, damping: 15 }}
 									>
 										<svg
-											fill="#009dff"
+											fill="currentColor"
 											viewBox="-960 -960 3840 3840"
 											xmlns="http://www.w3.org/2000/svg"
-											className="w-6 h-6"
+											className="w-6 h-6 text-gray-900 dark:text-white"
 										>
 											<path d="M960 15 693.227 257.027 333.44 243.053 284.693 599.96 0 820.547l192 304.64-76.267 352 342.934 109.973 167.893 318.613L960 1769.56l333.44 136.213 167.893-318.613 342.934-109.973-76.267-352 192-304.64-284.693-220.587-48.747-356.907-359.893 13.974L960 15Zm352.747 616.427 147.84 153.813-600 577.28-402.774-402.773L608.64 808.92l254.933 254.827 449.174-432.32Z" />
 										</svg>
@@ -272,13 +262,20 @@ function About() {
 							</h3>
 						</motion.div>
 
-						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3.5">
+						<div className="flex flex-col gap-y-3">
 							{techCategories.map((category) => (
-								<motion.div key={category.label} variants={fadeUp}>
-									<p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 mb-1.5 uppercase tracking-widest">
+								<motion.div
+									key={category.label}
+									variants={fadeUp}
+									className="flex flex-col sm:flex-row sm:items-start gap-1.5 sm:gap-4"
+								>
+									<p
+										className="shrink-0 sm:w-32 text-[10px] font-semibold text-gray-400 dark:text-gray-500
+											uppercase tracking-widest leading-5"
+									>
 										{category.label}
 									</p>
-									<div className="flex flex-wrap gap-1.5">
+									<div className="flex flex-wrap gap-1.5 min-w-0">
 										{category.items.map((tool) => (
 											<TechPill key={tool} tool={tool} />
 										))}
@@ -286,6 +283,37 @@ function About() {
 								</motion.div>
 							))}
 						</div>
+					</motion.div>
+
+					{/* ── Row 4: Contribution Activity ── */}
+					<motion.div
+						variants={stagger}
+						initial="hidden"
+						whileInView="visible"
+						viewport={{ once: true }}
+						className="px-7 py-6 sm:px-9 sm:py-7 border-t border-gray-200/40 dark:border-gray-700/40"
+					>
+						<motion.div
+							variants={fadeUp}
+							className="flex items-center gap-2 mb-1.5"
+						>
+							<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white" />
+							<h3 className="text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+								Contribution Activity
+							</h3>
+						</motion.div>
+
+						<motion.p
+							variants={fadeUp}
+							className="text-xs text-gray-500 dark:text-gray-400 mb-4 max-w-md leading-relaxed"
+						>
+							Coursework, client builds, and the capstone — committed a little
+							at a time.
+						</motion.p>
+
+						<motion.div variants={fadeUp}>
+							<GitHubCalendar />
+						</motion.div>
 					</motion.div>
 				</motion.div>
 			</div>

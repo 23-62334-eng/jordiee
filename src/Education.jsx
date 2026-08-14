@@ -143,6 +143,60 @@ function SkillBadge({ skill }) {
 	);
 }
 
+/* ─── Work Card (no screenshots — capstone & client builds) ─ */
+function WorkCard({ id, label, title, description, tags, status, slideFrom }) {
+	return (
+		<motion.div
+			id={id}
+			initial={{
+				opacity: 0,
+				x: slideFrom === "left" ? -45 : 45,
+				filter: "blur(4px)",
+			}}
+			whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+			viewport={{ once: true, amount: 0.15 }}
+			transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+			className="rounded-2xl p-4 sm:p-5
+				bg-white dark:bg-gray-900/60
+				border border-gray-200 dark:border-gray-700/60
+				shadow-sm hover:shadow-xl
+				hover:-translate-y-1.5
+				transition-all duration-300"
+		>
+			<div className="flex items-center justify-between gap-3 mb-2">
+				<span className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
+					{label}
+				</span>
+				{status && (
+					<span className="flex items-center gap-1.5 text-[10px] font-medium text-gray-500 dark:text-gray-400">
+						<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+						{status}
+					</span>
+				)}
+			</div>
+			<h4 className="text-sm font-semibold text-gray-900 dark:text-white leading-snug mb-1.5">
+				{title}
+			</h4>
+			<p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-3">
+				{description}
+			</p>
+			<div className="flex flex-wrap gap-1.5">
+				{tags.map((tag) => (
+					<span
+						key={tag}
+						className="px-2.5 py-0.5 rounded-full text-[10px] font-medium
+							bg-gray-100 dark:bg-gray-800
+							border border-gray-200 dark:border-gray-700
+							text-gray-600 dark:text-gray-400"
+					>
+						{tag}
+					</span>
+				))}
+			</div>
+		</motion.div>
+	);
+}
+
 /* ─── Project Card ────────────────────────────────────────── */
 function ProjectCard({
 	id,
@@ -226,6 +280,38 @@ function Projects() {
 			transition: { duration: 0.55, ease: "easeOut" },
 		},
 	};
+
+	const professionalWork = [
+		{
+			id: "project-capstone",
+			label: "Capstone",
+			title:
+				"Web-Based Integrated Payroll and Mobile Commercial System — Tanauan City Water District",
+			description:
+				"Payroll processing plus a mobile commercial layer for a live municipal water utility — built end to end from schema and API through to UI and deployment.",
+			tags: ["Payroll", "Mobile", "Municipal Utility", "Full Stack"],
+			status: "In development",
+			slideFrom: "left",
+		},
+		{
+			id: "project-twd-monitoring",
+			label: "Client work",
+			title: "TWD Project Monitoring System",
+			description:
+				"Replaces manual office-to-office, file-based progress reporting with a single web system for tracking project status across departments.",
+			tags: ["Web System", "Reporting", "Client Work"],
+			slideFrom: "right",
+		},
+		{
+			id: "project-school-evaluation",
+			label: "Client work",
+			title: "School Evaluation System",
+			description:
+				"A structured evaluation workflow with role-based access and reporting, replacing paper-based evaluation forms.",
+			tags: ["Role-Based Access", "Reporting", "Client Work"],
+			slideFrom: "left",
+		},
+	];
 
 	const projects = [
 		{
@@ -332,6 +418,24 @@ function Projects() {
 			desc: "Developed a PHP-based vehicle rental system with CRUD operations and XML data handling, enhanced with a chatbot for booking guidance.",
 			side: "left",
 		},
+		{
+			date: "4th Year · 2026",
+			title: "TWD Project Monitoring System",
+			desc: "Client work — replaced manual office-to-office, file-based progress reporting with a single web system.",
+			side: "right",
+		},
+		{
+			date: "4th Year · 2026",
+			title: "School Evaluation System",
+			desc: "Client work — a structured evaluation workflow with role-based access and reporting.",
+			side: "left",
+		},
+		{
+			date: "4th Year · 2026",
+			title: "Capstone — Integrated Payroll & Mobile Commercial System",
+			desc: "Payroll processing and a mobile commercial layer for Tanauan City Water District. In development.",
+			side: "right",
+		},
 	];
 
 	return (
@@ -381,10 +485,18 @@ function Projects() {
 										<p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
 											Batangas State University · 2023 – Present
 										</p>
+
+										<p className="mt-2 inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-600 dark:text-gray-300">
+											<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white animate-pulse" />
+											4th Year · Capstone in development
+										</p>
+
 										<p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mt-3 max-w-lg">
-											Currently studying software development, database systems,
-											and modern web technologies — building real-world
-											full-stack applications across multiple academic projects.
+											Now in my fourth year, currently developing our capstone
+											project alongside coursework in software development,
+											database systems, and modern web technologies — building
+											real-world full-stack applications across multiple
+											academic projects.
 										</p>
 									</div>
 								</div>
@@ -444,6 +556,28 @@ function Projects() {
 							))}
 						</motion.div>
 					</motion.div>
+
+					{/* ── Section 3: Capstone & Client Work ── */}
+					<div className="px-7 py-6 sm:px-9 sm:py-7 border-b border-gray-200/40 dark:border-gray-700/40">
+						<motion.div
+							initial={{ opacity: 0, y: 14 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true }}
+							transition={{ duration: 0.5 }}
+							className="flex items-center gap-2 mb-6"
+						>
+							<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white" />
+							<h3 className="text-sm font-bold text-gray-900 dark:text-white tracking-wide">
+								Capstone &amp; Client Work
+							</h3>
+						</motion.div>
+
+						<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+							{professionalWork.map((work) => (
+								<WorkCard key={work.title} {...work} />
+							))}
+						</div>
+					</div>
 
 					{/* ── Section 3: Academic Projects ── */}
 					<div className="px-7 py-6 sm:px-9 sm:py-7 border-b border-gray-200/40 dark:border-gray-700/40">

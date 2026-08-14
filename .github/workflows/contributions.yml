@@ -1,0 +1,131 @@
+name: Refresh contribution calendar
+
+on:
+  schedule:
+    # 03:17 UTC daily. Actions cron is best-effort and drifts under load, but
+    # this is a once-a-day data refresh so a late run costs nothing.
+    - cron: "17 3 * * *"
+  # GitHub auto-disables scheduled workflows after 60 days without repo
+  # activity — exactly what happens to a finished portfolio. workflow_dispatch
+  # gives a manual way back, and the push trigger re-arms the schedule.
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [".github/workflows/contributions.yml"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: contributions
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Checking out with the PAT is deliberate. Pushes made with the
+          # default GITHUB_TOKEN do not trigger other workflows, so the daily
+          # commit would never fire pages.yml and jordiee.me would keep serving
+          # a stale calendar forever.
+          token: ${{ secrets.CONTRIBUTIONS_TOKEN }}
+
+      - name: Query every contribution year
+        env:
+          # MUST be a personal access token (classic). Scopes: read:user, plus
+          # `repo` — NOT `public_repo` — if contributions in private repos
+          # should ever be counted. `public_repo` cannot see private activity,
+          # so the calendar would silently drop it.
+          # The default GITHUB_TOKEN authenticates as github-actions[bot], and
+          # `viewer` would then resolve to the bot — a silent year of zeros.
+          # Using `viewer` rather than `user(login:)` is what lets the totals
+          # include private contributions.
+          GH_TOKEN: ${{ secrets.CONTRIBUTIONS_TOKEN }}
+        run: |
+          created=$(gh api graphql -f query='query { viewer { createdAt } }' \
+            --jq '.data.viewer.createdAt')
+          echo "CREATED_DATE=${created%%T*}" >> "$GITHUB_ENV"
+
+          # contributionCalendar covers at most one year per query, so "all
+          # contributions" means one query per year since the account existed.
+          for year in $(seq "${created:0:4}" "$(date -u +%Y)"); do
+            gh api graphql \
+              -f query='
+                query($from: DateTime!, $to: DateTime!) {
+                  viewer {
+                    contributionsCollection(from: $from, to: $to) {
+                      contributionCalendar {
+                        weeks {
+                          contributionDays {
+                            date
+                            contributionCount
+                          }
+                        }
+                      }
+                    }
+                  }
+                }' \
+              -f from="${year}-01-01T00:00:00Z" \
+              -f to="${year}-12-31T23:59:59Z" \
+              > "year-${year}.json"
+          done
+
+      - name: Merge, reshape and validate
+        run: |
+          jq -s \
+            --arg created "$CREATED_DATE" \
+            --arg today "$(date -u +%F)" '
+            ([ .[]
+               | .data.viewer.contributionsCollection.contributionCalendar.weeks[].contributionDays[]
+               | { date: .date, count: .contributionCount }
+             ]
+             # Calendar years overlap at the edges, and the current year query
+             # returns trailing days that have not happened yet.
+             | map(select(.date >= $created and .date <= $today))
+             | sort_by(.date)
+             | unique_by(.date)) as $days
+            | {
+                generatedAt: (now | todate),
+                range: { from: $days[0].date, to: $days[-1].date },
+                totalContributions: ([$days[].count] | add),
+                yearlyTotals: (
+                  $days
+                  | group_by(.date[0:4])
+                  | map({ key: .[0].date[0:4], value: ([.[].count] | add) })
+                  | from_entries
+                ),
+                days: $days
+              }
+          ' year-*.json > contributions.next.json
+
+          total=$(jq -r '.totalContributions' contributions.next.json)
+          days=$(jq -r '.days | length' contributions.next.json)
+
+          # Fail loudly. The component fails *quietly* by design, so a bad token
+          # here would otherwise just make the calendar vanish from the site
+          # with nothing anywhere to tell you why.
+          if [ "$total" -le 0 ] || [ "$days" -lt 300 ]; then
+            echo "::error::Refusing to publish (total=$total, days=$days). Almost always CONTRIBUTIONS_TOKEN: the default GITHUB_TOKEN yields an empty calendar."
+            exit 1
+          fi
+
+          mkdir -p public
+          mv contributions.next.json public/contributions.json
+          rm -f year-*.json
+
+      - name: Commit when changed
+        run: |
+          if git diff --quiet -- public/contributions.json; then
+            echo "Calendar unchanged; nothing to commit."
+            exit 0
+          fi
+
+          # Authored as the bot on purpose: a commit authored by you would make
+          # this workflow feed the very graph it publishes.
+          git -c user.name='github-actions[bot]' \
+              -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+              commit -m 'chore: refresh contribution calendar' -- public/contributions.json
+          git push

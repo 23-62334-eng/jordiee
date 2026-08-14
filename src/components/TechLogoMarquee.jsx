@@ -1,60 +1,79 @@
 import { motion } from "framer-motion";
 import {
-	SiFigma,
+	SiTypescript,
 	SiJavascript,
-	SiReact,
-	SiTailwindcss,
-	SiPrettier,
-	SiPhp,
-	SiMysql,
 	SiPython,
+	SiPhp,
+	SiSharp,
+	SiReact,
+	SiNextdotjs,
+	SiTailwindcss,
+	SiNodedotjs,
+	SiExpress,
+	SiPrisma,
+	SiPostgresql,
+	SiMysql,
+	SiMongodb,
+	SiSupabase,
+	SiTensorflow,
+	SiN8N,
 	SiDocker,
 	SiXampp,
+	SiFigma,
+	SiPrettier,
+	SiGit,
 	SiGithub,
+	SiPostman,
 	SiIntellijidea,
 	SiPycharm,
 	SiApachenetbeanside,
 	SiXcode,
-	SiNodedotjs,
-	SiExpress,
-	SiMongodb,
-	SiPostman,
 } from "react-icons/si";
 import { FaJava } from "react-icons/fa";
-import { TbAutomation, TbCursorText } from "react-icons/tb";
+import { TbBrandReactNative, TbChartBar, TbCursorText } from "react-icons/tb";
 import { VscCode } from "react-icons/vsc";
 
 const techLogos = [
-	{ name: "Figma", icon: SiFigma, color: "#F24E1E" },
+	{ name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
 	{ name: "JavaScript", icon: SiJavascript, color: "#F7DF1E" },
-	{ name: "React", icon: SiReact, color: "#61DAFB" },
-	{ name: "Tailwind CSS", icon: SiTailwindcss, color: "#06B6D4" },
-	{ name: "Prettier", icon: SiPrettier, color: "#F7B93E" },
-	{ name: "PHP", icon: SiPhp, color: "#777BB4" },
-	{ name: "MySQL", icon: SiMysql, color: "#4479A1" },
 	{ name: "Python", icon: SiPython, color: "#3776AB" },
+	{ name: "PHP", icon: SiPhp, color: "#777BB4" },
 	{ name: "Java", icon: FaJava, color: "#ED8B00" },
+	{ name: "C#", icon: SiSharp, color: "#8B5CF6" },
+	{ name: "React", icon: SiReact, color: "#61DAFB" },
+	{ name: "Next.js", icon: SiNextdotjs, color: "#E6EDF3" },
+	{ name: "React Native", icon: TbBrandReactNative, color: "#61DAFB" },
+	{ name: "Tailwind CSS", icon: SiTailwindcss, color: "#06B6D4" },
+	{ name: "Node.js", icon: SiNodedotjs, color: "#339933" },
+	{ name: "Express.js", icon: SiExpress, color: "#E6EDF3" },
+	{ name: "Prisma", icon: SiPrisma, color: "#5A67D8" },
+	{ name: "PostgreSQL", icon: SiPostgresql, color: "#4169E1" },
+	{ name: "MySQL", icon: SiMysql, color: "#4479A1" },
+	{ name: "MongoDB", icon: SiMongodb, color: "#13AA52" },
+	{ name: "Supabase", icon: SiSupabase, color: "#3ECF8E" },
+	{ name: "TensorFlow Lite", icon: SiTensorflow, color: "#FF6F00" },
+	{ name: "n8n", icon: SiN8N, color: "#EA4B71" },
 	{ name: "Docker", icon: SiDocker, color: "#2496ED" },
 	{ name: "XAMPP", icon: SiXampp, color: "#FB7A24" },
-	{ name: "n8n", icon: TbAutomation, color: "#EA4B71" },
+	{ name: "Figma", icon: SiFigma, color: "#F24E1E" },
+	{ name: "Prettier", icon: SiPrettier, color: "#F7B93E" },
+	{ name: "Git", icon: SiGit, color: "#F05032" },
 	{ name: "GitHub", icon: SiGithub, color: "#E6EDF3" },
+	{ name: "Postman", icon: SiPostman, color: "#FF6C37" },
+	{ name: "Power BI", icon: TbChartBar, color: "#F2C811" },
 	{ name: "VS Code", icon: VscCode, color: "#007ACC" },
 	{ name: "Cursor", icon: TbCursorText, color: "#A0A0A0" },
 	{ name: "IntelliJ IDEA", icon: SiIntellijidea, color: "#FE315D" },
 	{ name: "PyCharm", icon: SiPycharm, color: "#21D789" },
 	{ name: "NetBeans", icon: SiApachenetbeanside, color: "#1B6AC6" },
 	{ name: "Xcode", icon: SiXcode, color: "#147EFB" },
-	{ name: "Node.js", icon: SiNodedotjs, color: "#339933" },
-	{ name: "Express.js", icon: SiExpress, color: "#FFFFFF" },
-	{ name: "MongoDB", icon: SiMongodb, color: "#13AA52" },
-	{ name: "Postman", icon: SiPostman, color: "#FF6C37" },
 ];
 
 // Split logos into 3 rows
 const rows = [
-	techLogos.slice(0, 8),
-	techLogos.slice(8, 16),
-	techLogos.slice(16, 23),
+	techLogos.slice(0, 11),
+	techLogos.slice(11, 22),
+	techLogos.slice(22, 33),
 ];
 
 function MarqueeRow({ items, reverse = false }) {
@@ -77,14 +96,21 @@ function MarqueeRow({ items, reverse = false }) {
 					return (
 						<div
 							key={`${tech.name}-${i}`}
-							className="flex items-center justify-center w-10 h-10 rounded-xl
+							// Brand colour rides in as a custom property so the hover
+							// state stays pure CSS — an inline style cannot express :hover.
+							style={{ "--brand": tech.color }}
+							className="group/logo flex items-center justify-center w-10 h-10 rounded-xl
 								bg-gray-100/80 dark:bg-gray-800/60
 								border border-gray-200/40 dark:border-gray-700/40
 								hover:scale-110 hover:shadow-lg hover:shadow-current/10
 								hover:border-gray-300 dark:hover:border-gray-500
 								cursor-default transition-all duration-200"
 						>
-							<Icon className="w-5 h-5" style={{ color: tech.color }} />
+							<Icon
+								className="w-5 h-5 text-gray-700 dark:text-gray-200
+									group-hover/logo:text-[var(--brand)]
+									transition-colors duration-200"
+							/>
 						</div>
 					);
 				})}
