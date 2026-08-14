@@ -34,6 +34,7 @@ const techCategories = [
 			"React",
 			"Next.js",
 			"React Native",
+			"Flutter",
 			"Tailwind CSS",
 			"Prettier",
 		],

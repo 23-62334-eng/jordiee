@@ -6,6 +6,7 @@ import {
 	SiPhp,
 	SiSharp,
 	SiReact,
+	SiFlutter,
 	SiNextdotjs,
 	SiTailwindcss,
 	SiNodedotjs,
@@ -43,6 +44,7 @@ const techLogos = [
 	{ name: "React", icon: SiReact, color: "#61DAFB" },
 	{ name: "Next.js", icon: SiNextdotjs, color: "#E6EDF3" },
 	{ name: "React Native", icon: TbBrandReactNative, color: "#61DAFB" },
+	{ name: "Flutter", icon: SiFlutter, color: "#02569B" },
 	{ name: "Tailwind CSS", icon: SiTailwindcss, color: "#06B6D4" },
 	{ name: "Node.js", icon: SiNodedotjs, color: "#339933" },
 	{ name: "Express.js", icon: SiExpress, color: "#E6EDF3" },
@@ -70,11 +72,14 @@ const techLogos = [
 ];
 
 // Split logos into 3 rows
-const rows = [
-	techLogos.slice(0, 11),
-	techLogos.slice(11, 22),
-	techLogos.slice(22, 33),
-];
+// Derived from the list length rather than fixed bounds: the previous
+// slice(22, 33) silently dropped anything added past the 33rd logo.
+const ROW_COUNT = 3;
+const PER_ROW = Math.ceil(techLogos.length / ROW_COUNT);
+
+const rows = Array.from({ length: ROW_COUNT }, (_, row) =>
+	techLogos.slice(row * PER_ROW, (row + 1) * PER_ROW)
+);
 
 function MarqueeRow({ items, reverse = false }) {
 	// Duplicate items enough times for seamless loop
