@@ -1,7 +1,8 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { FiBookOpen } from "react-icons/fi";
-import { useState, useRef } from "react";
-import TiltCard from "./components/TiltCard";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { FiBookOpen, FiX, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { useState, useEffect, useCallback, useId, useRef } from "react";
+import { createPortal } from "react-dom";
+
 import portfolio1 from "./assets/proj/1stPortfolio/portfolio1.webp";
 import portfolio2 from "./assets/proj/1stPortfolio/portfolio2.webp";
 import portfolio3 from "./assets/proj/1stPortfolio/portfolio3.webp";
@@ -35,666 +36,703 @@ import rental8 from "./assets/proj/vehiRental/vRental8.webp";
 import rental9 from "./assets/proj/vehiRental/vRental9.webp";
 import rental10 from "./assets/proj/vehiRental/vRental10.webp";
 
-/* ─── Image Carousel ─────────────────────────────────────── */
-const ImageCarousel = ({ images, title, dateBadge }) => {
-	const [currentIndex, setCurrentIndex] = useState(0);
-	const stackSize = Math.min(images.length, 4);
+/* One easing and one duration for the whole section. The old version mixed
+   spring stacks, blur filters and four different slide directions; a single
+   curve is what makes a page read as considered rather than decorated. */
+const EASE = [0.23, 1, 0.32, 1];
 
-	const handleClick = () => {
-		setCurrentIndex((prev) => (prev + 1) % images.length);
+/* Depth slots for the lightbox deck: where a card sits, how big it is, and how
+   far out of focus, by its distance from the front. Cards animate between these
+   on navigate, blur included — a one-off 380ms tween on at most four layers,
+   not a continuous one, which is what makes filter animation affordable here.
+
+   Offsets are percentages of the card's own width, not pixels, so the deck
+   keeps its proportions on a phone instead of sliding out of the panel. */
+const SLOTS = [
+	{ x: "0%", scale: 1, opacity: 1, blur: 0 },
+	{ x: "12%", scale: 0.93, opacity: 0.7, blur: 3 },
+	{ x: "21%", scale: 0.87, opacity: 0.4, blur: 6 },
+	{ x: "28%", scale: 0.82, opacity: 0.2, blur: 9 },
+];
+
+// Off-deck positions. Advancing throws the front card past the left edge;
+// stepping back sends the rearmost card further into the stack. `blur` is
+// translated to `filter` here — it is not a motion prop on its own.
+const OUT_FRONT = { x: "-42%", scale: 0.92, opacity: 0, filter: "blur(0px)" };
+const atSlot = (s) => ({
+	x: s.x,
+	scale: s.scale,
+	opacity: s.opacity,
+	filter: `blur(${s.blur}px)`,
+});
+const rear = (depth) => {
+	const s = SLOTS[depth - 1];
+	return {
+		x: s.x,
+		scale: s.scale,
+		opacity: 0,
+		filter: `blur(${s.blur}px)`,
 	};
-
-	return (
-		<div className="relative w-full">
-			{dateBadge && (
-				<div className="absolute -top-3 left-3 px-3 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-[10px] font-semibold z-30">
-					{dateBadge}
-				</div>
-			)}
-			<div
-				className="relative cursor-pointer group"
-				style={{ paddingBottom: "68%" }}
-				onClick={handleClick}
-			>
-				{Array.from({ length: stackSize }, (_, stackIdx) => {
-					const depth = stackSize - 1 - stackIdx;
-					const imgIndex = (currentIndex + depth) % images.length;
-					const isFront = depth === 0;
-					const rotations = [0, -3.5, 4, -2];
-					const xOffsets = [0, -8, 12, -4];
-					const yOffsets = [0, -6, -10, -14];
-
-					return (
-						<motion.div
-							key={`stack-${stackIdx}`}
-							initial={false}
-							animate={{
-								rotate: rotations[depth] || 0,
-								x: xOffsets[depth] || 0,
-								y: yOffsets[depth] || 0,
-								scale: 1 - depth * 0.03,
-								opacity: 1 - depth * 0.15,
-							}}
-							transition={{ type: "spring", stiffness: 300, damping: 25 }}
-							className="absolute inset-0"
-							style={{ zIndex: stackIdx }}
-						>
-							<TiltCard
-								className="w-full h-full rounded-xl overflow-hidden shadow-md border border-gray-200 dark:border-gray-700/50"
-								borderRadius="rounded-xl"
-								tiltDegree={isFront ? 8 : 3}
-								scale={isFront ? 1.02 : 1}
-								glareOpacity={isFront ? 0.15 : 0.04}
-							>
-								<div className="relative w-full h-full">
-									<motion.img
-										key={imgIndex}
-										initial={{ opacity: 0.7 }}
-										animate={{ opacity: 1 }}
-										transition={{ duration: 0.35 }}
-										src={images[imgIndex]}
-										alt={`${title} - ${imgIndex + 1}`}
-										loading="lazy"
-										decoding="async"
-										// Intrinsic size lets the browser reserve the box and pick a
-										// decode size instead of holding a full-res bitmap per layer.
-										width={1200}
-										height={750}
-										fetchPriority={isFront ? "auto" : "low"}
-										draggable={false}
-										className={`w-full h-full object-cover ${isFront ? "group-hover:scale-105 transition-transform duration-700 ease-out" : ""}`}
-									/>
-									{isFront && (
-										<>
-											<div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none" />
-											<div className="absolute bottom-2 right-2 px-2.5 py-0.5 rounded-full bg-black/35 backdrop-blur-md text-white text-[10px] font-medium">
-												{(currentIndex % images.length) + 1} / {images.length}
-											</div>
-											<div className="absolute bottom-2 left-2 px-2.5 py-0.5 rounded-full bg-black/35 backdrop-blur-md text-white text-[10px] font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-												Click to browse
-											</div>
-										</>
-									)}
-									<div className="absolute inset-0 rounded-xl ring-1 ring-white/20 pointer-events-none" />
-								</div>
-							</TiltCard>
-						</motion.div>
-					);
-				})}
-			</div>
-		</div>
-	);
 };
 
-/* ─── Skill Badge ─────────────────────────────────────────── */
-function SkillBadge({ skill }) {
-	const [hovered, setHovered] = useState(false);
-	return (
-		<span
-			onMouseEnter={() => setHovered(true)}
-			onMouseLeave={() => setHovered(false)}
-			style={{
-				transition: "transform 0.22s ease, box-shadow 0.3s ease",
-				transform: hovered
-					? "scale(1.06) translateY(-2px)"
-					: "scale(1) translateY(0)",
-				boxShadow: hovered ? "0 0 18px 4px rgba(99,102,241,0.28)" : "none",
-			}}
-			className="px-4 py-1.5 rounded-full text-sm font-medium cursor-default
-				bg-gray-100 dark:bg-gray-800
-				border border-gray-200 dark:border-gray-700
-				text-gray-700 dark:text-gray-300"
-		>
-			{skill}
-		</span>
-	);
-}
+/* ─── Data ───────────────────────────────────────────────────
+   One chronological list, newest first. This used to be three arrays —
+   professionalWork, projects and timelineItems — where the timeline restated
+   all eight entries the cards had already described. */
+const work = [
+	{
+		id: "project-capstone",
+		year: "2026",
+		term: "4th Year",
+		kind: "Capstone",
+		status: "In development",
+		title: "Integrated Payroll & Mobile Commercial System",
+		org: "Tanauan City Water District",
+		description:
+			"Payroll processing plus a mobile commercial layer for a live municipal water utility — built end to end from schema and API through to UI and deployment.",
+		tags: ["Payroll", "Mobile", "Full Stack"],
+	},
+	{
+		id: "project-twd-monitoring",
+		year: "2026",
+		term: "4th Year",
+		kind: "Client work",
+		title: "TWD Project Monitoring System",
+		description:
+			"Replaces manual office-to-office, file-based progress reporting with a single web system for tracking project status across departments.",
+		tags: ["Web System", "Reporting"],
+	},
+	{
+		id: "project-school-evaluation",
+		year: "2026",
+		term: "4th Year",
+		kind: "School project",
+		title: "School Evaluation System",
+		description:
+			"A structured evaluation workflow with role-based access and reporting, replacing paper-based evaluation forms.",
+		tags: ["Role-Based Access", "Reporting"],
+	},
+	{
+		id: "project-vehicle-rental",
+		year: "2025",
+		term: "3rd Yr · Sem 1",
+		kind: "School project",
+		title: "Vehicle Rental System",
+		description:
+			"A PHP-based vehicle rental system with CRUD operations and XML data handling, enhanced with a chatbot for booking guidance.",
+		tags: ["PHP", "CRUD", "XML"],
+		images: [
+			rental1,
+			rental2,
+			rental3,
+			rental4,
+			rental5,
+			rental6,
+			rental7,
+			rental8,
+			rental9,
+			rental10,
+		],
+	},
+	{
+		id: "project-bat-cafe",
+		year: "2025",
+		term: "3rd Yr · Sem 1",
+		kind: "School project",
+		title: "Malvar Bat Cave Café",
+		description:
+			"A café management system with PHP and XAMPP featuring CRUD operations, an integrated chatbot, and dark mode.",
+		tags: ["PHP", "XAMPP", "MySQL"],
+		images: [
+			cafe1,
+			cafe2,
+			cafe3,
+			cafe4,
+			cafe5,
+			cafe6,
+			cafe7,
+			cafe8,
+			cafe9,
+			cafe10,
+		],
+	},
+	{
+		id: "project-portfolio",
+		year: "2025",
+		term: "Vacation",
+		kind: "Personal",
+		title: "Portfolio Website",
+		description:
+			"A fully responsive personal portfolio built with HTML, CSS, and Tailwind CSS showcasing projects through a clean interface.",
+		tags: ["HTML", "CSS", "Tailwind"],
+		images: [portfolio1, portfolio2, portfolio3, portfolio4],
+	},
+	{
+		id: "project-thrift-shop",
+		year: "2025",
+		term: "2nd Yr · Sem 2",
+		kind: "School project",
+		title: "Online Thrift Shop",
+		description:
+			"A web-based e-commerce platform with HTML, Tailwind CSS, and MySQL, featuring product browsing and inventory management.",
+		tags: ["HTML", "Tailwind", "MySQL"],
+		images: [thrift1, thrift2, thrift3, thrift4, thrift5],
+	},
+	{
+		id: "project-time-scheduling",
+		year: "2024",
+		term: "2nd Yr · Sem 1",
+		kind: "School project",
+		title: "Time Scheduling System",
+		description:
+			"A scheduling management system built with Java (OOP) and MySQL to efficiently manage schedules and streamline time-based operations.",
+		tags: ["Java", "MySQL", "OOP"],
+		images: [time1, time2, time3],
+	},
+];
 
-/* ─── Work Card (no screenshots — capstone & client builds) ─ */
-function WorkCard({
-	id,
-	label,
-	year,
-	title,
-	description,
-	tags,
-	status,
-	slideFrom,
-}) {
-	return (
+const focusAreas = [
+	"Software Development",
+	"Database Management",
+	"Web Application Development",
+	"System Analysis & Design",
+];
+
+const skills = [
+	"Object-Oriented Programming",
+	"Database Design",
+	"Full Stack Development",
+	"System Analysis",
+	"UI/UX Implementation",
+];
+
+/* ─── Lightbox ───────────────────────────────────────────────
+   The thumbnail shows one calm frame; the rest of the shots live here rather
+   than in a rotating stack that kept every image decoded on the page. */
+function Lightbox({ item, onClose }) {
+	const titleId = useId();
+	const dialogRef = useRef(null);
+	const reduced = useReducedMotion();
+	// `page` counts monotonically instead of wrapping, and each card is keyed by
+	// its page rather than by which image it shows. A project with four or fewer
+	// shots renders every one of them at once, so keying by image meant the key
+	// set was identical before and after a step — AnimatePresence saw nothing
+	// enter or leave, and the front card crawled backwards into the deck instead
+	// of flying off. Monotonic keys guarantee exactly one enter and one exit for
+	// every project, whether it has three screenshots or ten.
+	//
+	// Direction rides along so the deck knows which way to move; without it,
+	// prev would animate like next in reverse.
+	const [{ page, dir }, setSlide] = useState({ page: 0, dir: 1 });
+	const total = item.images.length;
+	const wrap = (n) => ((n % total) + total) % total;
+	const index = wrap(page);
+
+	const next = useCallback(
+		() => setSlide(({ page: p }) => ({ page: p + 1, dir: 1 })),
+		[],
+	);
+	const prev = useCallback(
+		() => setSlide(({ page: p }) => ({ page: p - 1, dir: -1 })),
+		[],
+	);
+	// Dots jump by the shortest signed distance so the deck travels the way the
+	// dot sits relative to the current one.
+	const goTo = useCallback(
+		(target) =>
+			setSlide(({ page: p }) => {
+				const delta = target - ((p % total) + total) % total;
+				return { page: p + delta, dir: delta >= 0 ? 1 : -1 };
+			}),
+		[total],
+	);
+
+	// On a phone the deck has to give way to the screenshot: a four-card stack
+	// left the actual image about 200px wide, which defeats the point of
+	// opening it. One card behind, and the front card gets the room.
+	const [compact, setCompact] = useState(
+		() =>
+			typeof window !== "undefined" &&
+			window.matchMedia("(max-width: 639px)").matches,
+	);
+	useEffect(() => {
+		const mq = window.matchMedia("(max-width: 639px)");
+		const onChange = (e) => setCompact(e.matches);
+		mq.addEventListener("change", onChange);
+		return () => mq.removeEventListener("change", onChange);
+	}, []);
+	const depth = Math.min(total, compact ? 2 : SLOTS.length);
+
+	useEffect(() => {
+		document.body.style.overflow = "hidden";
+		const onKey = (e) => {
+			if (e.key === "Escape") onClose();
+			if (e.key === "ArrowRight") next();
+			if (e.key === "ArrowLeft") prev();
+		};
+		document.addEventListener("keydown", onKey);
+		dialogRef.current?.focus();
+		return () => {
+			document.body.style.overflow = "";
+			document.removeEventListener("keydown", onKey);
+		};
+	}, [onClose, next, prev]);
+
+	return createPortal(
 		<motion.div
-			id={id}
-			initial={{
-				opacity: 0,
-				x: slideFrom === "left" ? -45 : 45,
-				filter: "blur(4px)",
-			}}
-			whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-			viewport={{ once: true, amount: 0.15 }}
-			transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-			className="rounded-2xl p-4 sm:p-5
-				bg-white dark:bg-gray-900/60
-				border border-gray-200 dark:border-gray-700/60
-				shadow-sm hover:shadow-xl
-				hover:-translate-y-1.5
-				transition-all duration-300"
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			exit={{ opacity: 0 }}
+			transition={{ duration: 0.18, ease: EASE }}
+			className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-black/40 dark:bg-black/80"
+			onClick={onClose}
 		>
-			<div className="flex items-center justify-between gap-3 mb-2">
-				<span className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
-					{label}
-					{year && (
+			<motion.div
+				ref={dialogRef}
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby={titleId}
+				tabIndex={-1}
+				// Never scale from 0 — it reads as appearing out of nowhere.
+				initial={{ opacity: 0, scale: 0.97 }}
+				animate={{ opacity: 1, scale: 1 }}
+				exit={{ opacity: 0, scale: 0.97 }}
+				transition={{ duration: 0.22, ease: EASE }}
+				className="relative w-full max-w-5xl outline-none
+					rounded-3xl border border-black/10 dark:border-white/10
+					bg-white/80 dark:bg-neutral-900/75 backdrop-blur-2xl
+					px-4 py-5 sm:px-6 sm:py-6"
+				onClick={(e) => e.stopPropagation()}
+			>
+				<div className="flex items-start justify-between gap-4 mb-4">
+					<div className="min-w-0">
+						<h2
+							id={titleId}
+							className="text-sm font-semibold text-gray-900 dark:text-white truncate"
+						>
+							{item.title}
+						</h2>
+						<p className="text-xs text-gray-500 dark:text-white/50 mt-0.5 tabular-nums">
+							{index + 1} of {total}
+						</p>
+					</div>
+					<button
+						onClick={onClose}
+						aria-label="Close"
+						className="shrink-0 w-9 h-9 grid place-items-center rounded-full
+							border border-black/10 dark:border-white/15
+							bg-black/[0.03] dark:bg-white/5 backdrop-blur-md
+							text-gray-500 hover:text-gray-900 hover:bg-black/[0.07]
+							dark:text-white/70 dark:hover:text-white dark:hover:bg-white/10
+							active:scale-95
+							transition-[color,background-color,transform] duration-150
+							focus-visible:outline-none focus-visible:ring-2
+							focus-visible:ring-gray-900 dark:focus-visible:ring-white/60"
+					>
+						<FiX size={16} />
+					</button>
+				</div>
+
+				{/* Depth stack: the current shot sits sharp and forward, the next few
+				    recede to the right, scaled down and blurred, so the set reads as
+				    a physical deck rather than a single flat frame.
+
+				    Each card is keyed by its image, not by its position, so on
+				    navigate the card behind physically travels forward — growing,
+				    unblurring and sliding left into the front slot — instead of
+				    every slot cross-fading in place. */}
+				<div className="relative flex items-center justify-center">
+					<div
+						className="relative w-[80%] sm:w-[62%] aspect-[16/10]"
+						style={{ perspective: 1200 }}
+					>
+						<AnimatePresence initial={false} custom={dir}>
+							{Array.from({ length: depth }, (_, d) => {
+								const position = page + d;
+								const imgIndex = wrap(position);
+								const slot = SLOTS[d];
+								const isFront = d === 0;
+								return (
+									<motion.div
+										key={position}
+										custom={dir}
+										// enter/exit are named variants, not inline objects, so
+										// AnimatePresence's `custom` reaches a card that is already
+										// unmounting. With inline props the leaving card keeps the
+										// direction from its last render and exits the wrong way.
+										variants={{
+											// Reduced motion keeps the deck's layout but drops the
+											// travel: cards fade in place instead of sliding.
+											enter: (direction) =>
+												reduced
+													? { ...atSlot(slot), opacity: 0 }
+													: direction === 1
+														? rear(depth)
+														: OUT_FRONT,
+											exit: (direction) =>
+												reduced
+													? { ...atSlot(slot), opacity: 0 }
+													: direction === 1
+														? OUT_FRONT
+														: rear(depth),
+										}}
+										initial="enter"
+										animate={atSlot(slot)}
+										exit="exit"
+										transition={{ duration: reduced ? 0.15 : 0.38, ease: EASE }}
+										className="absolute inset-0 rounded-2xl overflow-hidden
+											border border-black/10 dark:border-white/10
+											bg-gray-100 dark:bg-black/40 shadow-2xl"
+										// Front card paints on top, and keeps that z while it
+										// exits so it slides out over the deck, not under it.
+										style={{ zIndex: SLOTS.length - d }}
+									>
+										<img
+											src={item.images[imgIndex]}
+											alt={
+												isFront
+													? `${item.title} — screenshot ${imgIndex + 1}`
+													: ""
+											}
+											aria-hidden={!isFront}
+											draggable={false}
+											className="w-full h-full object-cover"
+										/>
+									</motion.div>
+								);
+							})}
+						</AnimatePresence>
+					</div>
+
+					{total > 1 && (
 						<>
-							<span className="mx-1.5 text-gray-300 dark:text-gray-600">·</span>
-							{year}
+							<button
+								onClick={prev}
+								aria-label="Previous screenshot"
+								className="absolute left-0 sm:left-2 z-20 w-11 h-11 grid place-items-center rounded-full
+									border border-black/10 dark:border-white/15
+									bg-white/70 dark:bg-white/5 backdrop-blur-md shadow-sm dark:shadow-none
+									text-gray-600 hover:text-gray-900 hover:bg-white
+									dark:text-white/80 dark:hover:text-white dark:hover:bg-white/10
+									active:scale-95
+									transition-[color,background-color,transform] duration-150
+									focus-visible:outline-none focus-visible:ring-2
+									focus-visible:ring-gray-900 dark:focus-visible:ring-white/60"
+							>
+								<FiChevronLeft size={20} />
+							</button>
+							<button
+								onClick={next}
+								aria-label="Next screenshot"
+								className="absolute right-0 sm:right-2 z-20 w-11 h-11 grid place-items-center rounded-full
+									border border-black/10 dark:border-white/15
+									bg-white/70 dark:bg-white/5 backdrop-blur-md shadow-sm dark:shadow-none
+									text-gray-600 hover:text-gray-900 hover:bg-white
+									dark:text-white/80 dark:hover:text-white dark:hover:bg-white/10
+									active:scale-95
+									transition-[color,background-color,transform] duration-150
+									focus-visible:outline-none focus-visible:ring-2
+									focus-visible:ring-gray-900 dark:focus-visible:ring-white/60"
+							>
+								<FiChevronRight size={20} />
+							</button>
 						</>
 					)}
-				</span>
-				{status && (
-					<span className="flex items-center gap-1.5 text-[10px] font-medium text-gray-500 dark:text-gray-400">
-						<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white animate-pulse" />
-						{status}
-					</span>
+				</div>
+
+				{/* Dots: the active one stretches into a pill rather than just
+				    brightening, so position is readable at a glance. */}
+				{total > 1 && (
+					<div className="flex items-center justify-center gap-1.5 mt-6">
+						{item.images.map((_, i) => (
+							<button
+								key={i}
+								onClick={() => goTo(i)}
+								aria-label={`Go to screenshot ${i + 1}`}
+								aria-current={i === index}
+								className={`h-1.5 rounded-full transition-[width,background-color] duration-300 ease-out
+									focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 dark:focus-visible:ring-white/60
+									${
+										i === index
+											? "w-6 bg-gray-900 dark:bg-white"
+											: "w-1.5 bg-gray-900/25 dark:bg-white/30 hover:bg-gray-900/40 dark:hover:bg-white/50"
+									}`}
+							/>
+						))}
+					</div>
 				)}
-			</div>
-			<h4 className="text-sm font-semibold text-gray-900 dark:text-white leading-snug mb-1.5">
-				{title}
-			</h4>
-			<p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-3">
-				{description}
-			</p>
-			<div className="flex flex-wrap gap-1.5">
-				{tags.map((tag) => (
-					<span
-						key={tag}
-						className="px-2.5 py-0.5 rounded-full text-[10px] font-medium
-							bg-gray-100 dark:bg-gray-800
-							border border-gray-200 dark:border-gray-700
-							text-gray-600 dark:text-gray-400"
-					>
-						{tag}
-					</span>
-				))}
-			</div>
-		</motion.div>
+			</motion.div>
+		</motion.div>,
+		document.body,
 	);
 }
 
-/* ─── Project Card ────────────────────────────────────────── */
-function ProjectCard({
-	id,
-	title,
-	description,
-	tags,
-	images,
-	date,
-	slideFrom,
-}) {
+/* ─── Work Row ───────────────────────────────────────────────
+   Year rail, then the entry, then one screenshot. A row, not a card: the old
+   grid gave three different card treatments to what is really one list. */
+function WorkRow({ item, onOpen, reduced }) {
+	const hasImages = item.images?.length > 0;
+
 	return (
-		<motion.div
-			id={id}
-			initial={{
-				opacity: 0,
-				x: slideFrom === "left" ? -45 : 45,
-				filter: "blur(4px)",
+		<motion.li
+			id={item.id}
+			variants={{
+				hidden: { opacity: 0, y: reduced ? 0 : 12 },
+				visible: {
+					opacity: 1,
+					y: 0,
+					transition: { duration: 0.42, ease: EASE },
+				},
 			}}
-			whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-			viewport={{ once: true, amount: 0.12 }}
-			transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-			// Cards that are off screen skip layout, paint and image decode
-			// entirely; the intrinsic size keeps the scrollbar from jumping.
-			style={{ contentVisibility: "auto", containIntrinsicSize: "1px 380px" }}
-			className="rounded-2xl overflow-hidden
-				bg-white dark:bg-gray-900/60
-				border border-gray-200 dark:border-gray-700/60
-				shadow-sm hover:shadow-xl
-				hover:-translate-y-1.5
-				transition-all duration-300 group"
+			className="group scroll-mt-24"
 		>
-			<div className="relative p-3 pb-0">
-				<ImageCarousel images={images} title={title} />
-				{date && (
-					<span className="absolute top-5 left-5 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md text-white text-[10px] font-semibold tracking-wide z-20">
-						{date}
+			<div
+				className="grid gap-x-6 gap-y-2 py-6 sm:grid-cols-[5.5rem_1fr]
+					border-t border-gray-200/70 dark:border-gray-700/50"
+			>
+				{/* Year rail */}
+				<div className="sm:pt-0.5">
+					<span className="text-xs font-semibold tabular-nums text-gray-900 dark:text-white">
+						{item.year}
 					</span>
-				)}
-			</div>
-			<div className="p-4 pt-3">
-				<h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-1.5">
-					{title}
-				</h4>
-				<p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-3">
-					{description}
-				</p>
-				<div className="flex flex-wrap gap-1.5">
-					{tags.map((tag) => (
-						<span
-							key={tag}
-							className="px-2.5 py-0.5 rounded-full text-[10px] font-medium
-								bg-gray-100 dark:bg-gray-800
-								border border-gray-200 dark:border-gray-700
-								text-gray-600 dark:text-gray-400"
+					<span className="block text-[10px] text-gray-400 dark:text-gray-500 mt-0.5">
+						{item.term}
+					</span>
+				</div>
+
+				{/* Entry */}
+				<div className="flex flex-col-reverse sm:flex-row gap-4 sm:gap-6">
+					<div className="flex-1 min-w-0">
+						<div className="flex items-center gap-2 mb-1.5">
+							<span className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+								{item.kind}
+							</span>
+							{item.status && (
+								<span className="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-500 dark:text-gray-400">
+									<span className="w-1 h-1 rounded-full bg-gray-900 dark:bg-white" />
+									{item.status}
+								</span>
+							)}
+						</div>
+
+						<h4 className="text-sm font-semibold text-gray-900 dark:text-white leading-snug">
+							{item.title}
+						</h4>
+						{item.org && (
+							<p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+								{item.org}
+							</p>
+						)}
+
+						<p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mt-2 max-w-prose">
+							{item.description}
+						</p>
+
+						<div className="flex flex-wrap gap-x-3 gap-y-1 mt-3">
+							{item.tags.map((tag) => (
+								<span
+									key={tag}
+									className="text-[10px] font-medium text-gray-400 dark:text-gray-500"
+								>
+									{tag}
+								</span>
+							))}
+						</div>
+					</div>
+
+					{/* One screenshot. Opens the rest rather than rotating in place. */}
+					{hasImages && (
+						<button
+							type="button"
+							onClick={() => onOpen(item)}
+							aria-label={`View ${item.images.length} screenshots of ${item.title}`}
+							className="relative shrink-0 w-full sm:w-44 aspect-[16/10] overflow-hidden rounded-lg
+								border border-gray-200 dark:border-gray-700/60 bg-gray-100 dark:bg-gray-800
+								cursor-pointer active:scale-[0.98]
+								transition-transform duration-150
+								focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 dark:focus-visible:ring-white focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900"
 						>
-							{tag}
-						</span>
-					))}
+							<img
+								src={item.images[0]}
+								alt=""
+								loading="lazy"
+								decoding="async"
+								width={1200}
+								height={750}
+								className="w-full h-full object-cover
+									transition-[opacity] duration-200
+									group-hover:opacity-90"
+							/>
+							{item.images.length > 1 && (
+								<span
+									className="absolute bottom-1.5 right-1.5 px-1.5 py-0.5 rounded
+										bg-black/55 text-white text-[9px] font-medium tabular-nums"
+								>
+									{item.images.length}
+								</span>
+							)}
+						</button>
+					)}
 				</div>
 			</div>
-		</motion.div>
+		</motion.li>
 	);
 }
 
-/* ─── Main Component ──────────────────────────────────────── */
-function Projects() {
-	const timelineRef = useRef(null);
+/* ─── Main Component ─────────────────────────────────────── */
+function Education() {
+	const [active, setActive] = useState(null);
+	const reduced = useReducedMotion();
 
-	const { scrollYProgress } = useScroll({
-		target: timelineRef,
-		offset: ["start center", "end center"],
-	});
-	const scaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
-
-	const stagger = {
+	const list = {
 		hidden: {},
-		visible: { transition: { staggerChildren: 0.07 } },
+		visible: { transition: { staggerChildren: 0.05 } },
 	};
 	const fadeUp = {
-		hidden: { opacity: 0, y: 16 },
+		hidden: { opacity: 0, y: reduced ? 0 : 12 },
 		visible: {
 			opacity: 1,
 			y: 0,
-			transition: { duration: 0.55, ease: "easeOut" },
+			transition: { duration: 0.42, ease: EASE },
 		},
 	};
 
-	const professionalWork = [
-		{
-			id: "project-capstone",
-			label: "Capstone",
-			year: "2026",
-			title:
-				"Web-Based Integrated Payroll and Mobile Commercial System — Tanauan City Water District",
-			description:
-				"Payroll processing plus a mobile commercial layer for a live municipal water utility — built end to end from schema and API through to UI and deployment.",
-			tags: ["Payroll", "Mobile", "Municipal Utility", "Full Stack"],
-			status: "In development",
-			slideFrom: "left",
-		},
-		{
-			id: "project-twd-monitoring",
-			label: "Client work",
-			year: "2026",
-			title: "TWD Project Monitoring System",
-			description:
-				"Replaces manual office-to-office, file-based progress reporting with a single web system for tracking project status across departments.",
-			tags: ["Web System", "Reporting", "Client Work"],
-			slideFrom: "right",
-		},
-		{
-			id: "project-school-evaluation",
-			label: "School project",
-			year: "2026",
-			title: "School Evaluation System",
-			description:
-				"A structured evaluation workflow with role-based access and reporting, replacing paper-based evaluation forms.",
-			tags: ["Role-Based Access", "Reporting", "School Project"],
-			slideFrom: "left",
-		},
-	];
-
-	const projects = [
-		{
-			id: "project-time-scheduling",
-			title: "Time Scheduling System",
-			date: "2nd Yr · 1st Sem 2024",
-			description:
-				"A scheduling management system built with Java (OOP) and MySQL to efficiently manage schedules and streamline time-based operations.",
-			tags: ["Java", "MySQL", "OOP"],
-			images: [time1, time2, time3],
-			slideFrom: "left",
-		},
-		{
-			id: "project-thrift-shop",
-			title: "Online Thrift Shop",
-			date: "2nd Yr · 2nd Sem 2025",
-			description:
-				"A web-based e-commerce platform with HTML, Tailwind CSS, and MySQL, featuring product browsing and inventory management.",
-			tags: ["HTML", "CSS", "Tailwind CSS", "MySQL"],
-			images: [thrift1, thrift2, thrift3, thrift4, thrift5],
-			slideFrom: "right",
-		},
-		{
-			title: "Portfolio Website",
-			date: "Vacation 2025",
-			description:
-				"A fully responsive personal portfolio built with HTML, CSS, and Tailwind CSS showcasing projects through a clean interface.",
-			tags: ["HTML", "CSS", "Tailwind CSS"],
-			images: [portfolio1, portfolio2, portfolio3, portfolio4],
-			slideFrom: "left",
-		},
-		{
-			id: "project-bat-cafe",
-			title: "Malvar Bat Cave Café",
-			date: "3rd Yr · 1st Sem 2025",
-			description:
-				"A café management system with PHP and XAMPP featuring CRUD operations, an integrated chatbot, and dark mode.",
-			tags: ["PHP", "XAMPP", "MySQL", "CRUD"],
-			images: [
-				cafe1,
-				cafe2,
-				cafe3,
-				cafe4,
-				cafe5,
-				cafe6,
-				cafe7,
-				cafe8,
-				cafe9,
-				cafe10,
-			],
-			slideFrom: "right",
-		},
-		{
-			id: "project-vehicle-rental",
-			title: "Vehicle Rental System",
-			date: "3rd Yr · 1st Sem 2025",
-			description:
-				"A PHP-based vehicle rental system with CRUD operations and XML data handling, enhanced with a chatbot for booking guidance.",
-			tags: ["PHP", "CRUD", "XML"],
-			images: [
-				rental1,
-				rental2,
-				rental3,
-				rental4,
-				rental5,
-				rental6,
-				rental7,
-				rental8,
-				rental9,
-				rental10,
-			],
-			slideFrom: "left",
-		},
-	];
-
-	const timelineItems = [
-		{
-			date: "2nd Year · 1st Semester 2024",
-			title: "Time Scheduling System",
-			desc: "Built a scheduling management system using Java OOP and MySQL.",
-			side: "left",
-		},
-		{
-			date: "2nd Year · 2nd Semester 2025",
-			title: "Online Thrift Shop",
-			desc: "Developed a web-based e-commerce platform with HTML, Tailwind CSS, and MySQL.",
-			side: "right",
-		},
-		{
-			date: "Vacation 2025",
-			title: "Portfolio Website",
-			desc: "Created a personal portfolio site with HTML, CSS, and Tailwind CSS.",
-			side: "left",
-		},
-		{
-			date: "3rd Year · 1st Semester 2025",
-			title: "Malvar Bat Cave Café",
-			desc: "Built a café management system with PHP and XAMPP featuring CRUD operations, an integrated chatbot, and dark mode.",
-			side: "right",
-		},
-		{
-			date: "3rd Year · 1st Semester 2025",
-			title: "Vehicle Rental System",
-			desc: "Developed a PHP-based vehicle rental system with CRUD operations and XML data handling, enhanced with a chatbot for booking guidance.",
-			side: "left",
-		},
-		{
-			date: "4th Year · 2026",
-			title: "TWD Project Monitoring System",
-			desc: "Client work — replaced manual office-to-office, file-based progress reporting with a single web system.",
-			side: "right",
-		},
-		{
-			date: "4th Year · 2026",
-			title: "School Evaluation System",
-			desc: "School project — a structured evaluation workflow with role-based access and reporting.",
-			side: "left",
-		},
-		{
-			date: "4th Year · 2026",
-			title: "Capstone — Integrated Payroll & Mobile Commercial System",
-			desc: "Payroll processing and a mobile commercial layer for Tanauan City Water District. In development.",
-			side: "right",
-		},
-	];
-
 	return (
-		<section id="education" className="min-h-screen relative z-0">
-			<div className="min-h-screen flex items-center justify-center px-4 sm:px-6 py-16">
+		<section id="education" className="relative z-0">
+			<div className="flex items-center justify-center px-4 sm:px-6 py-16">
 				<motion.div
-					initial={{ opacity: 0, y: 60 }}
-					whileInView={{ opacity: 1, y: 0 }}
+					variants={fadeUp}
+					initial="hidden"
+					whileInView="visible"
 					viewport={{ once: true, amount: 0.05 }}
-					transition={{ duration: 0.8, ease: "easeOut" }}
-					className="relative max-w-5xl w-full rounded-3xl bg-white/70 dark:bg-gray-800/70 backdrop-blur-2xl
+					className="relative max-w-5xl w-full rounded-3xl
+						bg-white/70 dark:bg-gray-800/70 backdrop-blur-2xl
 						border border-white/50 dark:border-gray-700/50
 						shadow-[0_20px_60px_-15px_rgba(0,0,0,0.25)]
 						overflow-hidden"
 				>
-					<div className="absolute inset-0 -z-10 rounded-3xl bg-gradient-to-br from-white/40 dark:from-gray-700/40 via-transparent to-white/10 dark:to-gray-800/10" />
-
-					{/* ── Section 1: Education ── */}
+					{/* ── Education ── */}
 					<motion.div
-						variants={stagger}
+						variants={list}
 						initial="hidden"
 						whileInView="visible"
-						viewport={{ once: true }}
-						className="px-7 py-7 sm:px-9 sm:py-8 border-b border-gray-200/40 dark:border-gray-700/40"
+						viewport={{ once: true, amount: 0.15 }}
+						className="px-7 py-8 sm:px-10 sm:py-10"
 					>
-						<motion.div
-							variants={fadeUp}
-							className="flex items-center gap-2 mb-6"
-						>
+						<motion.div variants={fadeUp} className="flex items-center gap-2 mb-7">
 							<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white" />
 							<h2 className="text-sm font-bold text-gray-900 dark:text-white tracking-wide uppercase">
 								Education
 							</h2>
 						</motion.div>
 
-						<div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
-							{/* Degree info */}
-							<motion.div variants={fadeUp} className="flex-1">
-								<div className="flex items-start gap-4">
-									<div className="w-10 h-10 rounded-xl bg-gray-900 dark:bg-white flex items-center justify-center shrink-0 mt-0.5">
-										<FiBookOpen className="w-5 h-5 text-white dark:text-gray-900" />
-									</div>
-									<div>
-										<h3 className="text-base font-bold text-gray-900 dark:text-white leading-snug">
-											Bachelor of Science in Information Technology
-										</h3>
-										<p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-											Batangas State University · 2023 – Present
-										</p>
+						<motion.div variants={fadeUp} className="flex items-start gap-4">
+							<div className="w-10 h-10 rounded-xl bg-gray-900 dark:bg-white flex items-center justify-center shrink-0 mt-0.5">
+								<FiBookOpen className="w-5 h-5 text-white dark:text-gray-900" />
+							</div>
+							<div className="min-w-0">
+								<h3 className="text-base font-bold text-gray-900 dark:text-white leading-snug">
+									Bachelor of Science in Information Technology
+								</h3>
+								<p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+									Batangas State University · 2023 – Present
+								</p>
+								<p className="mt-2 inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-600 dark:text-gray-300">
+									<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white" />
+									4th Year · Capstone in development
+								</p>
+								<p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mt-3 max-w-prose">
+									Now in my fourth year, currently developing our capstone
+									project alongside coursework in software development, database
+									systems, and modern web technologies — building real-world
+									full-stack applications across multiple academic projects.
+								</p>
+							</div>
+						</motion.div>
 
-										<p className="mt-2 inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-600 dark:text-gray-300">
-											<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white animate-pulse" />
-											4th Year · Capstone in development
-										</p>
-
-										<p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mt-3 max-w-lg">
-											Now in my fourth year, currently developing our capstone
-											project alongside coursework in software development,
-											database systems, and modern web technologies — building
-											real-world full-stack applications across multiple
-											academic projects.
-										</p>
-									</div>
-								</div>
-							</motion.div>
-
-							{/* Focus Areas */}
-							<motion.div variants={fadeUp} className="lg:w-60 shrink-0">
+						{/* Focus areas and skills, side by side rather than stacked as
+						    two more full-width blocks. */}
+						<motion.div
+							variants={fadeUp}
+							className="grid gap-8 sm:grid-cols-2 mt-8 pt-8 border-t border-gray-200/70 dark:border-gray-700/50"
+						>
+							<div>
 								<p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">
 									Focus Areas
 								</p>
-								<ul className="space-y-2">
-									{[
-										"Software Development",
-										"Database Management",
-										"Web Application Development",
-										"System Analysis & Design",
-									].map((area) => (
+								<ul className="space-y-1.5">
+									{focusAreas.map((area) => (
 										<li
 											key={area}
-											className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300"
+											className="text-sm text-gray-700 dark:text-gray-300"
 										>
-											<span className="w-1.5 h-1.5 rounded-full bg-gray-400 dark:bg-gray-500 shrink-0" />
 											{area}
 										</li>
 									))}
 								</ul>
-							</motion.div>
-						</div>
+							</div>
+							<div>
+								<p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">
+									Key Skills
+								</p>
+								<ul className="space-y-1.5">
+									{skills.map((skill) => (
+										<li
+											key={skill}
+											className="text-sm text-gray-700 dark:text-gray-300"
+										>
+											{skill}
+										</li>
+									))}
+								</ul>
+							</div>
+						</motion.div>
 					</motion.div>
 
-					{/* ── Section 2: Key Skills ── */}
-					<motion.div
-						variants={stagger}
-						initial="hidden"
-						whileInView="visible"
-						viewport={{ once: true }}
-						className="px-7 py-6 sm:px-9 sm:py-7 border-b border-gray-200/40 dark:border-gray-700/40"
-					>
+					{/* ── Work ── */}
+					<div className="px-7 pb-9 sm:px-10 sm:pb-11 border-t border-gray-200/40 dark:border-gray-700/40 pt-8">
 						<motion.div
 							variants={fadeUp}
-							className="flex items-center gap-2 mb-4"
-						>
-							<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white" />
-							<h3 className="text-sm font-bold text-gray-900 dark:text-white tracking-wide">
-								Key Skills Learned
-							</h3>
-						</motion.div>
-						<motion.div variants={fadeUp} className="flex flex-wrap gap-2">
-							{[
-								"Object-Oriented Programming",
-								"Database Design",
-								"Full Stack Development",
-								"System Analysis",
-								"UI/UX Implementation",
-							].map((skill) => (
-								<SkillBadge key={skill} skill={skill} />
-							))}
-						</motion.div>
-					</motion.div>
-
-					{/* ── Section 3: Capstone & Client Work ── */}
-					<div className="px-7 py-6 sm:px-9 sm:py-7 border-b border-gray-200/40 dark:border-gray-700/40">
-						<motion.div
-							initial={{ opacity: 0, y: 14 }}
-							whileInView={{ opacity: 1, y: 0 }}
+							initial="hidden"
+							whileInView="visible"
 							viewport={{ once: true }}
-							transition={{ duration: 0.5 }}
-							className="flex items-center gap-2 mb-6"
+							className="flex items-baseline justify-between gap-4 mb-2"
 						>
-							<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white" />
-							<h3 className="text-sm font-bold text-gray-900 dark:text-white tracking-wide">
-								Capstone &amp; Client Work
-							</h3>
-						</motion.div>
-
-						<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-							{professionalWork.map((work) => (
-								<WorkCard key={work.title} {...work} />
-							))}
-						</div>
-					</div>
-
-					{/* ── Section 3: Academic Projects ── */}
-					<div className="px-7 py-6 sm:px-9 sm:py-7 border-b border-gray-200/40 dark:border-gray-700/40">
-						<motion.div
-							initial={{ opacity: 0, y: 14 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true }}
-							transition={{ duration: 0.5 }}
-							className="flex items-center gap-2 mb-6"
-						>
-							<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white" />
-							<h3 className="text-sm font-bold text-gray-900 dark:text-white tracking-wide">
-								Academic Projects
-							</h3>
-						</motion.div>
-
-						<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-							{projects.map((proj) => (
-								<ProjectCard key={proj.title} {...proj} />
-							))}
-						</div>
-					</div>
-
-					{/* ── Section 4: Learning Timeline ── */}
-					<div className="px-7 py-6 sm:px-9 sm:py-7" ref={timelineRef}>
-						<motion.div
-							initial={{ opacity: 0, y: 14 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true }}
-							transition={{ duration: 0.5 }}
-							className="flex items-center gap-2 mb-8"
-						>
-							<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white" />
-							<h3 className="text-sm font-bold text-gray-900 dark:text-white tracking-wide">
-								Learning Timeline
-							</h3>
-						</motion.div>
-
-						<div className="relative">
-							{/* Base vertical line */}
-							<div className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-gray-200 dark:bg-gray-700" />
-							{/* Animated progress fill */}
-							<motion.div
-								style={{ scaleY, originY: 0 }}
-								className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-gray-500 dark:bg-gray-400"
-							/>
-
-							<div className="space-y-10 pb-2">
-								{timelineItems.map((item, i) => (
-									<motion.div
-										key={i}
-										initial={{
-											opacity: 0,
-											x: item.side === "left" ? -28 : 28,
-										}}
-										whileInView={{ opacity: 1, x: 0 }}
-										viewport={{ once: true, amount: 0.3 }}
-										transition={{ duration: 0.55, ease: "easeOut" }}
-										className={`relative flex items-start gap-4 ${item.side === "right" ? "flex-row-reverse" : ""}`}
-									>
-										{/* Dot */}
-										<div className="absolute left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-gray-400 dark:bg-gray-500 border-2 border-white dark:border-gray-800 z-10 mt-1.5" />
-
-										{/* Content */}
-										<div
-											className={`w-[calc(50%-18px)] ${item.side === "right" ? "text-right" : ""}`}
-										>
-											<span className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-												{item.date}
-											</span>
-											<h4 className="text-sm font-semibold text-gray-900 dark:text-white mt-0.5 mb-1">
-												{item.title}
-											</h4>
-											<p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
-												{item.desc}
-											</p>
-										</div>
-
-										{/* Spacer */}
-										<div className="w-[calc(50%-18px)]" />
-									</motion.div>
-								))}
+							<div className="flex items-center gap-2">
+								<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white" />
+								<h3 className="text-sm font-bold text-gray-900 dark:text-white tracking-wide uppercase">
+									Work
+								</h3>
 							</div>
-						</div>
+							<span className="text-[10px] font-medium text-gray-400 dark:text-gray-500 tabular-nums">
+								{work.length} projects · 2024 – 2026
+							</span>
+						</motion.div>
+
+						<motion.ul
+							variants={list}
+							initial="hidden"
+							whileInView="visible"
+							viewport={{ once: true, amount: 0.02 }}
+						>
+							{work.map((item) => (
+								<WorkRow
+									key={item.id}
+									item={item}
+									onOpen={setActive}
+									reduced={reduced}
+								/>
+							))}
+						</motion.ul>
 					</div>
 				</motion.div>
 			</div>
+
+			<AnimatePresence>
+				{active && <Lightbox item={active} onClose={() => setActive(null)} />}
+			</AnimatePresence>
 		</section>
 	);
 }
 
-export default Projects;
+export default Education;
