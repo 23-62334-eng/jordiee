@@ -91,10 +91,10 @@ function Footer() {
 							<div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm">
 								<FaEnvelope className="text-gray-500 dark:text-gray-400" />
 								<a
-									href="mailto:javiermarkjordan@email.com"
+									href="mailto:javiermarkjordan@gmail.com"
 									className="hover:text-gray-900 dark:hover:text-white transition-colors duration-300 hover:underline"
 								>
-									javiermarkjordan@email.com
+									javiermarkjordan@gmail.com
 								</a>
 							</div>
 							<div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm">
