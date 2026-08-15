@@ -8,6 +8,8 @@ import {
 	FiCheck,
 	FiMail,
 } from "react-icons/fi";
+import profile from "./data/profile.json";
+import RichText from "./data/RichText";
 
 /* ─── Animation Variants ─────────────────────────────────── */
 const fadeUp = {
@@ -55,30 +57,20 @@ function SkillCard({ icon: Icon, title }) {
 	);
 }
 
+// Icons stay in the component: profile.json holds facts, not presentation.
+// Positional, so the order here must track availability.services.
+const SERVICE_ICONS = [FiCode, FiDatabase, FiMonitor, FiGitBranch, FiClipboard];
+
 /* ─── Main Component ─────────────────────────────────────── */
 function Job() {
-	const skills = [
-		{ icon: FiCode, title: "Full Stack Development" },
-		{ icon: FiDatabase, title: "Database Design & CRUD Operations" },
-		{ icon: FiMonitor, title: "Responsive UI/UX Development" },
-		{ icon: FiGitBranch, title: "Version Control & Git Workflows" },
-		{ icon: FiClipboard, title: "Capstone Project Planning" },
-	];
+	const skills = profile.availability.services.map((title, i) => ({
+		icon: SERVICE_ICONS[i] ?? FiCode,
+		title,
+	}));
 
-	const goals = [
-		"Collaborative team environment with mentorship",
-		"Challenging projects that improve technical skills",
-		"Exposure to industry best practices",
-		"Opportunity to contribute to real-world systems",
-		"Continuous learning and professional growth",
-	];
+	const goals = profile.availability.lookingFor;
 
-	const highlightTags = [
-		"4th Year IT Student",
-		"Full Stack Development",
-		"Capstone Project",
-		"Clean Code",
-	];
+	const highlightTags = profile.availability.highlightTags;
 
 	const divider = (
 		<div className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent my-8" />
@@ -261,16 +253,13 @@ function Job() {
 									<div className="flex-1">
 										<div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/20 border border-green-500/40 text-green-400 text-xs font-semibold mb-4">
 											<span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-											Available for Internship / OJT
+											{profile.availability.status}
 										</div>
 										<p className="text-sm text-gray-300 leading-relaxed max-w-lg">
-											I am currently seeking an{" "}
-											<span className="font-semibold text-white">
-												Internship or OJT
-											</span>{" "}
-											opportunity where I can apply my development skills,
-											contribute to real projects, and grow as a software
-											developer.
+											<RichText
+												segments={profile.availability.statement}
+												emphasisClassName="font-semibold text-white"
+											/>
 										</p>
 									</div>
 									<motion.a

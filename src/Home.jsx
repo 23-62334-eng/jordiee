@@ -19,6 +19,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import cvPDF from "./assets/cv/markjordanjavier.pdf";
 import PaintPortrait from "./components/PaintPortrait";
 import TiltCard from "./components/TiltCard";
+import profile from "./data/profile.json";
 
 // Project thumbnail images
 import projTimeSched from "./assets/proj/timeSched/TSS1.webp";
@@ -134,7 +135,11 @@ function useScreenTier() {
 }
 
 function Home() {
+<<<<<<< HEAD
 	const titles = ["Full Stack Web Developer", "Aspiring Cloud Engineer"];
+=======
+	const titles = profile.identity.titles;
+>>>>>>> 6ddc1f2 (feat: profile.json as single source of truth)
 	const [displayedText, setDisplayedText] = useState("");
 	const screenTier = useScreenTier();
 
@@ -272,7 +277,7 @@ function Home() {
 										whileHover={{ scale: 1.05, y: -2 }}
 										transition={{ type: "spring", stiffness: 300, damping: 20 }}
 									>
-										Mark Jordan Javier
+										{profile.identity.name}
 									</motion.span>
 									<motion.div
 										className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-900/10 dark:bg-white/20 relative cursor-pointer"
@@ -298,7 +303,7 @@ function Home() {
 								{/* Location */}
 								<div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm sm:text-base">
 									<FaMapMarkerAlt />
-									<span>Batangas, Philippines</span>
+									<span>{profile.identity.location}</span>
 								</div>
 
 								{/* Title */}
@@ -309,9 +314,7 @@ function Home() {
 
 								{/* Bio */}
 								<p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base leading-relaxed">
-									A BS Information Technology student from Batangas State
-									University - TNEU. Passionate about building modern web
-									applications.
+									{profile.identity.bio.hero}
 								</p>
 
 								{/* Resume button */}
@@ -362,7 +365,11 @@ function Home() {
 										<FaLinkedin />
 									</motion.a>
 									<motion.a
+<<<<<<< HEAD
 										href="mailto:javiermarkjordan@gmail.com"
+=======
+										href={`mailto:${profile.contact.email}`}
+>>>>>>> 6ddc1f2 (feat: profile.json as single source of truth)
 										className="text-gray-700 dark:text-gray-200 hover:text-red-500 dark:hover:text-red-400"
 										whileHover={{ scale: 1.2, y: -3 }}
 										transition={{ type: "spring", stiffness: 400, damping: 15 }}
@@ -390,7 +397,7 @@ function Home() {
 									whileHover={{ scale: 1.05, y: -2 }}
 									transition={{ type: "spring", stiffness: 300, damping: 20 }}
 								>
-									Mark Jordan Javier
+									{profile.identity.name}
 								</motion.span>
 								<motion.div
 									className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-900/10 dark:bg-white/20 relative cursor-pointer"
@@ -415,7 +422,7 @@ function Home() {
 
 							<div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 mb-4 text-base">
 								<FaMapMarkerAlt />
-								<span>Batangas, Philippines</span>
+								<span>{profile.identity.location}</span>
 							</div>
 
 							<h1 className="text-3xl xl:text-5xl 2xl:text-6xl font-extrabold text-gray-900 dark:text-white leading-[0.95] tracking-tight">
@@ -425,9 +432,7 @@ function Home() {
 
 							{/* Info moved here - below title */}
 							<p className="mt-5 text-gray-600 dark:text-gray-300 text-sm xl:text-base 2xl:text-lg leading-relaxed max-w-md">
-								A BS Information Technology student from Batangas State
-								University - TNEU. Passionate about building modern web
-								applications.
+								{profile.identity.bio.hero}
 							</p>
 						</motion.div>
 					</motion.div>
@@ -662,7 +667,7 @@ function Home() {
 									<FaLinkedin />
 								</motion.a>
 								<motion.a
-									href="mailto:javiermarkjordan@email.com"
+									href={`mailto:${profile.contact.email}`}
 									className="text-gray-700 dark:text-gray-200 hover:text-red-500 dark:hover:text-red-400"
 									whileHover={{ scale: 1.2, y: -3 }}
 									transition={{ type: "spring", stiffness: 400, damping: 15 }}

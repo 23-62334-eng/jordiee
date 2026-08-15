@@ -1,0 +1,687 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jordiee.me/schema/profile.schema.json",
+  "title": "Portfolio profile",
+  "description": "Single source of truth for jordiee.me. null is a legal value for any field with no source in the components — absence is data, not an error. What is NOT legal is a required key going missing, a type changing, or an enum drifting.",
+  "type": "object",
+  "required": [
+    "sections",
+    "identity",
+    "education",
+    "skills",
+    "projects",
+    "certifications",
+    "contact",
+    "availability",
+    "faq",
+    "notAvailable"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "nullableString": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "richText": {
+      "description": "Prose that is interleaved with emphasised spans in the source. Stored as verbatim segments so every fragment stays traceable to a component.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "emphasis": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "assetPath": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_./-]+\\.(webp|jpg|jpeg|png|svg|pdf)$",
+      "description": "Relative to src/assets/. Existence is checked by scripts/verify-profile-sources.js, which the schema cannot do."
+    },
+    "url": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri",
+      "pattern": "^https?://"
+    },
+    "todoOrUrl": {
+      "anyOf": [
+        {
+          "const": "TODO_VERIFY"
+        },
+        {
+          "$ref": "#/$defs/url"
+        }
+      ],
+      "description": "Unverified sentinel or a real URL. validate-profile.js counts the sentinels and warns; it does not fail, because they are set deliberately."
+    }
+  },
+  "properties": {
+    "_meta": {
+      "type": "object"
+    },
+    "identity": {
+      "type": "object",
+      "required": [
+        "name",
+        "titles",
+        "location",
+        "bio"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alias": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "titles": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "location": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bio": {
+          "type": "object",
+          "required": [
+            "hero",
+            "footer",
+            "about",
+            "aboutPlain"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "hero": {
+              "type": "string",
+              "minLength": 1
+            },
+            "footer": {
+              "type": "string",
+              "minLength": 1
+            },
+            "about": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/richText"
+              }
+            },
+            "aboutPlain": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": "about[] flattened to plain strings for LLM consumption. Must stay in sync with about[]; validate-profile.js enforces that."
+            }
+          }
+        },
+        "pronouns": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "tagline": {
+          "$ref": "#/$defs/nullableString"
+        }
+      }
+    },
+    "education": {
+      "type": "object",
+      "required": [
+        "degree",
+        "institution",
+        "period",
+        "focusAreas",
+        "keySkills"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "degree": {
+          "type": "string",
+          "minLength": 1
+        },
+        "institution": {
+          "type": "string",
+          "minLength": 1
+        },
+        "institutionVariant": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "period": {
+          "type": "string",
+          "minLength": 1
+        },
+        "startYear": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1900,
+          "maximum": 2100
+        },
+        "yearLevel": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "status": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "summary": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "focusAreas": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "keySkills": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "expectedGraduation": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "gpa": {
+          "type": [
+            "string",
+            "number",
+            "null"
+          ]
+        },
+        "honors": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "coursework": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "skills": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "category",
+          "hasLogo"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "UI / UX",
+              "Frontend",
+              "Backend",
+              "Cloud",
+              "AI / ML",
+              "Automation",
+              "Developer Tools"
+            ],
+            "description": "Closed enum on purpose. A typo'd category would silently create an eighth group that renders as an empty section."
+          },
+          "hasLogo": {
+            "type": "boolean",
+            "description": "Whether TechLogoMarquee has an icon for this entry. False means it renders in About's pill list only."
+          }
+        }
+      }
+    },
+    "projects": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "org",
+          "year",
+          "status",
+          "description",
+          "tags",
+          "links"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^project-[a-z0-9-]+$",
+            "description": "Doubles as the DOM anchor. Home.jsx deep-links to these, so a rename silently breaks those jump links."
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "org": {
+            "$ref": "#/$defs/nullableString"
+          },
+          "year": {
+            "type": "string",
+            "pattern": "^[0-9]{4}$"
+          },
+          "term": {
+            "$ref": "#/$defs/nullableString"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "Capstone",
+              "Client work",
+              "School project",
+              "Personal"
+            ]
+          },
+          "status": {
+            "anyOf": [
+              {
+                "const": "TODO_VERIFY"
+              },
+              {
+                "enum": [
+                  "in-development",
+                  "completed",
+                  "deployed",
+                  "archived"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Normalised lifecycle state. Distinct from statusLabel, which is the free-text badge extracted from the components."
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tags": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "links": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": false,
+            "required": [
+              "repo",
+              "live",
+              "demo"
+            ],
+            "properties": {
+              "repo": {
+                "$ref": "#/$defs/todoOrUrl"
+              },
+              "live": {
+                "$ref": "#/$defs/todoOrUrl"
+              },
+              "demo": {
+                "$ref": "#/$defs/todoOrUrl"
+              }
+            }
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/assetPath"
+            }
+          },
+          "statusLabel": {
+            "$ref": "#/$defs/nullableString",
+            "description": "Sourced free-text status (only the capstone has one). Rendered in the UI; status is not, so TODO_VERIFY never reaches a visitor."
+          }
+        }
+      }
+    },
+    "certifications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "title",
+          "org",
+          "year",
+          "category",
+          "verified"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "org": {
+            "type": "string",
+            "minLength": 1
+          },
+          "year": {
+            "type": "string",
+            "pattern": "^[0-9]{4}$"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "Professional",
+              "Conference",
+              "Event"
+            ]
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "image": {
+            "$ref": "#/$defs/assetPath"
+          },
+          "credentialUrl": {
+            "$ref": "#/$defs/url"
+          }
+        }
+      }
+    },
+    "contact": {
+      "type": "object",
+      "required": [
+        "email",
+        "location",
+        "socials"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "email": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "email"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "emailConflict": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "Present only while contact.email is unresolved. Removing this without setting email is a bug, and the build check enforces that."
+        },
+        "location": {
+          "type": "string",
+          "minLength": 1
+        },
+        "phone": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "schedulingUrl": {
+          "$ref": "#/$defs/url"
+        },
+        "socials": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "platform",
+              "url"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "platform": {
+                "type": "string",
+                "enum": [
+                  "github",
+                  "linkedin",
+                  "facebook",
+                  "instagram"
+                ]
+              },
+              "url": {
+                "$ref": "#/$defs/url"
+              },
+              "handle": {
+                "$ref": "#/$defs/nullableString"
+              }
+            }
+          }
+        },
+        "resumeUrl": {
+          "$ref": "#/$defs/assetPath"
+        }
+      }
+    },
+    "availability": {
+      "type": "object",
+      "required": [
+        "status",
+        "statement"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seeking": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "statement": {
+          "$ref": "#/$defs/richText"
+        },
+        "highlightTags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "lookingFor": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "startDate": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "workArrangement": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "hoursPerWeek": {
+          "type": [
+            "string",
+            "number",
+            "null"
+          ]
+        }
+      }
+    },
+    "faq": {
+      "type": "array",
+      "description": "Search-palette content and the kill-switch fallback payload. Every answer must be composed only from fields already in this file.",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "question",
+          "answer",
+          "sourceFields"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^faq-[0-9]{2}$"
+          },
+          "status": {
+            "const": "TODO_VERIFY"
+          },
+          "question": {
+            "type": "string",
+            "minLength": 1
+          },
+          "answer": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sourceFields": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "notAvailable": {
+      "type": "array",
+      "description": "Data source for the refusal contract. `matches` are intent cues, not regexes.",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "topic",
+          "response"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^na-[0-9]{2}$"
+          },
+          "status": {
+            "const": "TODO_VERIFY"
+          },
+          "topic": {
+            "type": "string",
+            "enum": [
+              "compensation",
+              "academic-record",
+              "opinions-on-people",
+              "unlisted-skills",
+              "private-contact-details",
+              "employment-history"
+            ]
+          },
+          "matches": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "response": {
+            "type": "string",
+            "minLength": 1
+          },
+          "note": {
+            "type": "string"
+          },
+          "precondition": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Guard that must hold before this decline fires. For unlisted-skills it is what stops the assistant declining a technology the candidate actually lists."
+          }
+        }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Retrievable section vocabulary. `id` doubles as the DOM anchor a palette hit navigates to. `keywords` describe what a section IS in a visitor's words; the searchable body text is derived from the structured data by src/assistant/retriever.js and is deliberately not duplicated here.",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "keywords"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "keywords": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

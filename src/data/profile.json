@@ -1,0 +1,1112 @@
+{
+  "_meta": {
+    "description": "Single source of truth for jordiee.me. Every value below was extracted verbatim from a component in src/. Nothing is inferred, normalised or rounded. Fields with no source in the existing code are null and listed in profile.NEEDS_INPUT.md.",
+    "extractedAt": "2026-08-15",
+    "extractedFrom": "src/Home.jsx, src/About.jsx, src/Education.jsx, src/Job.jsx, src/Certificate.jsx, src/components/Footer.jsx",
+    "provenance": "See profile.SOURCES.json for a field-to-file:line map. scripts/verify-profile-sources.js re-checks every literal against its cited location.",
+    "conflicts": 2,
+    "nullFields": 14,
+    "ownerEdits": [
+      {
+        "path": "projects[id=project-capstone].description",
+        "original": "Payroll processing plus a mobile commercial layer for a live municipal water utility — built end to end from schema and API through to UI and deployment.",
+        "edited": "Payroll processing plus a mobile commercial layer for a live municipal water utility — built end to end from schema and API through to UI.",
+        "reason": "Status is in-development; 'through to UI and deployment' claims a shipped system. Removed on the owner's instruction.",
+        "date": "2026-08-15",
+        "note": "The original still traces to src/Education.jsx at the baseline commit; verify-profile-sources.js checks the ORIGINAL, so the edit cannot be used to smuggle in invented content."
+      }
+    ]
+  },
+  "sections": [
+    {
+      "id": "profile",
+      "title": "About Mark Jordan Javier",
+      "keywords": [
+        "about",
+        "bio",
+        "who",
+        "introduction",
+        "personal",
+        "summary"
+      ]
+    },
+    {
+      "id": "education",
+      "title": "Education",
+      "keywords": [
+        "university",
+        "college",
+        "school",
+        "degree",
+        "student",
+        "study",
+        "studies",
+        "studying",
+        "academic",
+        "coursework",
+        "subject",
+        "subjects",
+        "major",
+        "course",
+        "semester",
+        "enrolled",
+        "graduate",
+        "undergraduate",
+        "year level",
+        "focus"
+      ]
+    },
+    {
+      "id": "stack",
+      "title": "Tech Stack & Skills",
+      "keywords": [
+        "skill",
+        "skills",
+        "technology",
+        "technologies",
+        "tech",
+        "stack",
+        "framework",
+        "frameworks",
+        "language",
+        "languages",
+        "library",
+        "libraries",
+        "tool",
+        "tools",
+        "database",
+        "databases",
+        "frontend",
+        "backend",
+        "fullstack",
+        "devops",
+        "automation",
+        "know",
+        "use",
+        "uses",
+        "proficient",
+        "experience with",
+        "familiar"
+      ]
+    },
+    {
+      "id": "work",
+      "title": "Experience & Availability",
+      "keywords": [
+        "experience",
+        "availability",
+        "available",
+        "hire",
+        "hiring",
+        "internship",
+        "ojt",
+        "job",
+        "role",
+        "work",
+        "employment",
+        "opportunity",
+        "service",
+        "services",
+        "looking for",
+        "open to"
+      ]
+    },
+    {
+      "id": "certificate",
+      "title": "Certifications",
+      "keywords": [
+        "certificate",
+        "certificates",
+        "certification",
+        "certifications",
+        "credential",
+        "credentials",
+        "award",
+        "awards",
+        "conference",
+        "training",
+        "course completion",
+        "badge"
+      ]
+    },
+    {
+      "id": "contact",
+      "title": "Contact",
+      "keywords": [
+        "contact",
+        "email",
+        "mail",
+        "reach",
+        "reach out",
+        "get in touch",
+        "touch",
+        "message",
+        "hire me",
+        "social",
+        "socials",
+        "github",
+        "linkedin",
+        "facebook",
+        "instagram",
+        "calendly",
+        "schedule",
+        "book",
+        "meeting",
+        "call",
+        "located",
+        "location",
+        "based",
+        "address",
+        "connect"
+      ]
+    },
+    {
+      "id": "project-capstone",
+      "title": "Integrated Payroll & Mobile Commercial System",
+      "keywords": [
+        "project",
+        "projects",
+        "built",
+        "build",
+        "made",
+        "system",
+        "app",
+        "application"
+      ]
+    },
+    {
+      "id": "project-twd-monitoring",
+      "title": "TWD Project Monitoring System",
+      "keywords": [
+        "project",
+        "projects",
+        "built",
+        "build",
+        "made",
+        "system",
+        "app",
+        "application"
+      ]
+    },
+    {
+      "id": "project-school-evaluation",
+      "title": "School Evaluation System",
+      "keywords": [
+        "project",
+        "projects",
+        "built",
+        "build",
+        "made",
+        "system",
+        "app",
+        "application"
+      ]
+    },
+    {
+      "id": "project-vehicle-rental",
+      "title": "Vehicle Rental System",
+      "keywords": [
+        "project",
+        "projects",
+        "built",
+        "build",
+        "made",
+        "system",
+        "app",
+        "application"
+      ]
+    },
+    {
+      "id": "project-bat-cafe",
+      "title": "Malvar Bat Cave Café",
+      "keywords": [
+        "project",
+        "projects",
+        "built",
+        "build",
+        "made",
+        "system",
+        "app",
+        "application"
+      ]
+    },
+    {
+      "id": "project-portfolio",
+      "title": "Portfolio Website",
+      "keywords": [
+        "project",
+        "projects",
+        "built",
+        "build",
+        "made",
+        "system",
+        "app",
+        "application"
+      ]
+    },
+    {
+      "id": "project-thrift-shop",
+      "title": "Online Thrift Shop",
+      "keywords": [
+        "project",
+        "projects",
+        "built",
+        "build",
+        "made",
+        "system",
+        "app",
+        "application"
+      ]
+    },
+    {
+      "id": "project-time-scheduling",
+      "title": "Time Scheduling System",
+      "keywords": [
+        "project",
+        "projects",
+        "built",
+        "build",
+        "made",
+        "system",
+        "app",
+        "application"
+      ]
+    }
+  ],
+  "identity": {
+    "name": "Mark Jordan Javier",
+    "alias": "Jordiee",
+    "titles": [
+      "Full Stack Web Developer",
+      "Aspiring Software Engineer"
+    ],
+    "location": "Batangas, Philippines",
+    "bio": {
+      "hero": "A BS Information Technology student from Batangas State University - TNEU. Passionate about building modern web applications.",
+      "footer": "Full Stack Web Developer passionate about creating modern, functional web applications.",
+      "about": [
+        [
+          {
+            "text": "Hello! I'm "
+          },
+          {
+            "text": "Jordiee",
+            "emphasis": true
+          },
+          {
+            "text": ", a passionate Full Stack Web Developer and BS Information Technology student. I love building clean, functional, and modern web applications that provide great user experiences."
+          }
+        ],
+        [
+          {
+            "text": "I specialize in frontend and backend development as a "
+          },
+          {
+            "text": "MERN Stack Developer",
+            "emphasis": true
+          },
+          {
+            "text": " (MongoDB, Express.js, React, Node.js), alongside modern tools such as Tailwind CSS, PHP, MySQL, and Python. I enjoy solving problems, designing interfaces, and continuously learning new technologies."
+          }
+        ]
+      ],
+      "aboutPlain": [
+        "Hello! I'm Jordiee, a passionate Full Stack Web Developer and BS Information Technology student. I love building clean, functional, and modern web applications that provide great user experiences.",
+        "I specialize in frontend and backend development as a MERN Stack Developer (MongoDB, Express.js, React, Node.js), alongside modern tools such as Tailwind CSS, PHP, MySQL, and Python. I enjoy solving problems, designing interfaces, and continuously learning new technologies."
+      ]
+    },
+    "pronouns": null,
+    "tagline": null
+  },
+  "education": {
+    "degree": "Bachelor of Science in Information Technology",
+    "institution": "Batangas State University",
+    "institutionVariant": "Batangas State University - TNEU",
+    "period": "2023 – Present",
+    "startYear": 2023,
+    "yearLevel": "4th Year",
+    "status": "Capstone in development",
+    "summary": "Now in my fourth year, currently developing our capstone project alongside coursework in software development, database systems, and modern web technologies — building real-world full-stack applications across multiple academic projects.",
+    "focusAreas": [
+      "Software Development",
+      "Database Management",
+      "Web Application Development",
+      "System Analysis & Design"
+    ],
+    "keySkills": [
+      "Object-Oriented Programming",
+      "Database Design",
+      "Full Stack Development",
+      "System Analysis",
+      "UI/UX Implementation"
+    ],
+    "expectedGraduation": null,
+    "gpa": null,
+    "honors": null,
+    "coursework": null
+  },
+  "skills": [
+    {
+      "name": "Figma",
+      "category": "UI / UX",
+      "hasLogo": true
+    },
+    {
+      "name": "JavaScript",
+      "category": "Frontend",
+      "hasLogo": true
+    },
+    {
+      "name": "TypeScript",
+      "category": "Frontend",
+      "hasLogo": true
+    },
+    {
+      "name": "React",
+      "category": "Frontend",
+      "hasLogo": true
+    },
+    {
+      "name": "Next.js",
+      "category": "Frontend",
+      "hasLogo": true
+    },
+    {
+      "name": "React Native",
+      "category": "Frontend",
+      "hasLogo": true
+    },
+    {
+      "name": "Flutter",
+      "category": "Frontend",
+      "hasLogo": true
+    },
+    {
+      "name": "Tailwind CSS",
+      "category": "Frontend",
+      "hasLogo": true
+    },
+    {
+      "name": "Prettier",
+      "category": "Frontend",
+      "hasLogo": true
+    },
+    {
+      "name": "PHP",
+      "category": "Backend",
+      "hasLogo": true
+    },
+    {
+      "name": "MySQL",
+      "category": "Backend",
+      "hasLogo": true
+    },
+    {
+      "name": "Python",
+      "category": "Backend",
+      "hasLogo": true
+    },
+    {
+      "name": "Java",
+      "category": "Backend",
+      "hasLogo": true
+    },
+    {
+      "name": "C#",
+      "category": "Backend",
+      "hasLogo": true
+    },
+    {
+      "name": "Node.js",
+      "category": "Backend",
+      "hasLogo": true
+    },
+    {
+      "name": "Express.js",
+      "category": "Backend",
+      "hasLogo": true
+    },
+    {
+      "name": "Prisma",
+      "category": "Backend",
+      "hasLogo": true
+    },
+    {
+      "name": "REST APIs",
+      "category": "Backend",
+      "hasLogo": false
+    },
+    {
+      "name": "Docker",
+      "category": "Cloud",
+      "hasLogo": true
+    },
+    {
+      "name": "XAMPP",
+      "category": "Cloud",
+      "hasLogo": true
+    },
+    {
+      "name": "MongoDB",
+      "category": "Cloud",
+      "hasLogo": true
+    },
+    {
+      "name": "PostgreSQL",
+      "category": "Cloud",
+      "hasLogo": true
+    },
+    {
+      "name": "Supabase",
+      "category": "Cloud",
+      "hasLogo": true
+    },
+    {
+      "name": "TensorFlow Lite",
+      "category": "AI / ML",
+      "hasLogo": true
+    },
+    {
+      "name": "XGBoost",
+      "category": "AI / ML",
+      "hasLogo": false
+    },
+    {
+      "name": "MobileNetV2",
+      "category": "AI / ML",
+      "hasLogo": false
+    },
+    {
+      "name": "n8n",
+      "category": "Automation",
+      "hasLogo": true
+    },
+    {
+      "name": "Git",
+      "category": "Developer Tools",
+      "hasLogo": true
+    },
+    {
+      "name": "GitHub",
+      "category": "Developer Tools",
+      "hasLogo": true
+    },
+    {
+      "name": "VS Code",
+      "category": "Developer Tools",
+      "hasLogo": true
+    },
+    {
+      "name": "Cursor",
+      "category": "Developer Tools",
+      "hasLogo": true
+    },
+    {
+      "name": "IntelliJ IDEA",
+      "category": "Developer Tools",
+      "hasLogo": true
+    },
+    {
+      "name": "PyCharm",
+      "category": "Developer Tools",
+      "hasLogo": true
+    },
+    {
+      "name": "NetBeans",
+      "category": "Developer Tools",
+      "hasLogo": true
+    },
+    {
+      "name": "Xcode",
+      "category": "Developer Tools",
+      "hasLogo": true
+    },
+    {
+      "name": "Postman",
+      "category": "Developer Tools",
+      "hasLogo": true
+    },
+    {
+      "name": "Power BI",
+      "category": "Developer Tools",
+      "hasLogo": true
+    }
+  ],
+  "projects": [
+    {
+      "id": "project-capstone",
+      "title": "Integrated Payroll & Mobile Commercial System",
+      "org": "Tanauan City Water District",
+      "year": "2026",
+      "term": "4th Yr · Sem 1",
+      "kind": "Capstone",
+      "status": "in-development",
+      "statusLabel": "In development",
+      "description": "Payroll processing plus a mobile commercial layer for a live municipal water utility — built end to end from schema and API through to UI.",
+      "tags": [
+        "Payroll",
+        "Mobile",
+        "Full Stack"
+      ],
+      "links": {
+        "repo": null,
+        "live": null,
+        "demo": null
+      },
+      "images": []
+    },
+    {
+      "id": "project-twd-monitoring",
+      "title": "TWD Project Monitoring System",
+      "org": null,
+      "year": "2026",
+      "term": "4th Yr · Sem 1",
+      "kind": "Client work",
+      "status": "in-development",
+      "statusLabel": "In development",
+      "description": "Replaces manual office-to-office, file-based progress reporting with a single web system for tracking project status across departments.",
+      "tags": [
+        "Web System",
+        "Reporting"
+      ],
+      "links": {
+        "repo": null,
+        "live": null,
+        "demo": null
+      },
+      "images": []
+    },
+    {
+      "id": "project-school-evaluation",
+      "title": "School Evaluation System",
+      "org": null,
+      "year": "2026",
+      "term": "4th Yr · Summer",
+      "kind": "School project",
+      "status": "completed",
+      "statusLabel": "Completed",
+      "description": "A structured evaluation workflow with role-based access and reporting, replacing paper-based evaluation forms.",
+      "tags": [
+        "Role-Based Access",
+        "Reporting"
+      ],
+      "links": {
+        "repo": null,
+        "live": null,
+        "demo": null
+      },
+      "images": []
+    },
+    {
+      "id": "project-vehicle-rental",
+      "title": "Vehicle Rental System",
+      "org": null,
+      "year": "2025",
+      "term": "3rd Yr · Sem 1",
+      "kind": "School project",
+      "status": "completed",
+      "statusLabel": "Completed",
+      "description": "A PHP-based vehicle rental system with CRUD operations and XML data handling, enhanced with a chatbot for booking guidance.",
+      "tags": [
+        "PHP",
+        "CRUD",
+        "XML"
+      ],
+      "links": {
+        "repo": null,
+        "live": null,
+        "demo": null
+      },
+      "images": [
+        "proj/vehiRental/vRental1.webp",
+        "proj/vehiRental/vRental2.webp",
+        "proj/vehiRental/vRental3.webp",
+        "proj/vehiRental/vRental4.webp",
+        "proj/vehiRental/vRental5.webp",
+        "proj/vehiRental/vRental6.webp",
+        "proj/vehiRental/vRental7.webp",
+        "proj/vehiRental/vRental8.webp",
+        "proj/vehiRental/vRental9.webp",
+        "proj/vehiRental/vRental10.webp"
+      ]
+    },
+    {
+      "id": "project-bat-cafe",
+      "title": "Malvar Bat Cave Café",
+      "org": null,
+      "year": "2025",
+      "term": "3rd Yr · Sem 1",
+      "kind": "School project",
+      "status": "completed",
+      "statusLabel": "Completed",
+      "description": "A café management system with PHP and XAMPP featuring CRUD operations, an integrated chatbot, and dark mode.",
+      "tags": [
+        "PHP",
+        "XAMPP",
+        "MySQL"
+      ],
+      "links": {
+        "repo": null,
+        "live": null,
+        "demo": null
+      },
+      "images": [
+        "proj/batCafe/batCafe1.webp",
+        "proj/batCafe/batCafe2.webp",
+        "proj/batCafe/batCafe3.webp",
+        "proj/batCafe/batCafe4.webp",
+        "proj/batCafe/batCafe5.webp",
+        "proj/batCafe/batCafe6.webp",
+        "proj/batCafe/batCafe7.webp",
+        "proj/batCafe/batCafe8.webp",
+        "proj/batCafe/batCafe9.webp",
+        "proj/batCafe/batCafe10.webp"
+      ]
+    },
+    {
+      "id": "project-portfolio",
+      "title": "Portfolio Website",
+      "org": null,
+      "year": "2025",
+      "term": "Vacation",
+      "kind": "Personal",
+      "status": "archived",
+      "statusLabel": "Archived",
+      "description": "A fully responsive personal portfolio built with HTML, CSS, and Tailwind CSS showcasing projects through a clean interface.",
+      "tags": [
+        "HTML",
+        "CSS",
+        "Tailwind"
+      ],
+      "links": {
+        "repo": null,
+        "live": null,
+        "demo": null
+      },
+      "images": [
+        "proj/1stPortfolio/portfolio1.webp",
+        "proj/1stPortfolio/portfolio2.webp",
+        "proj/1stPortfolio/portfolio3.webp",
+        "proj/1stPortfolio/portfolio4.webp"
+      ]
+    },
+    {
+      "id": "project-thrift-shop",
+      "title": "Online Thrift Shop",
+      "org": null,
+      "year": "2025",
+      "term": "2nd Yr · Sem 2",
+      "kind": "School project",
+      "status": "completed",
+      "statusLabel": "Completed",
+      "description": "A web-based e-commerce platform with HTML, Tailwind CSS, and MySQL, featuring product browsing and inventory management.",
+      "tags": [
+        "HTML",
+        "Tailwind",
+        "MySQL"
+      ],
+      "links": {
+        "repo": null,
+        "live": null,
+        "demo": null
+      },
+      "images": [
+        "proj/thriftStore/img1.webp",
+        "proj/thriftStore/img2.webp",
+        "proj/thriftStore/img3.webp",
+        "proj/thriftStore/img4.webp",
+        "proj/thriftStore/img5.webp"
+      ]
+    },
+    {
+      "id": "project-time-scheduling",
+      "title": "Time Scheduling System",
+      "org": null,
+      "year": "2024",
+      "term": "2nd Yr · Sem 1",
+      "kind": "School project",
+      "status": "completed",
+      "statusLabel": "Completed",
+      "description": "A scheduling management system built with Java (OOP) and MySQL to efficiently manage schedules and streamline time-based operations.",
+      "tags": [
+        "Java",
+        "MySQL",
+        "OOP"
+      ],
+      "links": {
+        "repo": null,
+        "live": null,
+        "demo": null
+      },
+      "images": [
+        "proj/timeSched/TSS1.webp",
+        "proj/timeSched/TSS2.webp",
+        "proj/timeSched/TSS3.webp"
+      ]
+    }
+  ],
+  "certifications": [
+    {
+      "title": "Claude Agent",
+      "org": "Anthropic",
+      "year": "2026",
+      "category": "Professional",
+      "verified": true,
+      "image": "cert/Claude_Agent.webp",
+      "credentialUrl": null
+    },
+    {
+      "title": "Claude 101",
+      "org": "Anthropic",
+      "year": "2026",
+      "category": "Professional",
+      "verified": true,
+      "image": "cert/Claude_101.webp",
+      "credentialUrl": null
+    },
+    {
+      "title": "Claude in Action",
+      "org": "Anthropic",
+      "year": "2026",
+      "category": "Professional",
+      "verified": true,
+      "image": "cert/ClaudeInAction.webp",
+      "credentialUrl": null
+    },
+    {
+      "title": "Microsoft Power BI Data Analyst",
+      "org": "Microsoft",
+      "year": "2025",
+      "category": "Professional",
+      "verified": true,
+      "image": "cert/MicroPBI.webp",
+      "credentialUrl": null
+    },
+    {
+      "title": "Databiz Conference 2024",
+      "org": "Batangas Information Technology Society",
+      "year": "2024",
+      "category": "Conference",
+      "verified": true,
+      "image": "cert/cert1.webp",
+      "credentialUrl": null
+    },
+    {
+      "title": "BIT Conference (BITCON) 2025",
+      "org": "Batangas Information Technology Society",
+      "year": "2025",
+      "category": "Conference",
+      "verified": true,
+      "image": "cert/cert2.webp",
+      "credentialUrl": null
+    },
+    {
+      "title": "Databiz Conference 2025",
+      "org": "Batangas Information Technology Society",
+      "year": "2025",
+      "category": "Conference",
+      "verified": true,
+      "image": "cert/cert3.webp",
+      "credentialUrl": null
+    },
+    {
+      "title": "TechTalks S3",
+      "org": "CICS Student Council",
+      "year": "2025",
+      "category": "Event",
+      "verified": false,
+      "image": "cert/cert4.webp",
+      "credentialUrl": null
+    }
+  ],
+  "contact": {
+    "email": "javiermarkjordan@gmail.com",
+    "location": "Batangas, Philippines",
+    "phone": null,
+    "schedulingUrl": "https://calendly.com/javiermarkjordan/30min",
+    "socials": [
+      {
+        "platform": "github",
+        "url": "https://github.com/Jordieeeee",
+        "handle": "Jordieeeee"
+      },
+      {
+        "platform": "linkedin",
+        "url": "https://www.linkedin.com/in/mark-jordan-javier-29b72935a/",
+        "handle": null
+      },
+      {
+        "platform": "facebook",
+        "url": "https://www.facebook.com/markjordan.javier",
+        "handle": "markjordan.javier"
+      },
+      {
+        "platform": "instagram",
+        "url": "https://www.instagram.com/imnot_dannnnn",
+        "handle": "imnot_dannnnn"
+      }
+    ],
+    "resumeUrl": "cv/markjordanjavier_cv.pdf"
+  },
+  "availability": {
+    "status": "Available for Internship / OJT",
+    "seeking": "Internship or OJT",
+    "statement": [
+      {
+        "text": "I am currently seeking an "
+      },
+      {
+        "text": "Internship or OJT",
+        "emphasis": true
+      },
+      {
+        "text": " opportunity where I can apply my development skills, contribute to real projects, and grow as a software developer."
+      }
+    ],
+    "highlightTags": [
+      "4th Year IT Student",
+      "Full Stack Development",
+      "Capstone Project",
+      "Clean Code"
+    ],
+    "services": [
+      "Full Stack Development",
+      "Database Design & CRUD Operations",
+      "Responsive UI/UX Development",
+      "Version Control & Git Workflows",
+      "Capstone Project Planning"
+    ],
+    "lookingFor": [
+      "Collaborative team environment with mentorship",
+      "Challenging projects that improve technical skills",
+      "Exposure to industry best practices",
+      "Opportunity to contribute to real-world systems",
+      "Continuous learning and professional growth"
+    ],
+    "startDate": null,
+    "workArrangement": null,
+    "hoursPerWeek": null
+  },
+  "faq": [
+    {
+      "id": "faq-01",
+      "question": "What are you studying?",
+      "answer": "Mark is taking a Bachelor of Science in Information Technology at Batangas State University, from 2023 to the present.",
+      "sourceFields": [
+        "education.degree",
+        "education.institution",
+        "education.period"
+      ],
+      "tags": [
+        "education"
+      ]
+    },
+    {
+      "id": "faq-02",
+      "question": "What year are you in?",
+      "answer": "He is in his 4th Year, with his capstone currently in development.",
+      "sourceFields": [
+        "education.yearLevel",
+        "education.status"
+      ],
+      "tags": [
+        "education"
+      ]
+    },
+    {
+      "id": "faq-03",
+      "question": "What is your capstone project?",
+      "answer": "His capstone is an Integrated Payroll & Mobile Commercial System for Tanauan City Water District — payroll processing plus a mobile commercial layer for a live municipal water utility, built end to end from schema and API through to UI.",
+      "sourceFields": [
+        "projects[id=project-capstone].title",
+        "projects[id=project-capstone].org",
+        "projects[id=project-capstone].description"
+      ],
+      "tags": [
+        "projects",
+        "capstone"
+      ]
+    },
+    {
+      "id": "faq-04",
+      "question": "What technologies do you work with?",
+      "answer": "Frontend: JavaScript, TypeScript, React, Next.js, React Native, Flutter and Tailwind CSS. Backend: PHP, MySQL, Python, Java, C#, Node.js, Express.js, Prisma and REST APIs. He also works with Docker, Supabase, PostgreSQL, MongoDB, n8n and Figma.",
+      "sourceFields": [
+        "skills"
+      ],
+      "tags": [
+        "skills"
+      ]
+    },
+    {
+      "id": "faq-05",
+      "question": "Are you available for work?",
+      "answer": "Yes — he is available for Internship / OJT. He is seeking an opportunity where he can apply his development skills, contribute to real projects, and grow as a software developer.",
+      "sourceFields": [
+        "availability.status",
+        "availability.statement"
+      ],
+      "tags": [
+        "availability"
+      ]
+    },
+    {
+      "id": "faq-06",
+      "question": "How can I contact you?",
+      "answer": "By email at javiermarkjordan@gmail.com, or you can book a 30-minute slot on his Calendly.",
+      "sourceFields": [
+        "contact.email",
+        "contact.schedulingUrl"
+      ],
+      "tags": [
+        "contact"
+      ]
+    },
+    {
+      "id": "faq-07",
+      "question": "Where are you based?",
+      "answer": "He is based in Batangas, Philippines.",
+      "sourceFields": [
+        "identity.location"
+      ],
+      "tags": [
+        "contact"
+      ]
+    },
+    {
+      "id": "faq-08",
+      "question": "Can I see your resume?",
+      "answer": "Yes — his CV is downloadable from the hero section of this site.",
+      "sourceFields": [
+        "contact.resumeUrl"
+      ],
+      "tags": [
+        "contact"
+      ]
+    },
+    {
+      "id": "faq-09",
+      "question": "What certifications do you have?",
+      "answer": "Claude Agent, Claude 101 and Claude in Action from Anthropic (2026); Microsoft Power BI Data Analyst from Microsoft (2025); plus conference and event certificates from Databiz 2024 and 2025, BITCON 2025, and TechTalks S3.",
+      "sourceFields": [
+        "certifications"
+      ],
+      "tags": [
+        "certifications"
+      ]
+    },
+    {
+      "id": "faq-10",
+      "question": "What databases have you worked with?",
+      "answer": "MySQL, PostgreSQL, MongoDB and Supabase.",
+      "sourceFields": [
+        "skills[category=Backend]",
+        "skills[category=Cloud]"
+      ],
+      "tags": [
+        "skills"
+      ]
+    },
+    {
+      "id": "faq-11",
+      "question": "Can we schedule a call?",
+      "answer": "Yes — there is a 30-minute Calendly link on this site under “Schedule a Meeting”.",
+      "sourceFields": [
+        "contact.schedulingUrl"
+      ],
+      "tags": [
+        "contact"
+      ]
+    },
+    {
+      "id": "faq-12",
+      "question": "What kind of role are you looking for?",
+      "answer": "He is looking for an Internship or OJT with a collaborative team and mentorship, challenging projects that improve his technical skills, exposure to industry best practices, and the chance to contribute to real-world systems.",
+      "sourceFields": [
+        "availability.seeking",
+        "availability.lookingFor"
+      ],
+      "tags": [
+        "availability"
+      ]
+    }
+  ],
+  "notAvailable": [
+    {
+      "id": "na-01",
+      "topic": "compensation",
+      "matches": [
+        "salary",
+        "rate",
+        "pay",
+        "compensation",
+        "how much do you charge",
+        "budget",
+        "contract value"
+      ],
+      "response": "I don't have salary or rate information here. That's best discussed with Mark directly by email."
+    },
+    {
+      "id": "na-02",
+      "topic": "academic-record",
+      "matches": [
+        "gpa",
+        "grades",
+        "class rank",
+        "latin honors",
+        "honours",
+        "dean's list"
+      ],
+      "response": "Grades and academic records aren't published on this site."
+    },
+    {
+      "id": "na-03",
+      "topic": "opinions-on-people",
+      "matches": [
+        "what does he think of",
+        "better than",
+        "rate him",
+        "compare him",
+        "should i hire him instead",
+        "opinion of"
+      ],
+      "response": "I can't offer opinions about people or comparisons between candidates. I can tell you what Mark has built and studied."
+    },
+    {
+      "id": "na-04",
+      "topic": "unlisted-skills",
+      "precondition": "Fires ONLY after skills[] has been searched for the named technology and no match was found. A technology present in skills[] must be answered affirmatively and never declined — declining a listed skill is a false negative about a real candidate, and is treated as a failure, not caution.",
+      "matches": [
+        "does he know",
+        "experience with",
+        "has he used"
+      ],
+      "response": "That isn't listed in his stack. His listed technologies are in the Skills section — I can only speak to those."
+    },
+    {
+      "id": "na-05",
+      "topic": "private-contact-details",
+      "matches": [
+        "phone",
+        "mobile",
+        "number",
+        "home address",
+        "street",
+        "where does he live"
+      ],
+      "response": "Only his email and general location are published. You can reach him at javiermarkjordan@gmail.com."
+    },
+    {
+      "id": "na-06",
+      "topic": "employment-history",
+      "matches": [
+        "last job",
+        "previous employer",
+        "why did he leave",
+        "years of experience",
+        "worked at"
+      ],
+      "response": "Mark is a 4th-year IT student and this site lists academic, capstone and client project work rather than an employment history."
+    }
+  ]
+}

@@ -3,38 +3,8 @@ import { FiBookOpen, FiX, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useState, useEffect, useCallback, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 
-import portfolio1 from "./assets/proj/1stPortfolio/portfolio1.webp";
-import portfolio2 from "./assets/proj/1stPortfolio/portfolio2.webp";
-import portfolio3 from "./assets/proj/1stPortfolio/portfolio3.webp";
-import portfolio4 from "./assets/proj/1stPortfolio/portfolio4.webp";
-import thrift1 from "./assets/proj/thriftStore/img1.webp";
-import thrift2 from "./assets/proj/thriftStore/img2.webp";
-import thrift3 from "./assets/proj/thriftStore/img3.webp";
-import thrift4 from "./assets/proj/thriftStore/img4.webp";
-import thrift5 from "./assets/proj/thriftStore/img5.webp";
-import time1 from "./assets/proj/timeSched/TSS1.webp";
-import time2 from "./assets/proj/timeSched/TSS2.webp";
-import time3 from "./assets/proj/timeSched/TSS3.webp";
-import cafe1 from "./assets/proj/batCafe/batCafe1.webp";
-import cafe2 from "./assets/proj/batCafe/batCafe2.webp";
-import cafe3 from "./assets/proj/batCafe/batCafe3.webp";
-import cafe4 from "./assets/proj/batCafe/batCafe4.webp";
-import cafe5 from "./assets/proj/batCafe/batCafe5.webp";
-import cafe6 from "./assets/proj/batCafe/batCafe6.webp";
-import cafe7 from "./assets/proj/batCafe/batCafe7.webp";
-import cafe8 from "./assets/proj/batCafe/batCafe8.webp";
-import cafe9 from "./assets/proj/batCafe/batCafe9.webp";
-import cafe10 from "./assets/proj/batCafe/batCafe10.webp";
-import rental1 from "./assets/proj/vehiRental/vRental1.webp";
-import rental2 from "./assets/proj/vehiRental/vRental2.webp";
-import rental3 from "./assets/proj/vehiRental/vRental3.webp";
-import rental4 from "./assets/proj/vehiRental/vRental4.webp";
-import rental5 from "./assets/proj/vehiRental/vRental5.webp";
-import rental6 from "./assets/proj/vehiRental/vRental6.webp";
-import rental7 from "./assets/proj/vehiRental/vRental7.webp";
-import rental8 from "./assets/proj/vehiRental/vRental8.webp";
-import rental9 from "./assets/proj/vehiRental/vRental9.webp";
-import rental10 from "./assets/proj/vehiRental/vRental10.webp";
+import profile from "./data/profile.json";
+import { assets } from "./data/assets";
 
 /* One easing and one duration for the whole section. The old version mixed
    spring stacks, blur filters and four different slide directions; a single
@@ -76,135 +46,22 @@ const rear = (depth) => {
 };
 
 /* ─── Data ───────────────────────────────────────────────────
-   One chronological list, newest first. This used to be three arrays —
-   professionalWork, projects and timelineItems — where the timeline restated
-   all eight entries the cards had already described. */
-const work = [
-	{
-		id: "project-capstone",
-		year: "2026",
-		term: "4th Yr · Sem 1",
-		kind: "Capstone",
-		status: "In development",
-		title: "Integrated Payroll & Mobile Commercial System",
-		org: "Tanauan City Water District",
-		description:
-			"Payroll processing plus a mobile commercial layer for a live municipal water utility — built end to end from schema and API through to UI and deployment.",
-		tags: ["Payroll", "Mobile", "Full Stack"],
-	},
-	{
-		id: "project-twd-monitoring",
-		year: "2026",
-		term: "4th Yr · Sem 1",
-		kind: "Client work",
-		title: "TWD Project Monitoring System",
-		description:
-			"Replaces manual office-to-office, file-based progress reporting with a single web system for tracking project status across departments.",
-		tags: ["Web System", "Reporting"],
-	},
-	{
-		id: "project-school-evaluation",
-		year: "2026",
-		term: "4th Yr · Summer",
-		kind: "School project",
-		title: "School Evaluation System",
-		description:
-			"A structured evaluation workflow with role-based access and reporting, replacing paper-based evaluation forms.",
-		tags: ["Role-Based Access", "Reporting"],
-	},
-	{
-		id: "project-vehicle-rental",
-		year: "2025",
-		term: "3rd Yr · Sem 1",
-		kind: "School project",
-		title: "Vehicle Rental System",
-		description:
-			"A PHP-based vehicle rental system with CRUD operations and XML data handling, enhanced with a chatbot for booking guidance.",
-		tags: ["PHP", "CRUD", "XML"],
-		images: [
-			rental1,
-			rental2,
-			rental3,
-			rental4,
-			rental5,
-			rental6,
-			rental7,
-			rental8,
-			rental9,
-			rental10,
-		],
-	},
-	{
-		id: "project-bat-cafe",
-		year: "2025",
-		term: "3rd Yr · Sem 1",
-		kind: "School project",
-		title: "Malvar Bat Cave Café",
-		description:
-			"A café management system with PHP and XAMPP featuring CRUD operations, an integrated chatbot, and dark mode.",
-		tags: ["PHP", "XAMPP", "MySQL"],
-		images: [
-			cafe1,
-			cafe2,
-			cafe3,
-			cafe4,
-			cafe5,
-			cafe6,
-			cafe7,
-			cafe8,
-			cafe9,
-			cafe10,
-		],
-	},
-	{
-		id: "project-portfolio",
-		year: "2025",
-		term: "Vacation",
-		kind: "Personal",
-		title: "Portfolio Website",
-		description:
-			"A fully responsive personal portfolio built with HTML, CSS, and Tailwind CSS showcasing projects through a clean interface.",
-		tags: ["HTML", "CSS", "Tailwind"],
-		images: [portfolio1, portfolio2, portfolio3, portfolio4],
-	},
-	{
-		id: "project-thrift-shop",
-		year: "2025",
-		term: "2nd Yr · Sem 2",
-		kind: "School project",
-		title: "Online Thrift Shop",
-		description:
-			"A web-based e-commerce platform with HTML, Tailwind CSS, and MySQL, featuring product browsing and inventory management.",
-		tags: ["HTML", "Tailwind", "MySQL"],
-		images: [thrift1, thrift2, thrift3, thrift4, thrift5],
-	},
-	{
-		id: "project-time-scheduling",
-		year: "2024",
-		term: "2nd Yr · Sem 1",
-		kind: "School project",
-		title: "Time Scheduling System",
-		description:
-			"A scheduling management system built with Java (OOP) and MySQL to efficiently manage schedules and streamline time-based operations.",
-		tags: ["Java", "MySQL", "OOP"],
-		images: [time1, time2, time3],
-	},
-];
+   Sourced entirely from src/data/profile.json. Image paths are resolved to
+   bundled URLs at module load; the profile itself stays free of build
+   artefacts so it can be consumed by anything else that needs the same facts. */
+const work = profile.projects.map((p) => ({
+	...p,
+	images: assets(p.images),
+}));
 
-const focusAreas = [
-	"Software Development",
-	"Database Management",
-	"Web Application Development",
-	"System Analysis & Design",
-];
+const { focusAreas, keySkills: skills } = profile.education;
 
-const skills = [
-	"Object-Oriented Programming",
-	"Database Design",
-	"Full Stack Development",
-	"System Analysis",
-	"UI/UX Implementation",
-];
+// Derived, not hardcoded: adding a project outside the current span used to
+// leave the header advertising a stale range.
+const years = work.map((p) => Number(p.year)).filter(Number.isFinite);
+const yearRange = years.length
+	? `${Math.min(...years)} – ${Math.max(...years)}`
+	: "";
 
 /* ─── Lightbox ───────────────────────────────────────────────
    The thumbnail shows one calm frame; the rest of the shots live here rather
@@ -507,10 +364,10 @@ function WorkRow({ item, onOpen, reduced }) {
 							<span className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
 								{item.kind}
 							</span>
-							{item.status && (
+							{item.statusLabel && (
 								<span className="inline-flex items-center gap-1.5 text-[10px] font-medium text-gray-500 dark:text-gray-400">
 									<span className="w-1 h-1 rounded-full bg-gray-900 dark:bg-white" />
-									{item.status}
+									{item.statusLabel}
 								</span>
 							)}
 						</div>
@@ -632,21 +489,24 @@ function Education() {
 							</div>
 							<div className="min-w-0">
 								<h3 className="text-base font-bold text-gray-900 dark:text-white leading-snug">
-									Bachelor of Science in Information Technology
+									{profile.education.degree}
 								</h3>
 								<p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-									Batangas State University · 2023 – Present
+									{profile.education.institution} · {profile.education.period}
 								</p>
-								<p className="mt-2 inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-600 dark:text-gray-300">
-									<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white" />
-									4th Year · Capstone in development
-								</p>
-								<p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mt-3 max-w-prose">
-									Now in my fourth year, currently developing our capstone
-									project alongside coursework in software development, database
-									systems, and modern web technologies — building real-world
-									full-stack applications across multiple academic projects.
-								</p>
+								{(profile.education.yearLevel || profile.education.status) && (
+									<p className="mt-2 inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-600 dark:text-gray-300">
+										<span className="w-1.5 h-1.5 rounded-full bg-gray-900 dark:bg-white" />
+										{[profile.education.yearLevel, profile.education.status]
+											.filter(Boolean)
+											.join(" · ")}
+									</p>
+								)}
+								{profile.education.summary && (
+									<p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mt-3 max-w-prose">
+										{profile.education.summary}
+									</p>
+								)}
 							</div>
 						</motion.div>
 
@@ -705,7 +565,7 @@ function Education() {
 								</h3>
 							</div>
 							<span className="text-[10px] font-medium text-gray-400 dark:text-gray-500 tabular-nums">
-								{work.length} projects · 2024 – 2026
+								{work.length} projects · {yearRange}
 							</span>
 						</motion.div>
 

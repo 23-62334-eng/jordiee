@@ -7,6 +7,7 @@ import { useState, useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 import TiltCard from "./components/TiltCard";
 
+<<<<<<< HEAD
 import cert1 from "./assets/cert/cert1.webp";
 import cert2 from "./assets/cert/cert2.webp";
 import cert3 from "./assets/cert/cert3.webp";
@@ -102,6 +103,16 @@ const certificates = [
 		verified: false,
 	},
 ];
+=======
+import profile from "./data/profile.json";
+import { asset } from "./data/assets";
+
+/* ─── Data ───────────────────────────────────────────────── */
+const certificates = profile.certifications.map((c) => ({
+	...c,
+	img: asset(c.image),
+}));
+>>>>>>> 6ddc1f2 (feat: profile.json as single source of truth)
 
 // One neutral badge for every category. The three used to be blue / purple /
 // emerald, which were the last colours left in this section.

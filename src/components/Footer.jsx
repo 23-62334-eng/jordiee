@@ -7,6 +7,7 @@ import {
 	FaMapMarkerAlt,
 	FaInstagram,
 } from "react-icons/fa";
+import profile from "../data/profile.json";
 
 function Footer() {
 	const currentYear = new Date().getFullYear();
@@ -23,11 +24,10 @@ function Footer() {
 						transition={{ duration: 0.6, ease: "easeOut" }}
 					>
 						<h3 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
-							Mark Jordan Javier
+							{profile.identity.name}
 						</h3>
 						<p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-							Full Stack Web Developer passionate about creating modern,
-							functional web applications.
+							{profile.identity.bio.footer}
 						</p>
 					</motion.div>
 
@@ -91,15 +91,22 @@ function Footer() {
 							<div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm">
 								<FaEnvelope className="text-gray-500 dark:text-gray-400" />
 								<a
+<<<<<<< HEAD
 									href="mailto:javiermarkjordan@gmail.com"
 									className="hover:text-gray-900 dark:hover:text-white transition-colors duration-300 hover:underline"
 								>
 									javiermarkjordan@gmail.com
+=======
+									href={`mailto:${profile.contact.email}`}
+									className="hover:text-gray-900 dark:hover:text-white transition-colors duration-300 hover:underline"
+								>
+									{profile.contact.email}
+>>>>>>> 6ddc1f2 (feat: profile.json as single source of truth)
 								</a>
 							</div>
 							<div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm">
 								<FaMapMarkerAlt className="text-gray-500 dark:text-gray-400" />
-								<span>Batangas, Philippines</span>
+								<span>{profile.contact.location}</span>
 							</div>
 						</div>
 					</motion.div>
@@ -117,7 +124,7 @@ function Footer() {
 					className="flex flex-col md:flex-row items-center justify-between gap-4"
 				>
 					<p className="text-gray-600 dark:text-gray-400 text-sm text-center md:text-left">
-						© {currentYear} Mark Jordan Javier. All rights reserved.
+						© {currentYear} {profile.identity.name}. All rights reserved.
 					</p>
 				</motion.div>
 			</div>

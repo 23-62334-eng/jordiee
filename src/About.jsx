@@ -7,6 +7,8 @@ import { motion } from "framer-motion";
 import { FiMapPin, FiCalendar, FiMail } from "react-icons/fi";
 import TechLogoMarquee from "./components/TechLogoMarquee";
 import GitHubCalendar from "./components/GitHubCalendar";
+import profile from "./data/profile.json";
+import RichText from "./data/RichText";
 
 function TechPill({ tool }) {
 	return (
@@ -25,6 +27,7 @@ function TechPill({ tool }) {
 	);
 }
 
+<<<<<<< HEAD
 const techCategories = [
 	{ label: "UI / UX", items: ["Figma"] },
 	{
@@ -80,7 +83,23 @@ const techCategories = [
 			"Xcode",
 		],
 	},
+=======
+// Rebuilt from profile.skills. Category order is fixed here because it is a
+// layout decision; membership comes from the data.
+const CATEGORY_ORDER = [
+	"UI / UX",
+	"Frontend",
+	"Backend",
+	"Cloud",
+	"AI / ML",
+	"Automation",
+	"Developer Tools",
+>>>>>>> 6ddc1f2 (feat: profile.json as single source of truth)
 ];
+const techCategories = CATEGORY_ORDER.map((label) => ({
+	label,
+	items: profile.skills.filter((s) => s.category === label).map((s) => s.name),
+})).filter((c) => c.items.length > 0);
 
 function About() {
 	const stagger = {
@@ -125,7 +144,7 @@ function About() {
 						<motion.div variants={fadeUp} className="flex items-center gap-4">
 							<img
 								src={profileImg}
-								alt="Mark Jordan Javier"
+								alt={profile.identity.name}
 								width={64}
 								height={64}
 								className="w-16 h-16 rounded-full object-cover ring-2 ring-white/60 dark:ring-gray-600/60 shadow-md"
@@ -133,7 +152,7 @@ function About() {
 							<div>
 								<div className="flex items-center gap-1.5">
 									<h2 className="text-2xl font-bold text-gray-900 dark:text-white leading-tight">
-										Mark Jordan Javier
+										{profile.identity.name}
 									</h2>
 									<motion.div
 										className="flex items-center justify-center w-5 h-5 rounded-full bg-gray-900/10 dark:bg-white/20 cursor-pointer"
@@ -153,7 +172,7 @@ function About() {
 								</div>
 								<p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1 mt-0.5">
 									<FiMapPin className="w-3 h-3" />
-									Batangas, Philippines
+									{profile.identity.location}
 								</p>
 								<p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
 									Full Stack Web Developer{" "}
@@ -166,7 +185,7 @@ function About() {
 						{/* Action Buttons */}
 						<motion.div variants={fadeUp} className="flex items-center gap-2.5">
 							<a
-								href="https://calendly.com/javiermarkjordan/30min"
+								href={profile.contact.schedulingUrl}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold
@@ -218,27 +237,14 @@ function About() {
 								variants={fadeUp}
 								className="text-sm leading-6 text-gray-600 dark:text-gray-300 mb-3"
 							>
-								Hello! I'm{" "}
-								<span className="font-semibold text-gray-900 dark:text-white">
-									Jordiee
-								</span>
-								, a passionate Full Stack Web Developer and BS Information
-								Technology student. I love building clean, functional, and
-								modern web applications that provide great user experiences.
+								<RichText segments={profile.identity.bio.about[0]} />
 							</motion.p>
 
 							<motion.p
 								variants={fadeUp}
 								className="text-sm leading-6 text-gray-600 dark:text-gray-300"
 							>
-								I specialize in frontend and backend development as a{" "}
-								<span className="font-semibold text-gray-900 dark:text-white">
-									MERN Stack Developer
-								</span>{" "}
-								(MongoDB, Express.js, React, Node.js), alongside modern tools
-								such as Tailwind CSS, PHP, MySQL, and Python. I enjoy solving
-								problems, designing interfaces, and continuously learning new
-								technologies.
+								<RichText segments={profile.identity.bio.about[1]} />
 							</motion.p>
 						</motion.div>
 

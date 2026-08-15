@@ -8,11 +8,14 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "node --test tests/",
-    "test:retrieval": "node --test tests/retrieval.test.js",
+    "test": "PROFILE_PATH=src/data/profile.json RETRIEVER_ENTRY=src/assistant/retriever.js node --test tests/",
+    "test:retrieval": "PROFILE_PATH=src/data/profile.json RETRIEVER_ENTRY=src/assistant/retriever.js node --test tests/retrieval.test.js",
     "test:resilience": "node --test tests/resilience.test.js",
     "scan:secrets": "node scripts/scan-secrets.js",
-    "verify": "npm run lint && npm run build && npm run scan:secrets && npm test"
+    "verify": "npm run lint && npm run validate:profile && npm run verify:sources && npm run build && npm run scan:secrets && npm test",
+    "validate:profile": "node scripts/validate-profile.js",
+    "verify:sources": "node scripts/verify-profile-sources.js",
+    "prebuild": "npm run validate:profile"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
@@ -31,6 +34,8 @@
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
