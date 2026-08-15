@@ -4,8 +4,8 @@
     "extractedAt": "2026-08-15",
     "extractedFrom": "src/Home.jsx, src/About.jsx, src/Education.jsx, src/Job.jsx, src/Certificate.jsx, src/components/Footer.jsx",
     "provenance": "See profile.SOURCES.json for a field-to-file:line map. scripts/verify-profile-sources.js re-checks every literal against its cited location.",
-    "conflicts": 2,
-    "nullFields": 14,
+    "conflicts": 1,
+    "nullFields": 50,
     "ownerEdits": [
       {
         "path": "projects[id=project-capstone].description",
@@ -15,7 +15,8 @@
         "date": "2026-08-15",
         "note": "The original still traces to src/Education.jsx at the baseline commit; verify-profile-sources.js checks the ORIGINAL, so the edit cannot be used to smuggle in invented content."
       }
-    ]
+    ],
+    "conflictsNote": "Remaining: education.institution vs institutionVariant ('Batangas State University' vs '... - TNEU'). contact.email was resolved in an earlier pass."
   },
   "sections": [
     {
@@ -548,6 +549,11 @@
         "Mobile",
         "Full Stack"
       ],
+      "contribution": {
+        "role": "Sole developer",
+        "scope": "code",
+        "collaborators": "Groupmates handle documentation"
+      },
       "links": {
         "repo": null,
         "live": null,

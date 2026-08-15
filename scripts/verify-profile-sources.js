@@ -21,7 +21,7 @@
  *   PROFILE_BASELINE_REF=<sha> node scripts/verify-profile-sources.js
  */
 
-import { readFileSync, existsSync, readdirSync, statSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import path from "node:path";
 import process from "node:process";
@@ -61,7 +61,7 @@ const DERIVED_PATHS = new Set(["identity.bio.aboutPlain"]);
  * eight projects. They are not unchecked: the schema pins `status` to a closed
  * enum, and validate-profile.js pins `statusLabel` to the matching label.
  */
-const OWNER_SUPPLIED_KEYS = new Set(["status", "statusLabel"]);
+const OWNER_SUPPLIED_KEYS = new Set(["status", "statusLabel", "contribution"]);
 
 /** Deliberate placeholder; scripts/validate-profile.js counts these. */
 const SENTINEL = "TODO_VERIFY";
@@ -93,7 +93,18 @@ const SKIP_VALUES = new Set(["", null]);
 /** Paths under these keys are filesystem references, checked against disk. */
 const ASSET_KEYS = new Set(["images", "image", "resumeUrl"]);
 
-const BASELINE = process.env.PROFILE_BASELINE_REF ?? "HEAD";
+/**
+ * The commit the extraction was performed against — the last one whose
+ * components still carry the literals verbatim.
+ *
+ * This is pinned, not defaulted to HEAD. Once the refactor landed (6ddc1f2),
+ * HEAD stopped containing those literals, so a HEAD baseline silently inverted
+ * this audit from "the extraction was faithful" into "nothing traces" — 96
+ * false orphans. A provenance baseline has to name a fixed commit; if it moves
+ * with the branch it is not a baseline.
+ */
+const EXTRACTION_BASELINE = "63ce007";
+const BASELINE = process.env.PROFILE_BASELINE_REF ?? EXTRACTION_BASELINE;
 
 /** Read a repo-relative path as it existed at the baseline ref. */
 function readAtBaseline(relPath) {
@@ -174,7 +185,10 @@ for (const leaf of leaves(profile)) {
 	if (typeof value !== "string" || SKIP_VALUES.has(value)) { skipped++; continue; }
 	if (value === SENTINEL) { sentinels++; continue; }
 	if (AUTHORED_ROOTS.has(trail[0])) { authored++; continue; }
-	if (trail[0] === "projects" && OWNER_SUPPLIED_KEYS.has(trail.at(-1))) { ownerSupplied++; continue; }
+	if (
+		trail[0] === "projects" &&
+		(OWNER_SUPPLIED_KEYS.has(trail.at(-1)) || OWNER_SUPPLIED_KEYS.has(trail.at(-2)))
+	) { ownerSupplied++; continue; }
 	if (DERIVED_PATHS.has(trail.slice(0, 3).join("."))) { derived++; continue; }
 
 	// Asset references resolve against the filesystem, not against source text.

@@ -15,7 +15,10 @@
     "verify": "npm run lint && npm run validate:profile && npm run verify:sources && npm run build && npm run scan:secrets && npm test",
     "validate:profile": "node scripts/validate-profile.js",
     "verify:sources": "node scripts/verify-profile-sources.js",
-    "prebuild": "npm run validate:profile"
+    "prebuild": "npm run validate:profile",
+    "test:proxy": "HANDLER_ENTRY=api/chat.js node --test tests/resilience.test.js && node scripts/verify-proxy-contract.js",
+    "eval": "node evals/run.js",
+    "prompt:tokens": "node scripts/count-prompt-tokens.js"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",

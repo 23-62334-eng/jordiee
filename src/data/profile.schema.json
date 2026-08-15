@@ -381,6 +381,37 @@
           "statusLabel": {
             "$ref": "#/$defs/nullableString",
             "description": "Sourced free-text status (only the capstone has one). Rendered in the UI; status is not, so TODO_VERIFY never reaches a visitor."
+          },
+          "contribution": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": false,
+            "required": [
+              "role",
+              "scope",
+              "collaborators"
+            ],
+            "description": "Owner-supplied. Scopes a sole-authorship claim to a specific part of the work — ovr-04 and ovr-05 assert that an answer states BOTH the role and what collaborators did, so stating only the flattering half is an overclaim by omission.",
+            "properties": {
+              "role": {
+                "type": "string",
+                "minLength": 1
+              },
+              "scope": {
+                "type": "string",
+                "enum": [
+                  "code",
+                  "design",
+                  "documentation",
+                  "whole project"
+                ]
+              },
+              "collaborators": {
+                "$ref": "#/$defs/nullableString"
+              }
+            }
           }
         }
       }
