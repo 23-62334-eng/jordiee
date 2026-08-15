@@ -362,7 +362,7 @@ function Home() {
 										<FaLinkedin />
 									</motion.a>
 									<motion.a
-										href="mailto:javiermarkjordan@email.com"
+										href="mailto:javiermarkjordan@gmail.com"
 										className="text-gray-700 dark:text-gray-200 hover:text-red-500 dark:hover:text-red-400"
 										whileHover={{ scale: 1.2, y: -3 }}
 										transition={{ type: "spring", stiffness: 400, damping: 15 }}
