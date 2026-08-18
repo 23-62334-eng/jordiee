@@ -134,7 +134,7 @@ function useScreenTier() {
 }
 
 function Home() {
-	const titles = ["Full Stack Web Developer", "Aspiring Software Engineer"];
+	const titles = ["Full Stack Web Developer", "Aspiring Cloud Engineer"];
 	const [displayedText, setDisplayedText] = useState("");
 	const screenTier = useScreenTier();
 
