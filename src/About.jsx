@@ -56,7 +56,7 @@ const techCategories = [
 	},
 	{
 		label: "Cloud",
-		items: ["Docker", "XAMPP", "MongoDB", "PostgreSQL", "Supabase", "Firebase"],
+		items: ["Docker", "XAMPP", "MongoDB", "PostgreSQL", "Supabase", "Firebase", "AWS"],
 	},
 	{
 		label: "AI / ML",
