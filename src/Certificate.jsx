@@ -22,6 +22,22 @@ import certAWSCLI from "./assets/cert/AWS_CLI.webp";
 /* ─── Data ───────────────────────────────────────────────── */
 const certificates = [
 	{
+		title: "CLOUD 101",
+		org: "AWS",
+		year: "2026",
+		img: certAWSCLOUD101,
+		category: "Professional",
+		verified: true,
+	},
+	{
+		title: "AWS CLI",
+		org: "AWS",
+		year: "2026",
+		img: certAWSCLI,
+		category: "Professional",
+		verified: true,
+	},
+	{
 		title: "Claude Agent",
 		org: "Anthropic",
 		year: "2026",
