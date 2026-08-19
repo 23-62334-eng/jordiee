@@ -26,7 +26,7 @@ const certificates = [
 		org: "AWS",
 		year: "2026",
 		img: certAWSCLOUD101,
-		category: "Professional",
+		category: "Badge",
 		verified: true,
 	},
 	{
