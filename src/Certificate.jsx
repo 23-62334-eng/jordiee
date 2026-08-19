@@ -15,6 +15,9 @@ import certMicroPBI from "./assets/cert/MicroPBI.webp";
 import certClaudeInAction from "./assets/cert/ClaudeInAction.webp";
 import certClaude101 from "./assets/cert/Claude_101.webp";
 import certClaudeAgent from "./assets/cert/Claude_Agent.webp";
+import certAWSCLOUD101 from "./assets/cert/Cloud101.webp";
+import certAWSCLI from "./assets/cert/AWS_CLI.webp";
+
 
 /* ─── Data ───────────────────────────────────────────────── */
 const certificates = [
