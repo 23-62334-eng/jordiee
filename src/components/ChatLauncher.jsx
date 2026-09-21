@@ -158,7 +158,7 @@ const makeId = () => `m${nextId++}`;
  * carrying a colour of its own.
  */
 
-const Icon = ({ path, className = "h-5 w-5", fill = "none" }) => (
+const Icon = ({ path, className = "h-5 w-5", fill = "none", stroke = 1.6 }) => (
 	<svg
 		aria-hidden="true"
 		xmlns="http://www.w3.org/2000/svg"
@@ -166,7 +166,7 @@ const Icon = ({ path, className = "h-5 w-5", fill = "none" }) => (
 		viewBox="0 0 24 24"
 		fill={fill}
 		stroke="currentColor"
-		strokeWidth={1.6}
+		strokeWidth={stroke}
 		strokeLinecap="round"
 		strokeLinejoin="round"
 	>
@@ -174,16 +174,44 @@ const Icon = ({ path, className = "h-5 w-5", fill = "none" }) => (
 	</svg>
 );
 
+/**
+ * The launcher glyph: one speech bubble, nothing inside it.
+ *
+ * It used to be a bubble with three typing dots. Two problems, both only
+ * visible at the size it actually renders. The dots land at roughly 1.5px
+ * across and collapse into a smudge — at 16px they stop being three of
+ * anything — and a bubble drawn AROUND them has to give up its interior, so
+ * neither idea gets the room to read. Removing them is what let the bubble be
+ * drawn properly rather than around an obstruction.
+ *
+ * Squared rather than circular on purpose: the button behind it is a 56px
+ * disc, and a round bubble inside a round button is two concentric circles.
+ * The square reads as a deliberate shape against it, and sits in the same
+ * geometric family as the dock's icons.
+ *
+ * Geometry chosen by rendering the alternatives at true size, not by eye in a
+ * large viewport — r2 is harsh and r5 turns the bubble into a blob; 1.6 (the
+ * default here) reads thin inside a solid disc and 2.0 is clumsy; a longer
+ * tail sprawls.
+ *
+ * SIZE was set by measurement rather than taste, because the first draft
+ * looked recessed beside the dock and it was not obvious why. The dock's icons
+ * occupy 61% of their circle (28px of 46px); the glyph was covering 29% of
+ * this one (16px of 56px), so it was carrying roughly half the presence of
+ * every control next to it. The box is h-7 and the bubble fills 18 of the 24
+ * grid, which puts the ink at ~37% — deliberately short of the dock's 61%,
+ * since a floating button wants more breathing room than a packed pill, but no
+ * longer visibly lighter than its neighbours.
+ */
 const ChatIcon = () => (
 	<Icon
-		className="h-6 w-6"
-		path={
-			<path d="M8 10.5h.01M12 10.5h.01M16 10.5h.01M21 12c0 4.418-4.03 8-9 8a9.9 9.9 0 0 1-4-.86L3 20l1.16-4.11A7.94 7.94 0 0 1 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8Z" />
-		}
+		className="h-7 w-7"
+		stroke={1.8}
+		path={<path d="M7.5 4h9a4.5 4.5 0 0 1 4.5 4.5v4a4.5 4.5 0 0 1-4.5 4.5H7.2L3 20.4V8.5A4.5 4.5 0 0 1 7.5 4Z" />}
 	/>
 );
-const CloseIcon = ({ className }) => (
-	<Icon className={className} path={<path d="M6 18 18 6M6 6l12 12" />} />
+const CloseIcon = ({ className, stroke }) => (
+	<Icon className={className} stroke={stroke} path={<path d="M6 18 18 6M6 6l12 12" />} />
 );
 const SendIcon = () => (
 	<Icon className="h-[18px] w-[18px]" path={<path d="M12 19V5M5 12l7-7 7 7" />} />
@@ -468,7 +496,7 @@ export default function ChatLauncher() {
 				aria-label={open ? "Close the assistant" : `Ask the assistant about ${DISPLAY_NAME}`}
 				className={`chat-accent fixed ${LAUNCHER_POSITION} z-50 flex h-14 w-14 items-center justify-center rounded-full transition-transform duration-300 hover:scale-105 focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 focus-visible:outline-none dark:focus-visible:ring-white dark:focus-visible:ring-offset-gray-900`}
 			>
-				{open ? <CloseIcon className="h-6 w-6" /> : <ChatIcon />}
+				{open ? <CloseIcon className="h-7 w-7" stroke={1.8} /> : <ChatIcon />}
 			</motion.button>
 
 			{/*

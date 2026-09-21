@@ -27,63 +27,6 @@ function TechPill({ tool }) {
 	);
 }
 
-<<<<<<< HEAD
-const techCategories = [
-	{ label: "UI / UX", items: ["Figma"] },
-	{
-		label: "Frontend",
-		items: [
-			"JavaScript",
-			"TypeScript",
-			"React",
-			"Next.js",
-			"React Native",
-			"Flutter",
-			"Tailwind CSS",
-			"Prettier",
-		],
-	},
-	{
-		label: "Backend",
-		items: [
-			"PHP",
-			"MySQL",
-			"Python",
-			"Java",
-			"C#",
-			"Node.js",
-			"Express.js",
-			"Prisma",
-			"REST APIs",
-		],
-	},
-	{
-		label: "Cloud",
-		items: ["Docker", "XAMPP", "MongoDB", "PostgreSQL", "Supabase", "Firebase", "AWS"],
-	},
-	{
-		label: "AI / ML",
-		items: ["TensorFlow Lite", "XGBoost", "MobileNetV2"],
-	},
-	{ label: "Automation", items: ["n8n"] },
-	{
-		label: "Developer Tools",
-		items: [
-			"Git",
-			"GitHub",
-			"VS Code",
-			"Cursor",
-			"IntelliJ IDEA",
-			"PyCharm",
-			"NetBeans",
-			"Xcode",
-			"Postman",
-			"Power BI",
-			"Antigravity",
-			"Xcode",
-		],
-	},
-=======
 // Rebuilt from profile.skills. Category order is fixed here because it is a
 // layout decision; membership comes from the data.
 const CATEGORY_ORDER = [
@@ -94,7 +37,6 @@ const CATEGORY_ORDER = [
 	"AI / ML",
 	"Automation",
 	"Developer Tools",
->>>>>>> 6ddc1f2 (feat: profile.json as single source of truth)
 ];
 const techCategories = CATEGORY_ORDER.map((label) => ({
 	label,

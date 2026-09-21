@@ -91,17 +91,10 @@ function Footer() {
 							<div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm">
 								<FaEnvelope className="text-gray-500 dark:text-gray-400" />
 								<a
-<<<<<<< HEAD
-									href="mailto:javiermarkjordan@gmail.com"
-									className="hover:text-gray-900 dark:hover:text-white transition-colors duration-300 hover:underline"
-								>
-									javiermarkjordan@gmail.com
-=======
 									href={`mailto:${profile.contact.email}`}
 									className="hover:text-gray-900 dark:hover:text-white transition-colors duration-300 hover:underline"
 								>
 									{profile.contact.email}
->>>>>>> 6ddc1f2 (feat: profile.json as single source of truth)
 								</a>
 							</div>
 							<div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-sm">

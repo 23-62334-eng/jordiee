@@ -445,6 +445,7 @@
             "type": "string",
             "enum": [
               "Professional",
+              "Badge",
               "Conference",
               "Event"
             ]

@@ -135,11 +135,7 @@ function useScreenTier() {
 }
 
 function Home() {
-<<<<<<< HEAD
-	const titles = ["Full Stack Web Developer", "Aspiring Cloud Engineer"];
-=======
 	const titles = profile.identity.titles;
->>>>>>> 6ddc1f2 (feat: profile.json as single source of truth)
 	const [displayedText, setDisplayedText] = useState("");
 	const screenTier = useScreenTier();
 
@@ -365,11 +361,7 @@ function Home() {
 										<FaLinkedin />
 									</motion.a>
 									<motion.a
-<<<<<<< HEAD
-										href="mailto:javiermarkjordan@gmail.com"
-=======
 										href={`mailto:${profile.contact.email}`}
->>>>>>> 6ddc1f2 (feat: profile.json as single source of truth)
 										className="text-gray-700 dark:text-gray-200 hover:text-red-500 dark:hover:text-red-400"
 										whileHover={{ scale: 1.2, y: -3 }}
 										transition={{ type: "spring", stiffness: 400, damping: 15 }}

@@ -7,103 +7,6 @@ import { useState, useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 import TiltCard from "./components/TiltCard";
 
-<<<<<<< HEAD
-import cert1 from "./assets/cert/cert1.webp";
-import cert2 from "./assets/cert/cert2.webp";
-import cert3 from "./assets/cert/cert3.webp";
-import cert4 from "./assets/cert/cert4.webp";
-import certMicroPBI from "./assets/cert/MicroPBI.webp";
-import certClaudeInAction from "./assets/cert/ClaudeInAction.webp";
-import certClaude101 from "./assets/cert/Claude_101.webp";
-import certClaudeAgent from "./assets/cert/Claude_Agent.webp";
-import certAWSCLOUD101 from "./assets/cert/Cloud101.webp";
-import certAWSCLI from "./assets/cert/AWS_CLI.webp";
-
-
-/* ─── Data ───────────────────────────────────────────────── */
-const certificates = [
-	{
-		title: "AWS CLI",
-		org: "AWS",
-		year: "2026",
-		img: certAWSCLI,
-		category: "Professional",
-		verified: true,
-	},
-	{
-		title: "CLOUD 101",
-		org: "AWS",
-		year: "2026",
-		img: certAWSCLOUD101,
-		category: "Badge",
-		verified: true,
-	},
-	{
-		title: "Claude Agent",
-		org: "Anthropic",
-		year: "2026",
-		img: certClaudeAgent,
-		category: "Professional",
-		verified: true,
-	},
-	{
-		title: "Claude 101",
-		org: "Anthropic",
-		year: "2026",
-		img: certClaude101,
-		category: "Professional",
-		verified: true,
-	},
-	{
-		title: "Claude in Action",
-		org: "Anthropic",
-		year: "2026",
-		img: certClaudeInAction,
-		category: "Professional",
-		verified: true,
-	},
-	{
-		title: "Microsoft Power BI Data Analyst",
-		org: "Microsoft",
-		year: "2025",
-		img: certMicroPBI,
-		category: "Professional",
-		verified: true,
-	},
-	{
-		title: "Databiz Conference 2024",
-		org: "Batangas Information Technology Society",
-		year: "2024",
-		img: cert1,
-		category: "Conference",
-		verified: true,
-	},
-	{
-		title: "BIT Conference (BITCON) 2025",
-		org: "Batangas Information Technology Society",
-		year: "2025",
-		img: cert2,
-		category: "Conference",
-		verified: true,
-	},
-	{
-		title: "Databiz Conference 2025",
-		org: "Batangas Information Technology Society",
-		year: "2025",
-		img: cert3,
-		category: "Conference",
-		verified: true,
-	},
-	{
-		title: "TechTalks S3",
-		org: "CICS Student Council",
-		year: "2025",
-		img: cert4,
-		category: "Event",
-		verified: false,
-	},
-];
-=======
 import profile from "./data/profile.json";
 import { asset } from "./data/assets";
 
@@ -112,7 +15,6 @@ const certificates = profile.certifications.map((c) => ({
 	...c,
 	img: asset(c.image),
 }));
->>>>>>> 6ddc1f2 (feat: profile.json as single source of truth)
 
 // One neutral badge for every category. The three used to be blue / purple /
 // emerald, which were the last colours left in this section.

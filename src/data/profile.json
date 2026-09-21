@@ -16,7 +16,37 @@
         "note": "The original still traces to src/Education.jsx at the baseline commit; verify-profile-sources.js checks the ORIGINAL, so the edit cannot be used to smuggle in invented content."
       }
     ],
-    "conflictsNote": "Remaining: education.institution vs institutionVariant ('Batangas State University' vs '... - TNEU'). contact.email was resolved in an earlier pass."
+    "conflictsNote": "Remaining: education.institution vs institutionVariant ('Batangas State University' vs '... - TNEU'). contact.email was resolved in an earlier pass.",
+    "ownerAdditions": [
+      {
+        "path": "certifications[title=AWS CLI].title",
+        "value": "AWS CLI",
+        "reason": "Added to the components after the extraction baseline (63ce007) and recovered from the pre-rebase commit 43b94ce, whose Certificate.jsx and About.jsx carried it as a hardcoded literal. The rebase onto main collided with the refactor that moved that data into profile.json; the conflict was resolved to the data-driven side, so this is where the value now lives. It cannot trace to the baseline because it did not exist then.",
+        "date": "2026-09-22",
+        "source": "43b94ce — src/Certificate.jsx, src/About.jsx (pre-rebase, hardcoded)"
+      },
+      {
+        "path": "certifications[title=CLOUD 101].title",
+        "value": "CLOUD 101",
+        "reason": "Added to the components after the extraction baseline (63ce007) and recovered from the pre-rebase commit 43b94ce, whose Certificate.jsx and About.jsx carried it as a hardcoded literal. The rebase onto main collided with the refactor that moved that data into profile.json; the conflict was resolved to the data-driven side, so this is where the value now lives. It cannot trace to the baseline because it did not exist then.",
+        "date": "2026-09-22",
+        "source": "43b94ce — src/Certificate.jsx, src/About.jsx (pre-rebase, hardcoded)"
+      },
+      {
+        "path": "skills[name=Firebase].name",
+        "value": "Firebase",
+        "reason": "Added to the components after the extraction baseline (63ce007) and recovered from the pre-rebase commit 43b94ce, whose Certificate.jsx and About.jsx carried it as a hardcoded literal. The rebase onto main collided with the refactor that moved that data into profile.json; the conflict was resolved to the data-driven side, so this is where the value now lives. It cannot trace to the baseline because it did not exist then.",
+        "date": "2026-09-22",
+        "source": "43b94ce — src/Certificate.jsx, src/About.jsx (pre-rebase, hardcoded)"
+      },
+      {
+        "path": "skills[name=Antigravity].name",
+        "value": "Antigravity",
+        "reason": "Added to the components after the extraction baseline (63ce007) and recovered from the pre-rebase commit 43b94ce, whose Certificate.jsx and About.jsx carried it as a hardcoded literal. The rebase onto main collided with the refactor that moved that data into profile.json; the conflict was resolved to the data-driven side, so this is where the value now lives. It cannot trace to the baseline because it did not exist then.",
+        "date": "2026-09-22",
+        "source": "43b94ce — src/Certificate.jsx, src/About.jsx (pre-rebase, hardcoded)"
+      }
+    ]
   },
   "sections": [
     {
@@ -463,6 +493,16 @@
       "hasLogo": true
     },
     {
+      "name": "Firebase",
+      "category": "Cloud",
+      "hasLogo": false
+    },
+    {
+      "name": "AWS",
+      "category": "Cloud",
+      "hasLogo": false
+    },
+    {
       "name": "TensorFlow Lite",
       "category": "AI / ML",
       "hasLogo": true
@@ -531,6 +571,11 @@
       "name": "Power BI",
       "category": "Developer Tools",
       "hasLogo": true
+    },
+    {
+      "name": "Antigravity",
+      "category": "Developer Tools",
+      "hasLogo": false
     }
   ],
   "projects": [
@@ -752,6 +797,24 @@
     }
   ],
   "certifications": [
+    {
+      "title": "AWS CLI",
+      "org": "AWS",
+      "year": "2026",
+      "category": "Professional",
+      "verified": true,
+      "image": "cert/AWS_CLI.webp",
+      "credentialUrl": null
+    },
+    {
+      "title": "CLOUD 101",
+      "org": "AWS",
+      "year": "2026",
+      "category": "Badge",
+      "verified": true,
+      "image": "cert/Cloud101.webp",
+      "credentialUrl": null
+    },
     {
       "title": "Claude Agent",
       "org": "Anthropic",

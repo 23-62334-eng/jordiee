@@ -77,6 +77,30 @@ const ownerEdits = new Map(
 	(profileForEdits._meta?.ownerEdits ?? []).map((e) => [e.path, e]),
 );
 
+/**
+ * Values the owner ADDED after extraction, keyed by path.
+ *
+ * ownerEdits above cannot cover these: it audits a recorded `original` against
+ * the baseline, which proves an edit changed real extracted content. An
+ * addition has no original — the certificate did not exist when the extraction
+ * was performed.
+ *
+ * Without this the audit had a terminal flaw rather than a strict one: the
+ * direction of authorship reversed at 6ddc1f2. Before it, profile.json was
+ * extracted FROM the components; after it, the components render FROM
+ * profile.json, so anything genuinely new is authored here first and can never
+ * trace to src/ no matter which commit the baseline names. The profile could
+ * never gain a fact again without this check failing.
+ *
+ * It is still not a way in. An addition has to be DECLARED, with the exact
+ * value it authorises and a reason — a value that does not match its
+ * declaration byte for byte is reported as an orphan exactly as before, so
+ * nothing can be invented silently or drift after the fact.
+ */
+const ownerAdditions = new Map(
+	(profileForEdits._meta?.ownerAdditions ?? []).map((a) => [a.path, a]),
+);
+
 /** profile.json path syntax -> the dotted trail this script builds. */
 function editPathToTrail(specPath) {
 	// "projects[id=project-capstone].description" -> "projects.[0].description"
@@ -175,6 +199,10 @@ const edited = [];
 const editedTrails = new Map(
 	[...ownerEdits.values()].map((e) => [editPathToTrail(e.path), e]),
 );
+const added = [];
+const addedTrails = new Map(
+	[...ownerAdditions.values()].map((a) => [editPathToTrail(a.path), a]),
+);
 let authored = 0;
 let derived = 0;
 
@@ -210,6 +238,25 @@ for (const leaf of leaves(profile)) {
 			orphans.push({
 				...leaf,
 				reason: `_meta.ownerEdits records an edit here, but its "original" does not trace to ${BASELINE} — the edit cannot be verified as a change to real content`,
+			});
+		}
+		continue;
+	}
+
+	const addition = addedTrails.get(trail.join("."));
+	if (addition) {
+		// The declaration must name the value it authorises, exactly. A
+		// mismatch means the data moved after the addition was recorded, and
+		// the record no longer describes what is in the file.
+		if (addition.value === value) {
+			added.push(leaf);
+		} else {
+			orphans.push({
+				...leaf,
+				reason:
+					`_meta.ownerAdditions declares this path with value ` +
+					`${JSON.stringify(addition.value)}, which no longer matches — ` +
+					`the declaration does not authorise the value now present`,
 			});
 		}
 		continue;
@@ -291,6 +338,7 @@ console.log(`  derived (aboutPlain)       : ${derived}  — sync-checked by vali
 console.log(`  TODO_VERIFY sentinels      : ${sentinels}`);
 console.log(`  owner-supplied statuses    : ${ownerSupplied}  — enum-pinned by validate-profile.js`);
 console.log(`  owner edits                : ${edited.length}  — original verified against ${BASELINE}`);
+console.log(`  owner additions            : ${added.length}  — declared in _meta.ownerAdditions with an exact value`);
 console.log(`  null fields          : ${nulls.length}`);
 
 if (nulls.length) {
