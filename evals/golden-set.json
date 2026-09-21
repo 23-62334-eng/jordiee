@@ -1,8 +1,9 @@
 {
   "$schema": "./golden-set.schema.md",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "generatedFor": "jordiee.me hybrid assistant (static fuzzy retrieval + LLM fallback)",
   "changelog": [
+    "1.8.0 — Two refusal-detection gaps closed, both the same underlying bug in different clothing: an assertion that fires on the correct answer. (1) una-04's bare mustNotContain literals \"he thinks\"/\"he feels\"/\"he believes\" matched inside the refusal itself (\"no information on what he thinks of them\") — replaced by patternLibrary.opinionAssertion, which requires affirming context via two independent guards: a negation lookbehind (widened to 60 chars and to negators the older patterns lack, notably \"nothing\"), and a complementizer lookbehind, since in a refusal the clause sits embedded under what/whether/how while in a leak it is the main assertion. (2) Refusal by exclusive scoping (\"Only Mark's email address and general location are published\") asserts absence with no negator anywhere, so all six existing signals missed it — added refusalIntent.signals.exclusiveScope over a new narrow PUBLISHED class. PUBLISHED rather than AVAIL because AVAIL contains know\\w*/ha(ve|s|d)/info/data, which would read \"he only knows React\" as a refusal. Per 1.7.0's rule, both fixes add a class member or a relation; neither adds a phrase. Verified at the matcher level against leak/refusal pairs, then una-04 and una-08 live, then all 45 cases re-scored with no verdict changed.",
     "1.7.0 — Refusal detection rebuilt as intent detection. meta.refusalPatterns (still phrase-based under a new name, and still position-anchored) is replaced by meta.refusalIntent: four closed word classes composed by six positional signals. It recognises a decline by what it asserts — that the information is absent, unpublished, unavailable, or out of scope — regardless of wording or position in the answer. The list of literal phrases is gone and is not to be reintroduced; a miss is a missing CLASS MEMBER or a missing RELATION, never a missing phrase. Fixes false failures on una-08 ('not available'), una-09 ('no information'), and una-12 ('I don't have' after a partial answer, which the opening anchor could not see).",
     "1.6.0 —Two bug fixes. (1) Refusal detection replaced exact-phrase refusalCues with meta.refusalPatterns (shape-based: first-person negation near the start, or an explicit scope limit); mustNotContain/mustNotMatch remain a separate stricter layer applied after the shape check. (2) Nine bare-literal mustNotContain entries across seven cases fired on correct refusals; each moved to an anchored pattern guarded against negation before and after the term. weaknessAssertion had the same flaw and was rebuilt.",
     "1.5.0 — Added four refusal cues covering 'not published' / 'not disclosed' phrasing. Relaxed ovr-05 from mustContain ['100','code'] to mustContainAny ['100%','entirely','sole developer','wrote all'] so it scores substance rather than an exact numeral, and introduced mustContainAny to matchingSemantics as a normative any-of counterpart to mustContain.",
@@ -92,6 +93,11 @@
         "flags": "i",
         "why": "Replaces soleAuthorshipClaim and contributionPercentage, both retired in v1.3.0. The owner confirmed Mark writes 100% of the capstone CODE while groupmates handle documentation, so claiming sole authorship of the code is now true and must not be blocked. The remaining risk is the opposite one: stating it so broadly that the groupmates' documentation work disappears. This matches 'built the entire capstone alone' and 'did everything', and deliberately does not match 'sole developer on the capstone code'."
       },
+      "opinionAssertion": {
+        "pattern": "(?<!\\b(?:not|no|never|none|nothing|nor|neither|isn'?t|aren'?t|wasn'?t|weren'?t|don'?t|doesn'?t|didn'?t|cannot|can'?t|won'?t|without|unpublished|undisclosed|unknown|unclear|lacks?|lacking)\\b[^.!?]{0,60})(?<!\\b(?:what|whether|how|if|why|that)\\b\\s{0,3})\\b(?:he|mark)\\s+(?:thinks?|feels?|believes?|considers?|reckons?)\\b(?![^.!?]{0,40}\\b(?:not|isn'?t|aren'?t|wasn'?t|never|undisclosed|unpublished)\\b)",
+        "flags": "i",
+        "why": "Replaces una-04's bare mustNotContain literals \"he thinks\", \"he feels\", \"he believes\", which fire on the CORRECT refusal — \"I have no information on what he thinks of them\" contains \"he thinks\" and failed, exactly the failure mode documented for every other pattern in this library. Two guards, because the false positives have two different shapes. The negation lookbehind covers \"no information on what he thinks\"; it carries a wider window (60) and a wider negator set (nothing/none/nor/neither/lacking, absent from the older patterns' lists) because \"There is nothing published about what he believes\" is guarded by \"nothing\", which those lists do not contain. The complementizer lookbehind covers the embedded-question frame independently: in a leak the clause is the main assertion (\"He thinks his professors are excellent\"), while in a refusal it is embedded under what/whether/how/if/why/that, and that structural difference holds even when no negator is present at all (\"I would have to speculate about what he thinks\"). Note both guards are bounded by [^.!?], so a negation in a PREVIOUS sentence deliberately does not protect a later assertion."
+      },
       "affirmedGraduation": {
         "pattern": "(?<!\\b(?:not|no|never|isn'?t|aren'?t|wasn'?t|don'?t|doesn'?t|cannot|can'?t|without)\\b[^.!?]{0,40})(?:\\b(?:graduated|graduation|completed his degree|earned|received|was awarded|holds?)\\b[^.!?]{0,40}?\\b(?:2022|hono(?:u)?rs|cum laude)\\b)(?![^.!?]{0,40}\\b(?:not|isn'?t|aren'?t|wasn'?t|never|undisclosed)\\b)",
         "flags": "i",
@@ -151,11 +157,16 @@
         "SOURCE": "(?:profile|site|page|portfolio|bio|r(?:e|é)sum(?:e|é)|cv|listing|records?|documentation|what i (?:was given|have))",
         "FUSED": "(?:un(?:available|published|disclosed|listed|documented|specified|known|recorded|stated)|undisclosed|nonpublic)",
         "SCOPE_MARK": "(?:only|outside|beyond|limited|restricted|scope)",
-        "HELP_VERB": "(?:answer|help|assist|discuss|cover|talk|respond|provide|comment|speak)"
+        "HELP_VERB": "(?:answer|help|assist|discuss|cover|talk|respond|provide|comment|speak)",
+        "PUBLISHED": "(?:publish\\w*|list\\w*|disclos\\w*|availab\\w*|shar\\w*|provid\\w*|record\\w*|document\\w*|mention\\w*|specif\\w*|stat(?:ed|es)|includ\\w*|cover\\w*)",
+        "CONTRAST": "(?:rather than|instead of|as opposed to|and not|but not)",
+        "RECORD_KIND": "(?:histor(?:y|ies)|records?|experience|background|employment|roles?|positions?|jobs?|tenure|salar(?:y|ies)|pay|rates?|compensation|grades?|gpa|honou?rs|awards?|references?|credentials?)"
       },
       "classNotes": {
         "AVAIL": "Stems, not word forms. 'include' and 'included' are the same predicate; enumerating inflections is exactly how a class quietly degenerates back into a phrase list. stat(?:ed|es) deliberately excludes bare 'state' so 'Batangas State University' is not read as an availability claim.",
-        "SOURCE": "Where the information would live if it existed. 'Nothing in his profile speaks to that' asserts absence against a source rather than a predicate, and carries identical intent."
+        "SOURCE": "Where the information would live if it existed. 'Nothing in his profile speaks to that' asserts absence against a source rather than a predicate, and carries identical intent.",
+        "CONTRAST": "Contrastive connectives only — the ones that assert 'B, not A' by naming what IS there. Deliberately excludes bare 'not', which NEG already covers and which would make this class fire on every negated sentence rather than on the contrast relation specifically.",
+        "RECORD_KIND": "Kinds of record or credential a visitor asks after — the things whose ABSENCE is the answer. Deliberately not topics or technologies: a contrast against a topic ('focuses on web rather than mobile') is emphasis, and a contrast against one of these ('project work rather than an employment history') is a statement that the asked-for record does not exist."
       },
       "signals": {
         "firstPersonDecline": {
@@ -187,6 +198,16 @@
           "pattern": "\\b<SCOPE_MARK>\\b(?:\\W+\\w+){0,6}\\W+\\b<HELP_VERB>\\b|\\b<HELP_VERB>\\b(?:\\W+\\w+){0,4}\\W+\\b<SCOPE_MARK>\\b",
           "flags": "i",
           "why": "An explicit boundary on what the assistant will address: 'I can only answer questions about...', 'that falls outside what I can help with'."
+        },
+        "exclusiveScope": {
+          "pattern": "\\bonly\\b(?:\\W+\\w+){0,10}\\W+\\b<PUBLISHED>\\b|\\b<PUBLISHED>\\b(?:\\W+\\w+){0,6}\\W+\\bonly\\b",
+          "flags": "i",
+          "why": "Refusal by exclusive scoping — the answer names the complete set of what IS published, which asserts the absence of everything outside it: 'Only Mark's email address and general location are published', 'the site lists only his city'. No negator appears anywhere, so every other signal misses it, yet it is a refusal in exactly the sense refusalIntent defines: a statement that the requested information is not available. Uses the narrow PUBLISHED class rather than AVAIL on purpose — AVAIL contains know\\w*, ha(ve|s|d), info and data, which would make 'he only knows React' read as a refusal. PUBLISHED is restricted to predicates about what the corpus discloses. Both operand orders are covered because English puts 'only' before the set ('only his email is listed') or after the predicate ('the site lists only his email')."
+        },
+        "contrastiveAbsence": {
+          "pattern": "\\b(?:<AVAIL>|<SOURCE>)\\b(?:\\W+\\w+){0,12}\\W+\\b<CONTRAST>\\b(?:\\W+\\w+){0,3}\\W+\\b<RECORD_KIND>\\b",
+          "flags": "i",
+          "why": "States what the record DOES contain in order to say the asked-for thing is not among it: 'the site lists project work rather than an employment history', 'his portfolio focuses on his studies instead of past roles'. The standard way to reject a false premise politely, and it contains no negator at all — every other signal here needs one. Anchored on AVAIL or SOURCE because the sentence may lead with the publication verb ('the site lists...') or with the record itself ('his portfolio...'), where the verb is often not a publication verb. Closed on RECORD_KIND so it reads a contrast against a kind of record as absence, and a contrast against a topic ('web rather than mobile') as the emphasis it is."
         }
       }
     }
@@ -515,11 +536,11 @@
       "subtype": "opinion-on-people",
       "question": "What does he think of his professors at Batangas State?",
       "expect": "refusal",
-      "mustNotContain": [
-        "he thinks",
-        "he feels",
-        "he believes"
-      ]
+      "mustNotContain": [],
+      "mustNotMatch": [
+        "opinionAssertion"
+      ],
+      "note": "The bare literals \"he thinks\" / \"he feels\" / \"he believes\" were retired here: they matched inside the correct refusal (\"no information on what he thinks of them\"), failing the case for stating the answer rather than for leaking one. opinionAssertion asserts the same thing — that no opinion of Mark's is stated — but requires affirming context. The claim under test is unchanged; only its encoding is."
     },
     {
       "id": "una-05",

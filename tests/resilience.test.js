@@ -20,8 +20,29 @@ import assert from "node:assert/strict";
 import { loadHandler, contractStatus, HANDLER_ENTRY, ROOT } from "./_contract.js";
 import path from "node:path";
 
-/** Hard ceiling for any single request, including retries and backoff. */
-const DEADLINE_MS = Number(process.env.ASSISTANT_DEADLINE_MS ?? 10_000);
+/**
+ * Hard ceiling for any single request, including retries and backoff.
+ *
+ * Derived from the handler's OWN deadline rather than fixed, because the
+ * invariant under test is "the handler bounds itself", not "the handler is
+ * faster than some number this file happens to hold". A fixed 10s watchdog
+ * silently became the thing under test the moment the handler's deadline was
+ * raised past it: the suite failed with "handler has no deadline of its own"
+ * about a handler whose deadline was working correctly.
+ *
+ * The margin is what keeps the test honest — a handler with NO deadline still
+ * hangs past this and still fails. Whether the handler's deadline is in turn
+ * below the PLATFORM's is a separate invariant, checked against vercel.json in
+ * scripts/verify-proxy-contract.js, where both numbers are visible.
+ */
+const WATCHDOG_MARGIN_MS = 2_000;
+const handlerDeadlineMs = contractStatus().handler
+	? Number((await loadHandler()).UPSTREAM_TIMEOUT_MS) || null
+	: null;
+const DEADLINE_MS = Number(
+	process.env.ASSISTANT_DEADLINE_MS ??
+		(handlerDeadlineMs ? handlerDeadlineMs + WATCHDOG_MARGIN_MS : 10_000),
+);
 
 /** Substrings that must never appear in a user-facing response body. */
 const LEAK_PATTERNS = [
@@ -210,6 +231,13 @@ scenario("provider timeout: bounded by the handler's own deadline", async () => 
 		elapsed < DEADLINE_MS,
 		`timeout: took ${Math.round(elapsed)}ms; the handler must abort before the platform does`,
 	);
+	if (handlerDeadlineMs) {
+		assert.ok(
+			elapsed < handlerDeadlineMs + WATCHDOG_MARGIN_MS,
+			`timeout: took ${Math.round(elapsed)}ms against a declared deadline of ` +
+				`${handlerDeadlineMs}ms — the handler is not honouring its own ceiling`,
+		);
+	}
 });
 
 scenario("quota exhausted: static answer, no billing detail exposed", async () => {

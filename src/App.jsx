@@ -1,3 +1,4 @@
+import React, { lazy, Suspense } from "react";
 import NavBar from "./components/NavBar.jsx";
 import Home from "./Home.jsx";
 import About from "./About.jsx";
@@ -7,6 +8,8 @@ import Certificate from "./Certificate.jsx";
 import Footer from "./components/Footer.jsx";
 import ThemeToggle from "./components/ThemeToggle.jsx";
 import { motion } from "framer-motion";
+
+const ChatLauncher = lazy(() => import("./components/ChatLauncher.jsx"));
 
 function App() {
 	return (
@@ -24,6 +27,10 @@ function App() {
 			<Job />
 			<Certificate />
 			<Footer />
+			{/* Chat launcher — closed by default, never auto-opens */}
+			<Suspense fallback={null}>
+				{typeof window !== "undefined" && <ChatLauncher />}
+			</Suspense>
 		</motion.div>
 	);
 }

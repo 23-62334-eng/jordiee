@@ -4,21 +4,23 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "NODE_OPTIONS=--dns-result-order=ipv4first vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "PROFILE_PATH=src/data/profile.json RETRIEVER_ENTRY=src/assistant/retriever.js node --test tests/",
+    "test": "PROFILE_PATH=src/data/profile.json RETRIEVER_ENTRY=src/assistant/retriever.js node --test \"tests/**/*.test.js\"",
     "test:retrieval": "PROFILE_PATH=src/data/profile.json RETRIEVER_ENTRY=src/assistant/retriever.js node --test tests/retrieval.test.js",
     "test:resilience": "node --test tests/resilience.test.js",
     "scan:secrets": "node scripts/scan-secrets.js",
-    "verify": "npm run lint && npm run validate:profile && npm run verify:sources && npm run build && npm run scan:secrets && npm test",
+    "verify": "npm run lint && npm run validate:profile && npm run verify:sources && npm run build && npm run scan:secrets && npm test && npm run test:proxy",
     "validate:profile": "node scripts/validate-profile.js",
     "verify:sources": "node scripts/verify-profile-sources.js",
     "prebuild": "npm run validate:profile",
     "test:proxy": "HANDLER_ENTRY=api/chat.js node --test tests/resilience.test.js && node scripts/verify-proxy-contract.js",
     "eval": "node evals/run.js",
-    "prompt:tokens": "node scripts/count-prompt-tokens.js"
+    "prompt:tokens": "node scripts/count-prompt-tokens.js",
+    "snapshot:contributions": "node scripts/snapshot-contributions.js",
+    "verify:chat-ui": "node scripts/verify-chat-ui.js"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
@@ -40,9 +42,12 @@
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "eslint": "^9.39.1",
+    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "lighthouse": "^10.2.0",
+    "playwright": "^1.40.0",
     "vite": "^7.2.4"
   }
 }

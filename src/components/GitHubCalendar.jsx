@@ -1,19 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion as Motion, useReducedMotion } from "framer-motion";
 
-/* ── Data source ──────────────────────────────────────────────────────────
-   A static file committed daily by .github/workflows/contributions.yml.
-   No token ever reaches the client.                                        */
-const CONTRIBUTIONS_URL = `${import.meta.env.BASE_URL}contributions.json`;
+import useContributions from "../hooks/useContributions.js";
+import { FIRST_CONTRIBUTION_YEAR, GITHUB_USERNAME } from "../lib/githubContributions.js";
 
-// ONE-LINE SWAP — runtime source, no Action and no token at all:
-// const CONTRIBUTIONS_URL = "https://github-contributions-api.jogruber.de/v4/Jordieeeee?y=last";
-// Tradeoff: zero setup, but it is a single-maintainer free endpoint whose
-// uptime and rate limits are outside your control, it can only ever see
-// PUBLIC contributions (so the total will read lower than `viewer` does), and
-// every visitor pays a cross-origin round trip on a section that is otherwise
-// served from your own origin. normalize() below accepts either shape, so the
-// swap really is just this line.
+const PROFILE_URL = `https://github.com/${GITHUB_USERNAME}`;
 
 /* ── Geometry ─────────────────────────────────────────────────────────────
    Two fixed sizes, no fluid scaling: cells below ~8px stop reading as a grid.
@@ -77,22 +68,6 @@ const monthYearFormat = new Intl.DateTimeFormat("en-US", {
 	year: "numeric",
 	timeZone: "UTC",
 });
-
-/* ── Payload handling ─────────────────────────────────────────────────── */
-function normalize(payload) {
-	// Static file: { totalContributions, days: [{ date, count }] }
-	if (Array.isArray(payload?.days)) {
-		return payload.days.map((d) => ({ date: d.date, count: d.count ?? 0 }));
-	}
-	// jogruber v4: { total: { lastYear }, contributions: [{ date, count }] }
-	if (Array.isArray(payload?.contributions)) {
-		return payload.contributions.map((d) => ({
-			date: d.date,
-			count: d.count ?? 0,
-		}));
-	}
-	return null;
-}
 
 /**
  * Buckets days 1–4 by quantile over ACTIVE days only.
@@ -216,39 +191,6 @@ function useViewportMode() {
 	return mode;
 }
 
-/* ── Data ─────────────────────────────────────────────────────────────── */
-function useContributions() {
-	const [state, setState] = useState({ status: "loading", days: null });
-
-	useEffect(() => {
-		const controller = new AbortController();
-
-		fetch(CONTRIBUTIONS_URL, { signal: controller.signal })
-			.then((res) => {
-				if (!res.ok) throw new Error(`Contributions request failed: ${res.status}`);
-				return res.json();
-			})
-			.then((payload) => {
-				const days = normalize(payload);
-				if (!days) throw new Error("Unrecognised contributions payload");
-				setState({ status: "ready", days });
-			})
-			.catch((error) => {
-				if (error.name === "AbortError") return;
-				// The section fails quietly in production, but silence during
-				// development is how a broken pipeline goes unnoticed for weeks.
-				if (import.meta.env.DEV) {
-					console.warn("[GitHubCalendar] falling back to no calendar:", error);
-				}
-				setState({ status: "error", days: null });
-			});
-
-		return () => controller.abort();
-	}, []);
-
-	return state;
-}
-
 /* ── Skeleton ─────────────────────────────────────────────────────────────
    Same column count, cell size and caption height as the real grid, so the
    swap to data moves nothing.                                               */
@@ -278,6 +220,7 @@ function Skeleton({ layout, mode }) {
 			<div className="flex items-start gap-3 sm:gap-4">
 				<div className="min-w-0 flex-1">
 					<div className={`mb-2 h-5 w-60 max-w-full rounded ${block}`} />
+					<div className={`mb-3 h-4 w-64 max-w-full rounded ${block}`} />
 
 					{mode === "sm" && filter}
 
@@ -309,7 +252,6 @@ function Skeleton({ layout, mode }) {
 
 /* ── Calendar ─────────────────────────────────────────────────────────── */
 function GitHubCalendar() {
-	const { status, days } = useContributions();
 	const mode = useViewportMode();
 	const reduceMotion = useReducedMotion();
 
@@ -317,14 +259,17 @@ function GitHubCalendar() {
 	const [tooltip, setTooltip] = useState(null);
 	// null = the rolling window ending today; otherwise a calendar year.
 	const [year, setYear] = useState(null);
+	const { status, days, checkedAt, savedAt } = useContributions(year);
+	const isLoading = status === "loading";
 
 	const layout = LAYOUT[mode];
 	const column = layout.cell + layout.gap;
 
-	const years = useMemo(() => {
-		if (!days) return [];
-		return [...new Set(days.map((day) => day.date.slice(0, 4)))].sort().reverse();
-	}, [days]);
+	const currentYear = new Date().getUTCFullYear();
+	const years = useMemo(() => Array.from(
+		{ length: currentYear - FIRST_CONTRIBUTION_YEAR + 1 },
+		(_, index) => String(currentYear - index)
+	), [currentYear]);
 
 	const model = useMemo(() => {
 		if (!days || days.length === 0) return null;
@@ -341,15 +286,13 @@ function GitHubCalendar() {
 		const scaleWeeks = year ? allWeeks : allWeeks.slice(-ROLLING_WEEKS);
 		const level = makeLevelScale(scaleWeeks.flat().filter(Boolean));
 
-		// A selected year always shows Jan–Dec; only the rolling view narrows
-		// to a six-month window on small screens.
+		// Preserve GitHub's rolling range; selected years show the full Jan–Dec grid.
 		const weeks = year ? allWeeks : allWeeks.slice(-ROLLING_WEEKS);
 		// Padding days and out-of-range days are structure, not data: they must
 		// not reach the total or the monthly summary.
 		const visible = weeks.flat().filter((day) => day && !day.outside);
 
-		// Counted over what is actually rendered — a year-total caption beside a
-		// six-month grid is a number the reader cannot check.
+		// Count only the days represented by this view.
 		const total = visible.reduce((sum, day) => sum + day.count, 0);
 
 		const months = new Map();
@@ -377,10 +320,17 @@ function GitHubCalendar() {
 	useEffect(() => {
 		const scroller = scrollerRef.current;
 		if (scroller) scroller.scrollLeft = scroller.scrollWidth;
-	}, [mode, model]);
+	}, [mode, year, isLoading]);
 
-	// Fail quietly: the About section renders as if the calendar was never here.
-	if (status === "error") return null;
+	if (status === "error") return (
+		<p role="status" className="text-xs text-gray-500 dark:text-gray-400">
+			GitHub activity is temporarily unavailable. Retrying automatically.{" "}
+			<a href={PROFILE_URL} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+				View on GitHub
+			</a>
+			{year && <button type="button" onClick={() => setYear(null)} className="ml-3 underline underline-offset-2">Back to last year</button>}
+		</p>
+	);
 	if (status === "loading") return <Skeleton layout={layout} mode={mode} />;
 	if (!model) return null;
 
@@ -391,6 +341,7 @@ function GitHubCalendar() {
 	const caption = isEmpty
 		? `No contributions in ${scope}`
 		: `${model.total} contribution${model.total === 1 ? "" : "s"} in ${scope}`;
+	const tooltipDay = tooltip && days.find((day) => day.date === tooltip.date);
 
 	/* Accessibility: option (b) — one focusable region plus a text equivalent.
 	   Roving tabindex over 365 cells is 365 tab stops of "1 contribution on
@@ -502,7 +453,7 @@ function GitHubCalendar() {
 							))}
 						</div>
 
-						<motion.div
+						<Motion.div
 							{...gridMotion}
 							role="img"
 							tabIndex={0}
@@ -515,7 +466,7 @@ function GitHubCalendar() {
 								if (!cell) return;
 								const rect = cell.getBoundingClientRect();
 								setTooltip({
-									text: cell.dataset.label,
+									date: cell.dataset.date,
 									x: rect.left + rect.width / 2,
 									y: rect.top,
 								});
@@ -523,7 +474,7 @@ function GitHubCalendar() {
 							onPointerLeave={() => setTooltip(null)}
 						>
 							{model.weeks.map((week, index) => (
-								<motion.div
+								<Motion.div
 									key={index}
 									{...columnMotion}
 									className="flex flex-col"
@@ -544,15 +495,16 @@ function GitHubCalendar() {
 										return (
 											<div
 												key={day.date}
+												data-date={day.date}
 												data-label={describe(day)}
-												className={`rounded-sm ${RAMP[model.level(day.count)]}`}
+												className={`rounded-sm ${RAMP[day.level ?? model.level(day.count)]}`}
 												style={{ width: layout.cell, height: layout.cell }}
 											/>
 										);
 									})}
-								</motion.div>
+								</Motion.div>
 							))}
-						</motion.div>
+						</Motion.div>
 					</div>
 				</div>
 			</div>
@@ -566,6 +518,17 @@ function GitHubCalendar() {
 					<figcaption className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-200">
 						{caption} on GitHub
 					</figcaption>
+
+					<div className="mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-[11px] text-gray-500 dark:text-gray-400">
+						<p role="status">
+							{status === "stale"
+								? `Showing saved activity${savedAt && !Number.isNaN(Date.parse(savedAt)) ? ` from ${new Date(savedAt).toLocaleDateString()}` : ""}. Retrying automatically.`
+								: `Auto-syncs every minute${checkedAt ? ` · Checked ${new Date(checkedAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}` : ""}`}
+						</p>
+						<a href={PROFILE_URL} target="_blank" rel="noopener noreferrer" className="shrink-0 underline underline-offset-2 hover:text-gray-900 dark:hover:text-white">
+							View on GitHub
+						</a>
+					</div>
 
 					{mode === "sm" && yearFilter}
 
@@ -599,7 +562,7 @@ function GitHubCalendar() {
 
 			{/* Tooltip is fixed-position and lives outside the scroller, so it
 			    cannot be clipped by overflow-x-auto at the container edges. */}
-			{tooltip && (
+			{tooltipDay && (
 				<div
 					role="tooltip"
 					className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-full rounded-lg
@@ -610,7 +573,7 @@ function GitHubCalendar() {
 						top: tooltip.y - 8,
 					}}
 				>
-					{tooltip.text}
+					{describe(tooltipDay)}
 				</div>
 			)}
 		</figure>

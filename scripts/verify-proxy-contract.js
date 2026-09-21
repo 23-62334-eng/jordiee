@@ -217,12 +217,20 @@ await check("model: pinned to an exact version string", () => {
 		!/latest|\*|preview|exp\b/.test(mod.MODEL),
 		`MODEL "${mod.MODEL}" is a floating alias, not a pin`,
 	);
-	// Gemini's bare family names (gemini-2.0-flash) float onto whatever Google
-	// ships next; only a version-suffixed ID is actually pinned.
+	// This used to demand a `-001`/`-20250101` revision suffix, on the reasoning
+	// that a bare family name floats. That convention is gone: the current
+	// generation publishes its stable IDs as bare names (gemini-3.1-flash-lite),
+	// and the only suffixed IDs left are the `-preview` and `-latest` ones the
+	// assertion above already rejects. Demanding a suffix now forbids every
+	// pinnable model and permits none, so the rule is stated the way it is
+	// actually enforced upstream: a minor-versioned family, never a bare one.
+	//
+	// gemini-3.1-flash-lite  ✓ pinned      gemini-flash-lite-latest  ✗ floats
+	// gemini-2.5-flash       ✓ pinned      gemini-flash              ✗ floats
 	assert.match(
 		mod.MODEL,
-		/-\d{3}$|-\d{8}$/,
-		`MODEL "${mod.MODEL}" has no version suffix — a bare family name is not a pin`,
+		/^gemini-\d+\.\d+-/,
+		`MODEL "${mod.MODEL}" names no minor version — a bare family name is not a pin`,
 	);
 	assert.match(mod.MODEL, /flash/i, "production model must be Flash class (cost/free-tier requirement)");
 	assert.ok(
@@ -285,6 +293,65 @@ await check("key: not leaked in any response body", async () => {
 		assert.ok(!wire.includes(pattern), `response leaks ${pattern}`);
 	}
 	assert.ok(res.status < 500, `provider auth failure surfaced as ${res.status}`);
+});
+
+/**
+ * The same guarantee for stderr, which is not a private place either.
+ *
+ * This is a regression test for a real leak: when fault logging was first added
+ * to chat.js it printed the provider's message verbatim, and the canary key in
+ * the check above appeared in full on the console — from there into whatever
+ * log drain the deployment has. A response-body check cannot catch that,
+ * because the body was correct the whole time.
+ */
+await check("key: not leaked into the fault log", async () => {
+	const CANARY = "sk-ant-REALKEY123";
+	const provider = {
+		async complete() {
+			throw Object.assign(
+				new Error(`401 authentication_error: invalid x-api-key ${CANARY}`),
+				{ status: 401 },
+			);
+		},
+	};
+
+	const original = console.error;
+	const lines = [];
+	console.error = (...args) => lines.push(args.join(" "));
+	try {
+		await mod.handleAssistantRequest({ question: "hi", provider });
+	} finally {
+		console.error = original;
+	}
+
+	const logged = lines.join("\n");
+	assert.ok(logged.length > 0, "provider fault produced no log line at all");
+	assert.ok(!logged.includes(CANARY), `fault log leaks the key: ${logged}`);
+	assert.match(logged, /401/, "fault log dropped the status, which is the useful half");
+});
+
+/**
+ * The handler's deadline must fire before the platform kills the function.
+ *
+ * These two numbers live in different files and are only correct relative to
+ * each other. If maxDuration drops below UPSTREAM_TIMEOUT_MS, the platform
+ * terminates the function mid-stream: headers are already sent, so the visitor
+ * gets a truncated connection instead of the fallback sentence the whole fault
+ * path exists to deliver — and nothing in the code would say so.
+ */
+await check("deadline: handler aborts before the platform's maxDuration", () => {
+	const config = JSON.parse(readFileSync(path.join(ROOT, "vercel.json"), "utf8"));
+	const chat = config.functions?.["api/chat.js"];
+	assert.ok(chat, "vercel.json declares no settings for api/chat.js");
+
+	const platformMs = Number(chat.maxDuration) * 1000;
+	assert.ok(Number.isFinite(platformMs) && platformMs > 0, "maxDuration is not a positive number");
+	assert.ok(
+		mod.UPSTREAM_TIMEOUT_MS < platformMs,
+		`UPSTREAM_TIMEOUT_MS (${mod.UPSTREAM_TIMEOUT_MS}ms) is not below ` +
+			`vercel.json maxDuration (${platformMs}ms) — the platform would kill the ` +
+			`function before the handler can degrade`,
+	);
 });
 
 /* ── 6. <user_message> boundary ─────────────────────────────────────────── */

@@ -65,7 +65,7 @@ export const RETRIEVER_ENTRY = process.env.RETRIEVER_ENTRY
  */
 export const HANDLER_ENTRY = process.env.HANDLER_ENTRY
 	? path.resolve(ROOT, process.env.HANDLER_ENTRY)
-	: path.join(ROOT, "api", "assistant.js");
+	: path.join(ROOT, "api", "_assistant.js");
 
 const missing = (label, target, shape) =>
 	new Error(
