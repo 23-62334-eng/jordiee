@@ -26,3 +26,4 @@ dist-ssr
 
 # eval response cache — keyed on hash(system_prompt + question)
 evals/.cache/
+tmp/
