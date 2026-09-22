@@ -183,9 +183,32 @@ const ALLOWED_ORIGINS = new Set([
 /** localhost on any port, http or https — dev servers move around. */
 const LOCALHOST = /^https?:\/\/(?:localhost|127\.0\.0\.1|\[::1\])(?::\d+)?$/;
 
+/**
+ * The deployment's own URL, which is not jordiee.me and is not known until the
+ * platform assigns it.
+ *
+ * The allowlist above is a hardcoded pair because the key lives here and an
+ * unlisted origin must not be able to spend it. But the site is also served
+ * from its Vercel deployment URL — `jordiee.vercel.app` in production, a fresh
+ * `jordiee-<hash>.vercel.app` per preview — and a visitor opening THAT sends
+ * it as Origin. Without this, every request from the deployment's own URL is
+ * rejected as third-party: the panel shows the same "something went wrong"
+ * sentence a missing endpoint does, so a correct deploy looks like a broken
+ * one and the next thing anyone does is widen the allowlist by hand.
+ *
+ * Vercel injects both vars; neither carries a scheme. This admits the site's
+ * own origin and nothing else — a request from any other site still arrives
+ * with that site's Origin, which is not in the set and does not match here.
+ */
+const SELF_ORIGINS = new Set(
+	[process.env.VERCEL_PROJECT_PRODUCTION_URL, process.env.VERCEL_URL]
+		.filter(Boolean)
+		.map((host) => `https://${host}`),
+);
+
 export function isOriginAllowed(origin) {
 	if (!origin) return false;
-	return ALLOWED_ORIGINS.has(origin) || LOCALHOST.test(origin);
+	return ALLOWED_ORIGINS.has(origin) || SELF_ORIGINS.has(origin) || LOCALHOST.test(origin);
 }
 
 import { readFileSync } from "node:fs";
