@@ -257,11 +257,37 @@ export default function ChatLauncher() {
 		return () => document.removeEventListener("keydown", onKey);
 	}, [open]);
 
-	// Focus moves into the panel on open and back to the button on close, so
-	// the chat is reachable and escapable without a mouse.
+	/**
+	 * Focus moves into the panel on open and back to the button on close, so
+	 * the chat is reachable and escapable without a mouse.
+	 *
+	 * `hasOpened` is why this is not just an if/else on `open`. An effect runs
+	 * on mount as well as on change, and `open` starts false — so the bare
+	 * else branch fired the moment the lazy chunk resolved and focused the
+	 * launcher on page load, before the visitor had asked for anything.
+	 *
+	 * That focus landed on the LAST element in the document, rendered after
+	 * the footer, and the browser scrolls whatever it focuses into view: the
+	 * portfolio opened at its own footer, every time. The launcher is fixed,
+	 * so it should already be in view and the scroll should be a no-op — but
+	 * App.jsx wraps the page in a motion.div whose entrance animation holds a
+	 * transform, and a transformed ancestor becomes the containing block for
+	 * its fixed descendants. For the length of that animation the launcher is
+	 * positioned against the full-height wrapper rather than the viewport,
+	 * which puts it at the bottom of the document, which is where the focus
+	 * took the page.
+	 *
+	 * So the restore now happens only on a real close. `preventScroll` covers
+	 * the same hazard on that path, where the transform can be live again.
+	 */
+	const hasOpened = useRef(false);
 	useEffect(() => {
-		if (open) inputRef.current?.focus();
-		else launcherRef.current?.focus();
+		if (open) {
+			hasOpened.current = true;
+			inputRef.current?.focus();
+		} else if (hasOpened.current) {
+			launcherRef.current?.focus({ preventScroll: true });
+		}
 	}, [open]);
 
 	/**
