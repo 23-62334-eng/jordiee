@@ -416,9 +416,10 @@ function WorkRow({ item, onOpen, reduced }) {
 								decoding="async"
 								width={1200}
 								height={750}
-								className="w-full h-full object-cover
-									transition-[opacity] duration-200
-									group-hover:opacity-90"
+								// Grey until the row is pointed at, then the real colours.
+								// It replaces the old hover dim: fading and colouring at the
+								// same time pulled in two directions.
+								className="w-full h-full object-cover photo-reveal"
 							/>
 							{item.images.length > 1 && (
 								<span

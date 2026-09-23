@@ -88,7 +88,10 @@ function CertificationCard({ cert, onView }) {
 						alt={cert.title}
 						loading="lazy"
 						decoding="async"
-						className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+						// .photo-reveal carries both the grey resting state and the
+						// timing for the zoom below it — one transition-property per
+						// element, so a Tailwind transition-* here would replace it.
+						className="w-full h-full object-cover photo-reveal group-hover:scale-105"
 					/>
 					{/* At four across there is no room for a "Verified" pill beside the
 					    category, so the tick moves onto the image as an icon. */}

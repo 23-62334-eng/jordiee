@@ -155,3 +155,40 @@ body {
 .marquee-reverse {
 	animation: marquee-reverse 20s linear infinite;
 }
+
+/* Photo colour reveal ─────────────────────────────────────────────────────
+   Project screenshots and certificates rest desaturated and come up in full
+   colour when their row or card is pointed at — the same move the tech icons
+   on About make when hover hands them their brand colour.
+
+   Written here rather than as `grayscale group-hover:grayscale-0` because the
+   muted state has to sit behind (hover: hover): a touch screen has no pointer
+   to reveal with, so a phone would be left with a permanently grey grid. The
+   transition stays outside that gate so it still applies wherever the filter
+   does.
+
+   The trigger is the enclosing .group — already the row on Projects and the
+   card on Certifications — so the image answers to the same hover target as
+   the rest of its entry. :focus-visible mirrors that for the keyboard, whether
+   the group itself takes focus (the certificate card is the button) or a
+   control inside it does (the project thumbnail). */
+.photo-reveal {
+	/* Two durations paired positionally with the two properties: colour comes
+	   back fast enough to read as an answer to the pointer, while any zoom the
+	   image also runs keeps the slower, more cinematic pace it was tuned at. */
+	transition-property: filter, scale;
+	transition-duration: 350ms, 700ms;
+	transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (hover: hover) {
+	.photo-reveal {
+		filter: grayscale(1);
+	}
+
+	.group:hover .photo-reveal,
+	.group:focus-visible .photo-reveal,
+	.group:has(:focus-visible) .photo-reveal {
+		filter: grayscale(0);
+	}
+}
