@@ -206,9 +206,53 @@ const SELF_ORIGINS = new Set(
 		.map((host) => `https://${host}`),
 );
 
+/**
+ * Whatever domain the site is actually served from, set per deployment.
+ *
+ * The pair at the top of this file is hardcoded, which was fine while the
+ * domain was a fixed fact about the project. It is not one: moving to a new
+ * domain leaves the new host unlisted, every request from it is rejected as
+ * third-party, and the panel shows the same "something went wrong" sentence
+ * that a missing endpoint does. That failure is indistinguishable from the
+ * real outage it looks like, so the domain belongs in configuration next to
+ * the key rather than in a constant that has to be edited and redeployed.
+ *
+ * SITE_ORIGINS is a comma-separated list of absolute https origins:
+ *
+ *   SITE_ORIGINS=https://example.dev,https://www.example.dev
+ *
+ * Parsed rather than trusted. Each entry must be a well-formed https origin
+ * carrying no credentials; anything else is dropped, because a malformed
+ * entry silently widening the allowlist is worse than one that does nothing.
+ * `URL.origin` normalises away paths, trailing slashes and default ports, so
+ * a value pasted with a trailing slash still matches the header the browser
+ * sends. An empty or unset value admits nothing extra.
+ */
+const CONFIGURED_ORIGINS = new Set(
+	(process.env.SITE_ORIGINS ?? "")
+		.split(",")
+		.map((entry) => entry.trim())
+		.filter(Boolean)
+		.flatMap((entry) => {
+			let url;
+			try {
+				url = new URL(entry);
+			} catch {
+				return [];
+			}
+			if (url.protocol !== "https:" || url.username || url.password) return [];
+			return [url.origin];
+		}),
+);
+
 export function isOriginAllowed(origin) {
 	if (!origin) return false;
-	return ALLOWED_ORIGINS.has(origin) || SELF_ORIGINS.has(origin) || LOCALHOST.test(origin);
+	return (
+		ALLOWED_ORIGINS.has(origin) ||
+		CONFIGURED_ORIGINS.has(origin) ||
+		SELF_ORIGINS.has(origin) ||
+		LOCALHOST.test(origin)
+	);
 }
 
 import { readFileSync } from "node:fs";
