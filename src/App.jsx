@@ -8,6 +8,7 @@ import Certificate from "./Certificate.jsx";
 import Footer from "./components/Footer.jsx";
 import ThemeToggle from "./components/ThemeToggle.jsx";
 import { motion } from "framer-motion";
+import { Analytics } from "@vercel/analytics/react";
 
 const ChatLauncher = lazy(() => import("./components/ChatLauncher.jsx"));
 
@@ -31,6 +32,7 @@ function App() {
 			<Suspense fallback={null}>
 				{typeof window !== "undefined" && <ChatLauncher />}
 			</Suspense>
+			<Analytics />
 		</motion.div>
 	);
 }
