@@ -1,5 +1,5 @@
 /**
- * Serverless chat proxy for jordiee.me (Vercel Node function).
+ * Serverless chat proxy for jordiee.dev (Vercel Node function).
  *
  * The whole reason this file exists is that the provider key must never reach
  * the browser. Everything else here is the cost of that: an origin allowlist so
@@ -175,7 +175,19 @@ export { MAX_INPUT_CHARS, MAX_TURNS };
  */
 export const UPSTREAM_TIMEOUT_MS = Number(process.env.ASSISTANT_TIMEOUT_MS ?? 20_000);
 
+/**
+ * The domains the site is served from. Both are live: .dev is where it moved,
+ * .me is the original and still resolves, so dropping it would break the
+ * assistant for anyone arriving on a link that predates the move.
+ *
+ * SITE_ORIGINS below does the same job from configuration. These stay
+ * hardcoded because a domain that is already known is one fewer environment
+ * variable to set correctly at 2am, and a missing one fails as a 403 that
+ * reads like an outage rather than like a missing setting.
+ */
 const ALLOWED_ORIGINS = new Set([
+	"https://jordiee.dev",
+	"https://www.jordiee.dev",
 	"https://jordiee.me",
 	"https://www.jordiee.me",
 ]);

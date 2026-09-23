@@ -15,7 +15,7 @@ section.
 ```
 ChatLauncher.jsx  ──POST /api/chat──▶  api/chat.js
                                           │
-                                          ├─ origin allowlist        reject anything not jordiee.me/localhost
+                                          ├─ origin allowlist        reject anything not jordiee.dev/.me/localhost
                                           ├─ rate limit              api/_limits.js, per IP
                                           ├─ validate                300 chars, 8 turns
                                           ├─ daily budget            kill switch → static FAQ answers
