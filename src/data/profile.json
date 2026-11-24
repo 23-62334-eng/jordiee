@@ -654,10 +654,17 @@
       ],
       "links": {
         "repo": null,
-        "live": null,
+        "live": "https://evalsystem-delta.vercel.app/",
         "demo": null
       },
-      "images": []
+      "images": [
+        "proj/schoolEval/01-landing.webp",
+        "proj/schoolEval/02-login.webp",
+        "proj/schoolEval/03-about.webp",
+        "proj/schoolEval/04-admissions.webp",
+        "proj/schoolEval/05-faqs.webp",
+        "proj/schoolEval/06-contact.webp"
+      ]
     },
     {
       "id": "project-vehicle-rental",
