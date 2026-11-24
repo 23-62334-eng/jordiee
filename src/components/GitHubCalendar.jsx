@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion as Motion, useReducedMotion } from "framer-motion";
 
 import useContributions from "../hooks/useContributions.js";
@@ -560,9 +561,11 @@ function GitHubCalendar() {
 			    signal here; per-day would be 365 sentences of noise. */}
 			<p className="sr-only">Monthly totals: {model.summary}.</p>
 
-			{/* Tooltip is fixed-position and lives outside the scroller, so it
-			    cannot be clipped by overflow-x-auto at the container edges. */}
-			{tooltipDay && (
+			{/* Portalled to <body>: a fixed element resolves against the nearest
+			    transformed ancestor, and the section's reveal animation is one,
+			    which parked the tooltip hundreds of pixels off the cursor. The
+			    portal also keeps it clear of overflow-x-auto clipping. */}
+			{tooltipDay && createPortal(
 				<div
 					role="tooltip"
 					className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-full rounded-lg
@@ -574,7 +577,8 @@ function GitHubCalendar() {
 					}}
 				>
 					{describe(tooltipDay)}
-				</div>
+				</div>,
+				document.body,
 			)}
 		</figure>
 	);
