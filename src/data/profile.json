@@ -601,10 +601,13 @@
       },
       "links": {
         "repo": null,
-        "live": null,
-        "demo": null
+        "live": "https://www.tanauanwaterdistrict.com/login",
+        "demo": "https://www.tanauanwaterdistrict.com/download"
       },
-      "images": []
+      "images": [
+        "proj/capstone/agos-download.webp",
+        "proj/capstone/portal-login.webp"
+      ]
     },
     {
       "id": "project-twd-monitoring",
@@ -625,7 +628,15 @@
         "live": null,
         "demo": null
       },
-      "images": []
+      "images": [
+        "proj/twdMonitoring/01-login.webp",
+        "proj/twdMonitoring/02-dashboard.webp",
+        "proj/twdMonitoring/03-projects.webp",
+        "proj/twdMonitoring/04-project-detail.webp",
+        "proj/twdMonitoring/05-file-preview.webp",
+        "proj/twdMonitoring/06-new-project.webp",
+        "proj/twdMonitoring/07-archived.webp"
+      ]
     },
     {
       "id": "project-school-evaluation",

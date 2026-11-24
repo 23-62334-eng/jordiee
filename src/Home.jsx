@@ -11,7 +11,6 @@ import {
 	FaPython,
 	FaDocker,
 	FaFigma,
-	FaWater,
 } from "react-icons/fa";
 import { SiTailwindcss, SiMysql, SiJavascript, SiN8N } from "react-icons/si";
 import { motion } from "framer-motion";
@@ -26,6 +25,7 @@ import projTimeSched from "./assets/proj/timeSched/TSS1.webp";
 import projThrift from "./assets/proj/thriftStore/img1.webp";
 import projBatCafe from "./assets/proj/batCafe/batCafe1.webp";
 import projVehiRental from "./assets/proj/vehiRental/vRental1.webp";
+import twdLogo from "./assets/proj/capstone/twd-logo.webp";
 
 // Orbiting tech stack icons around the portrait
 const orbitIcons = [
@@ -497,7 +497,9 @@ function Home() {
 								{
 									title: "Integrated Payroll & Commercial System",
 									desc: "Capstone — payroll processing and a mobile commercial layer for Tanauan City Water District.",
-									icon: FaWater,
+									// The client's own seal, not a generic water glyph: it is the
+									// one card whose subject is a real organisation.
+									logo: twdLogo,
 									time: "Capstone",
 									scrollId: "project-capstone",
 								},
@@ -578,6 +580,17 @@ function Home() {
 																alt={project.title}
 																className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
 															/>
+														) : project.logo ? (
+															// Contained, not cropped, and on a light plate in both
+															// themes — the seal is dark blue and would disappear
+															// against the dark-mode tile.
+															<div className="w-full h-full flex items-center justify-center bg-white p-1 group-hover:scale-110 transition-transform duration-500 ease-out">
+																<img
+																	src={project.logo}
+																	alt={project.title}
+																	className="w-full h-full object-contain"
+																/>
+															</div>
 														) : (
 															<div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900/10 to-gray-900/5 dark:from-white/15 dark:to-white/5 text-gray-900 dark:text-white group-hover:scale-110 transition-transform duration-500 ease-out">
 																<project.icon className="w-5 h-5" />

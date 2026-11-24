@@ -1,5 +1,11 @@
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { FiBookOpen, FiX, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import {
+	FiBookOpen,
+	FiX,
+	FiChevronLeft,
+	FiChevronRight,
+	FiArrowUpRight,
+} from "react-icons/fi";
 import { useState, useEffect, useCallback, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 
@@ -327,8 +333,15 @@ function Lightbox({ item, onClose }) {
 /* ─── Work Row ───────────────────────────────────────────────
    Year rail, then the entry, then one screenshot. A row, not a card: the old
    grid gave three different card treatments to what is really one list. */
+const LINK_LABELS = { live: "Live site", demo: "Download app", repo: "Repo" };
+
 function WorkRow({ item, onOpen, reduced }) {
 	const hasImages = item.images?.length > 0;
+	// Only real URLs: the schema also allows a TODO_VERIFY placeholder, which
+	// must never surface as a dead link.
+	const links = Object.entries(item.links ?? {}).filter(([, url]) =>
+		url?.startsWith("http"),
+	);
 
 	return (
 		<motion.li
@@ -395,6 +408,33 @@ function WorkRow({ item, onOpen, reduced }) {
 								</span>
 							))}
 						</div>
+
+						{links.length > 0 && (
+							<div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-3">
+								{links.map(([key, url]) => (
+									<a
+										key={key}
+										href={url}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="group/link inline-flex items-center gap-1 text-[11px] font-medium
+											text-gray-600 dark:text-gray-300
+											hover:text-gray-900 dark:hover:text-white
+											focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 dark:focus-visible:ring-white rounded-sm
+											transition-colors duration-150"
+									>
+										<span className="border-b border-gray-300 dark:border-gray-600 group-hover/link:border-current transition-colors duration-150">
+											{LINK_LABELS[key] ?? key}
+										</span>
+										<FiArrowUpRight
+											className="w-3 h-3 transition-transform duration-150
+												group-hover/link:-translate-y-px group-hover/link:translate-x-px"
+											aria-hidden="true"
+										/>
+									</a>
+								))}
+							</div>
+						)}
 					</div>
 
 					{/* One screenshot. Opens the rest rather than rotating in place. */}
