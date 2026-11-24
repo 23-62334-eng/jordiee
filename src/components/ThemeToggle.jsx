@@ -117,8 +117,7 @@ function ThemeToggle() {
 			role="radiogroup"
 			aria-label="Colour theme"
 			onKeyDown={onKeyDown}
-			className="fixed top-4 right-4 sm:top-5 sm:right-6 z-50
-				flex items-center gap-0.5 p-1
+			className="flex items-center gap-0.5 p-1
 				rounded-full
 				bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl
 				border border-gray-200/80 dark:border-gray-700/60

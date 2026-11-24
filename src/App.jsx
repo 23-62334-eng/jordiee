@@ -6,7 +6,7 @@ import Education from "./Education.jsx";
 import Job from "./Job.jsx";
 import Certificate from "./Certificate.jsx";
 import Footer from "./components/Footer.jsx";
-import ThemeToggle from "./components/ThemeToggle.jsx";
+import TopControls from "./components/TopControls.jsx";
 import { motion } from "framer-motion";
 
 const ChatLauncher = lazy(() => import("./components/ChatLauncher.jsx"));
@@ -19,7 +19,7 @@ function App() {
 			transition={{ duration: 0.7, ease: "easeOut" }}
 			className="bg-white dark:bg-gray-900 min-h-screen transition-colors duration-500"
 		>
-			<ThemeToggle />
+			<TopControls />
 			<Home />
 			<About />
 			<NavBar />

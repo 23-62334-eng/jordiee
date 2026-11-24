@@ -50,7 +50,60 @@
 	--glow: 255 255 255;
 }
 
-/* Smooth transitions for all theme-related properties */
+/* Pointer cursor on anything clickable ─────────────────────────────────────
+ *
+ * Tailwind v4's preflight sets `cursor: default` on buttons — a deliberate
+ * break from v3, on the reasoning that native buttons do not show a hand in
+ * desktop applications. On the web that is simply wrong: a hand is how a page
+ * says "this does something", and without it every button here felt dead.
+ *
+ * Deliberately inside @layer base, NOT unlayered. Base sits below Tailwind's
+ * utilities in the cascade, so a per-element `cursor-default` still wins where
+ * a control should not advertise itself — a Minesweeper square with nothing to
+ * reveal, a finished board, a locked Sokoban level. An unlayered rule would
+ * beat those utilities and make everything a hand, which is the mistake the
+ * transition rule below already makes.
+ *
+ * `:disabled` and `aria-disabled` are excluded for the same reason: a control
+ * that will not respond should not invite the click.
+ */
+@layer base {
+	button:not(:disabled),
+	[role="button"]:not([aria-disabled="true"]),
+	[role="radio"]:not([aria-disabled="true"]),
+	[role="tab"]:not([aria-disabled="true"]),
+	a[href],
+	label[for],
+	summary,
+	select,
+	input[type="checkbox"],
+	input[type="radio"],
+	input[type="range"] {
+		cursor: pointer;
+	}
+
+	button:disabled,
+	select:disabled,
+	input:disabled,
+	[aria-disabled="true"] {
+		cursor: default;
+	}
+}
+
+/* Smooth transitions for all theme-related properties.
+ *
+ * NOTE: this rule is UNLAYERED, and Tailwind's utilities live in
+ * @layer utilities. Unlayered CSS wins over any layer regardless of
+ * specificity, so this quietly overrides every `transition-*`, `duration-*`
+ * and `ease-*` utility on the site — including the transition-property list,
+ * which means utilities asking to animate opacity or transform get the colour
+ * list below instead and simply snap.
+ *
+ * Components that need to transition anything outside this list currently set
+ * transition-property inline (a style attribute is unlayered too, so it wins).
+ * Wrapping this rule in `@layer base { … }` would hand precedence back to the
+ * utilities and let those inline overrides go away.
+ */
 * {
 	transition-property: background-color, border-color, color, fill, stroke, box-shadow;
 	transition-duration: var(--transition-speed);
