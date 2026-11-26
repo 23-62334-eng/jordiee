@@ -40,7 +40,7 @@ const ENDPOINT = "/api/chat";
  * What the UI calls him, read from profile.json rather than typed here.
  *
  * `identity.alias` is already how the About section introduces him ("Hello! I'm
- * Jordiee"), so the chat using it too is the site being consistent rather than
+ * Mark Jordan"), so the chat using it too is the site being consistent rather than
  * holding a second opinion about its owner's name. Hardcoding it would create a
  * second place to edit and the first one to go stale.
  *
@@ -547,7 +547,7 @@ export default function ChatLauncher() {
 						  px-3 below `sm`, because at 280px (a folded phone's
 						  cover screen) the header is the tightest row in the
 						  panel: 36px of avatar and a close button leave the
-						  title barely 99px, and "Ask about Jordiee" needs 122.
+						  title barely 99px, and "Ask about Mark Jordan" needs more than that.
 						  The two saved gutters plus the wrapping below are what
 						  keep his name whole there.
 						*/}
@@ -617,7 +617,7 @@ export default function ChatLauncher() {
 								  line 158px: "Only answers what's published"
 								  measured 169px and was clipped mid-word. The
 								  verb is what went — the line above it already
-								  supplies one ("Ask about Jordiee"), so the
+								  supplies one ("Ask about Mark Jordan"), so the
 								  qualifier reads on its own.
 
 								  It wraps rather than truncates. Cutting a

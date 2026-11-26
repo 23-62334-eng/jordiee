@@ -306,7 +306,7 @@
   ],
   "identity": {
     "name": "Mark Jordan Javier",
-    "alias": "Jordiee",
+    "alias": "Mark Jordan",
     "titles": [
       "Full Stack Developer",
       "Aspiring Cloud Engineer"
@@ -321,7 +321,7 @@
             "text": "Hello! I'm "
           },
           {
-            "text": "Jordiee",
+            "text": "Mark Jordan",
             "emphasis": true
           },
           {
@@ -342,7 +342,7 @@
         ]
       ],
       "aboutPlain": [
-        "Hello! I'm Jordiee, a passionate Full Stack Web Developer and BS Information Technology student. I love building clean, functional, and modern web applications that provide great user experiences.",
+        "Hello! I'm Mark Jordan, a passionate Full Stack Web Developer and BS Information Technology student. I love building clean, functional, and modern web applications that provide great user experiences.",
         "I specialize in frontend and backend development as a MERN Stack Developer (MongoDB, Express.js, React, Node.js), alongside modern tools such as Tailwind CSS, PHP, MySQL, and Python. I enjoy solving problems, designing interfaces, and continuously learning new technologies."
       ]
     },
